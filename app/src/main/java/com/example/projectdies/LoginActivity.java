@@ -8,11 +8,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.ActionCodeSettings;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
 
-    public static final String TAG = "LoginActivity" ; //A string for debug purposes
+    public static final String ANDROID_PACKAGE = "com.example.projectdies";
+    public static final String IOS_PACKAGE = "com.example.ios";
+    public static final String FIREBASE_LINK = "https://projectdies-55a14.firebaseapp.com/";
+
+    public static final String TAG = "LoginActivity_projectDIES" ; //A string for debug purposes
 
     private EditText emailInput;
     private Button verifyButton;
@@ -33,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Toast.makeText(LoginActivity.this, "Verify button is clicked", Toast.LENGTH_SHORT).show();
                 switchToMainActivity();
+                googleLogin();
             }
         });
     }
@@ -40,5 +51,35 @@ public class LoginActivity extends AppCompatActivity {
     private void switchToMainActivity() {
         Intent i = new Intent (this, MainActivity.class);
         startActivity(i);
+    }
+
+    private void googleLogin(){
+        ActionCodeSettings actionCodeSettings =
+                ActionCodeSettings.newBuilder()
+                        // URL you want to redirect back to. The domain (www.example.com) for this
+                        // URL must be whitelisted in the Firebase Console.
+                        .setUrl("https://projectdies-55a14.firebaseapp.com/__/auth/action?mode=action&oobCode=code")
+                        // This must be true
+                        .setHandleCodeInApp(true)
+                        .setIOSBundleId(IOS_PACKAGE)
+                        .setAndroidPackageName(
+                                ANDROID_PACKAGE,
+                                true, /* installIfNotAvailable */
+                                "12"    /* minimumVersion */)
+                        .build();
+        Log.d(TAG, FIREBASE_LINK + "finishSignUp?cartId=1234");
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        auth.sendSignInLinkToEmail(emailInput.getText().toString(), actionCodeSettings)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "Email sent.");
+                        }
+                        else {
+                            Log.d(TAG, "Failed. Error: " + task.getException());
+                        }
+                    }
+                });
     }
 }
