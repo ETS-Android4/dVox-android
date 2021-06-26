@@ -41,8 +41,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
 
     //Visual dependencies
-    implementation "androidx.cardview:cardview:1.0.0"                   //Cardview
-    implementation 'com.daimajia.androidanimations:library:2.4@aar'     //Android simple animations
+    implementation "androidx.cardview:cardview:1.0.0"                   //CardView
+    implementation 'com.daimajia.androidanimations:library:2.4@aar'     //Android Simple Animations
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

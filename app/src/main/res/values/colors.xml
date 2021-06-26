@@ -11,6 +11,6 @@
     <color name="DarkGreyColor">#212121</color>
     <color name="GreyColor">#484848</color>
     <color name="BlackColor">#000000</color>
-    <color name="WhiteColor">#e5e4e2</color>
+    <color name="WhiteColor">#FFFFFFFF</color>
     <color name="TransparentWhiteColor">#a5a5a5</color>
 </resources>

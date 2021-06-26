@@ -96,14 +96,14 @@ public class LoginActivity extends AppCompatActivity {
         String emailPattern =
                 "^[a-zA-Z0-9_+&*-]+(?:\\."+
                 "[a-zA-Z0-9_+&*-]+)*@" +
-                "(?:[a-zA-Z0-9-]+\\.)+(edu)";
+                "(?:[a-zA-Z0-9-]+\\.)+(edu )";
         Pattern pat = Pattern.compile(emailPattern);
         if (emailInput.getText().toString().isEmpty()) {
-            Toast.makeText(LoginActivity.this, "The input is empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this, "The field cannot be empty.", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (pat.matcher(emailInput.getText().toString()).matches() == false){
-            Toast.makeText(LoginActivity.this, "The input is not valid", Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this, "The input is not valid.", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
