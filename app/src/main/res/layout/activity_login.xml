@@ -11,21 +11,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.65">
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/description_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginBottom="40dp"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginBottom="@dimen/_30sdp"
             android:fontFamily="@font/montserrat_thin"
             android:lines="3"
             android:text="voice\nyour\nthoughts"
             android:textAppearance="@style/TextAppearance.AppCompat.Display4"
             android:textColor="@color/TransparentWhiteColor"
-            android:textSize="80sp"
+            android:textSize="@dimen/_60ssp"
             app:layout_constraintBottom_toTopOf="@+id/cardview_input"
             app:layout_constraintStart_toStartOf="parent"
             tools:ignore="MissingConstraints" />
@@ -34,20 +33,20 @@
             android:id="@+id/cardview_input"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.8"
+            app:layout_constraintVertical_bias="1.0"
             tools:ignore="MissingConstraints">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:paddingTop="20dp"
                 android:paddingBottom="0dp">
 
@@ -55,11 +54,12 @@
                     android:id="@+id/email_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
+                    android:layout_marginStart="@dimen/_15sdp"
                     android:fontFamily="@font/montserrat_regular"
                     android:text="Enter your college email"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
                     android:textColor="@color/BlackColor"
+                    android:textSize="@dimen/_18ssp"
                     app:layout_constraintBottom_toTopOf="@+id/email_input"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -67,10 +67,10 @@
                 <EditText
                     android:id="@+id/email_input"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginBottom="20dp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_marginStart="@dimen/_15sdp"
+                    android:layout_marginEnd="@dimen/_15sdp"
+                    android:layout_marginBottom="@dimen/_15sdp"
                     android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890@.-_"
                     android:ems="10"
                     android:fontFamily="@font/montserrat_regular"
@@ -78,6 +78,7 @@
                     android:inputType="textFilter"
                     android:textColorHighlight="@color/GreyColor"
                     android:textColorLink="@color/BlackColor"
+                    android:textSize="@dimen/_15ssp"
                     app:layout_constraintBottom_toTopOf="@+id/cardview_button"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -102,14 +103,14 @@
                             android:id="@+id/verify_button"
                             style="@style/Widget.AppCompat.Button.Borderless"
                             android:layout_width="match_parent"
-                            android:layout_height="48dp"
+                            android:layout_height="@dimen/_40sdp"
                             android:fontFamily="@font/montserrat_bold"
                             android:insetRight="0dp"
                             android:scaleX="1.5"
                             android:scaleY="1.5"
                             android:text="next"
                             android:textColor="@color/BlackColor"
-                            app:elevation="2dp"
+                            app:elevation="0dp"
                             tools:ignore="MissingConstraints" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>
