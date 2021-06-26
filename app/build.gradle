@@ -43,6 +43,7 @@ dependencies {
     //Visual dependencies
     implementation "androidx.cardview:cardview:1.0.0"                   //CardView
     implementation 'com.daimajia.androidanimations:library:2.4@aar'     //Android Simple Animations
+    implementation 'com.muddzdev:styleabletoast:2.3.0'                  //Stylable Toasts
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

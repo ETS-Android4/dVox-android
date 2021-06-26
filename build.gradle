@@ -20,6 +20,7 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        jcenter()//DO NOT DELETE. The developer of com.muddzdev:styleabletoast:2.3.0 did not move the package to mavent repository yet
     }
 }
 

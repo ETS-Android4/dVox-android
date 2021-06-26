@@ -10,7 +10,8 @@
         android:theme="@style/Theme.ProjectDIES">
         <activity android:name=".LoginActivity"
             android:theme="@style/LoginTheme.ProjectDIES"
-            android:windowSoftInputMode="stateUnchanged|adjustPan">
+            android:windowSoftInputMode="stateUnchanged|adjustPan"
+            android:screenOrientation="portrait">
         <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

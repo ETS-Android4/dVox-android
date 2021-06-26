@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable/dies_logo_background.xml" value="0.209375" />
+        <entry key="app/src/main/res/font-v26/login_font.xml" value="0.5102473014965563" />
+        <entry key="app/src/main/res/font/login_font.xml" value="0.375" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.19322916666666667" />
         <entry key="app/src/main/res/layout/custom_login_toast.xml" value="0.721505618886323" />
