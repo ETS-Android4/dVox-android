@@ -67,10 +67,11 @@
                 <EditText
                     android:id="@+id/email_input"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_40sdp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_15sdp"
+                    android:layout_marginTop="@dimen/_7sdp"
                     android:layout_marginEnd="@dimen/_15sdp"
-                    android:layout_marginBottom="@dimen/_15sdp"
+                    android:layout_marginBottom="@dimen/_7sdp"
                     android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890@.-_"
                     android:ems="10"
                     android:fontFamily="@font/montserrat_regular"
@@ -78,11 +79,12 @@
                     android:inputType="textFilter"
                     android:textColorHighlight="@color/GreyColor"
                     android:textColorLink="@color/BlackColor"
-                    android:textSize="@dimen/_15ssp"
+                    android:textSize="@dimen/_13ssp"
                     app:layout_constraintBottom_toTopOf="@+id/cardview_button"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/email_label" />
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardview_button"

@@ -60,8 +60,8 @@
         <item name="stTextSize">14sp</item>
         <item name="stColorBackground">@color/WhiteColor</item>
         <item name="stSolidBackground">true</item>
-        <item name="stStrokeWidth">0dp</item>
-        <item name="stStrokeColor">#fff</item>
+        <item name="stStrokeWidth">@dimen/_1sdp</item>
+        <item name="stStrokeColor">@color/BlackColor</item>
         <item name="stLength">SHORT</item> LONG or SHORT
         <item name="stRadius">20dp</item>
     </style>
