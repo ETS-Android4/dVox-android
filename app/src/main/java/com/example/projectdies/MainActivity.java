@@ -11,9 +11,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.item_post); //Should be changed to main activity
 
-        Post post1 = new Post("Creator", "Welcome to the app");
+        Post post1 = new Post("Welcome message","Creator", "Welcome to the app");
 
 
     }

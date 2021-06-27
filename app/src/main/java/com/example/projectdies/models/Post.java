@@ -11,6 +11,7 @@ package com.example.projectdies.models;
 
 public class Post {
     int id;
+    String title;
     String author;
     String message;
     int votes;
@@ -23,11 +24,13 @@ public class Post {
     /**
      * Constructs a new post.
      *
+     *      @param   _title   (String) title of the post
      *      @param   _author    (String) author of the post
      *      @param   _message   (String) message of the post
      */
-    public Post(String _author, String _message){
+    public Post(String _title, String _author, String _message){
         this.id = 0;
+        this.title = _title;
         this.author = _author;
         this.message = _message;
         this.votes = 0;
@@ -45,8 +48,15 @@ public class Post {
         return id;
     }
     /**
-     * Gets the post's author.
-     *      @return author (String)
+     * Gets the post's title.
+     *      @return title (String)
+     */
+    public String getTitle() {
+        return title;
+    }
+    /**
+     * Gets the post's message.
+     *      @return message (String)
      */
     public String getAuthor() {
         return author;
