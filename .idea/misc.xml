@@ -3,6 +3,42 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/projectDIES_android/app/src/main/res/drawable/_20_otter.xml" value="0.37025641025641026" />
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/projectDIES_android/app/src/main/res/drawable/fi_rr_add.xml" value="0.32222222222222224" />
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/projectDIES_android/app/src/main/res/drawable/fi_rr_calculator.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/projectDIES_android/app/src/main/res/drawable/fi_rr_calendar.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/projectDIES_android/app/src/main/res/drawable/fi_rr_cloud.xml" value="0.37025641025641026" />
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/projectDIES_android/app/src/main/res/drawable/fi_rr_doctor.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/projectDIES_android/app/src/main/res/drawable/fi_rr_document.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/projectDIES_android/app/src/main/res/drawable/fi_rr_file_check.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/projectDIES_android/app/src/main/res/drawable/fi_rr_file_eps.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/projectDIES_android/app/src/main/res/drawable/fi_rr_filter.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/projectDIES_android/app/src/main/res/drawable/fi_rr_globe_alt.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/projectDIES_android/app/src/main/res/drawable/fi_rr_golf.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/projectDIES_android/app/src/main/res/drawable/fi_rr_graduation_cap.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/projectDIES_android/app/src/main/res/drawable/fi_rr_graphic_tablet.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/projectDIES_android/app/src/main/res/drawable/fi_rr_grid.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/projectDIES_android/app/src/main/res/drawable/fi_rr_gym.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/projectDIES_android/app/src/main/res/drawable/fi_rr_headset.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/projectDIES_android/app/src/main/res/drawable/fi_rr_home.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/projectDIES_android/app/src/main/res/drawable/fi_rr_password.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/projectDIES_android/app/src/main/res/drawable/fi_rr_picture.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/projectDIES_android/app/src/main/res/drawable/fi_rr_sign_in.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/projectDIES_android/app/src/main/res/drawable/fi_rr_signal_alt.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/projectDIES_android/app/src/main/res/drawable/fi_rr_skateboard.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/projectDIES_android/app/src/main/res/drawable/fi_rr_smartphone.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/projectDIES_android/app/src/main/res/drawable/fi_rr_soap.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/projectDIES_android/app/src/main/res/drawable/fi_rr_sticker.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/projectDIES_android/app/src/main/res/drawable/fi_rr_user.xml" value="0.32222222222222224" />
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/projectDIES_android/app/src/main/res/drawable/fi_rr_vector_alt.xml" value="0.37025641025641026" />
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/projectDIES_android/app/src/main/res/layout/activity_login.xml" value="0.22327898550724637" />
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/projectDIES_android/app/src/main/res/layout/activity_main.xml" value="0.22327898550724637" />
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/projectDIES_android/app/src/main/res/layout/fragment_add.xml" value="0.22327898550724637" />
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/projectDIES_android/app/src/main/res/layout/fragment_home.xml" value="0.22327898550724637" />
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/projectDIES_android/app/src/main/res/layout/fragment_user.xml" value="0.22327898550724637" />
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/projectDIES_android/app/src/main/res/layout/item_post.xml" value="0.22327898550724637" />
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/projectDIES_android/app/src/main/res/menu/navigation_menu.xml" value="0.35989583333333336" />
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/projectDIES_android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.3619791666666667" />
         <entry key="app/src/main/res/drawable/dies_logo_background.xml" value="0.209375" />
         <entry key="app/src/main/res/font-v26/login_font.xml" value="0.5102473014965563" />
         <entry key="app/src/main/res/font/login_font.xml" value="0.375" />

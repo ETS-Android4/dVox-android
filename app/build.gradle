@@ -47,7 +47,8 @@ dependencies {
     implementation 'com.daimajia.androidanimations:library:2.4@aar'     //Android Simple Animations
     implementation 'com.muddzdev:styleabletoast:2.3.0'                  //Stylable Toasts
     implementation 'com.intuit.ssp:ssp-android:1.0.6'                   //Scalable SP units
-    implementation 'com.intuit.sdp:sdp-android:1.0.6'                   //Scalable DP units
+    implementation 'com.intuit.sdp:sdp-android:1.0.6'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//Scalable DP units
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
