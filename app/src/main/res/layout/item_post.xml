@@ -95,8 +95,8 @@
                     android:id="@+id/avatar_image"
                     android:layout_width="@dimen/_33sdp"
                     android:layout_height="@dimen/_33sdp"
-                    app:srcCompat="@drawable/koala"
-                    tools:srcCompat="@drawable/koala" />
+                    app:srcCompat="@drawable/_02_koala"
+                    tools:srcCompat="@drawable/_02_koala" />
             </androidx.cardview.widget.CardView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
