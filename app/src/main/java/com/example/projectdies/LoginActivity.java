@@ -100,11 +100,11 @@ public class LoginActivity extends AppCompatActivity {
                 "(?:[a-zA-Z0-9-]+\\.)+(edu)";
         Pattern pat = Pattern.compile(emailPattern);
         if (emailInput.getText().toString().isEmpty()) {
-            StyleableToast.makeText(LoginActivity.this, "The field cannot be empty.", Toast.LENGTH_LONG, R.style.LoginToast).show();
+            StyleableToast.makeText(LoginActivity.this, "The field cannot be empty", Toast.LENGTH_LONG, R.style.LoginToast).show();
             return false;
         }
         if (pat.matcher(emailInput.getText().toString()).matches() == false){
-            StyleableToast.makeText(LoginActivity.this, "Please use a valid college (.edu) email.", Toast.LENGTH_LONG, R.style.LoginToast).show();
+            StyleableToast.makeText(LoginActivity.this, "Please use a valid college (.edu) email", Toast.LENGTH_LONG, R.style.LoginToast).show();
             return false;
         }
         return true;
