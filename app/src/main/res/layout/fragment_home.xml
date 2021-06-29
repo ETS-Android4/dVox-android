@@ -14,7 +14,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="HOMIE" />
+            android:background="@color/BlackColor"
+            android:text="HOMIE"
+            android:textColor="@color/WhiteColor" />
 
     </RelativeLayout>
 
