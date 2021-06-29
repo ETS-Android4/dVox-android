@@ -24,8 +24,8 @@ import com.muddzdev.styleabletoast.StyleableToast;
 
 public class LoginActivity extends AppCompatActivity {
 
-    public static final String ANDROID_PACKAGE = "dvox";
-    public static final String IOS_PACKAGE = "com.example.ios";
+    public static final String ANDROID_PACKAGE = "com.dpearth.dvox";
+    public static final String IOS_PACKAGE = "com.dpearth.dvox";
     public static final String FIREBASE_LINK = "https://projectdies-55a14.firebaseapp.com/";
 
     public static final String LOGIN_TAG = "LoginActivity_projectDIES" ; //A string for debug purposes

@@ -18,16 +18,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
             android:layout_marginBottom="@dimen/_30sdp"
-            android:fontFamily="@font/montserrat_thin"
+            android:fontFamily="@font/montserrat_semi_bold_italic"
             android:lines="3"
-            android:text="voice\nyour\nthoughts"
+            android:text="Voice\nYour\nThoughts"
+            android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Display4"
             android:textColor="@color/TransparentWhiteColor"
-            android:textSize="@dimen/_60ssp"
+            android:textSize="@dimen/_55ssp"
             app:layout_constraintBottom_toTopOf="@+id/cardview_input"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:ignore="MissingConstraints" />
+            tools:ignore="MissingConstraints"
+            tools:text="VOICE\nYOUR\nTHOUGHTS" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardview_input"

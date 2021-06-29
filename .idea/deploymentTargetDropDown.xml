@@ -6,12 +6,12 @@
         <type value="RUNNING_DEVICE_TARGET" />
         <deviceKey>
           <Key>
-            <type value="VIRTUAL_DEVICE_PATH" />
-            <value value="$USER_HOME$/.android/avd/BlackBerry_Keyone_API_30_ARM64_.avd" />
+            <type value="SERIAL_NUMBER" />
+            <value value="adb-RF8M80ZXG6D-t99K5h._adb-tls-connect._tcp." />
           </Key>
         </deviceKey>
       </Target>
     </runningDeviceTargetSelectedWithDropDown>
-    <timeTargetWasSelectedWithDropDown value="2021-06-29T14:23:05.965354Z" />
+    <timeTargetWasSelectedWithDropDown value="2021-06-29T14:38:33.358019Z" />
   </component>
 </project>
