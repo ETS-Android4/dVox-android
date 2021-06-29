@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/BlackColor"
-    tools:context=".MainActivity">
+    tools:context="com.dpearth.dvox.MainActivity">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
@@ -44,13 +44,12 @@
     <FrameLayout
         android:id="@+id/fl_wrapper"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="1dp"
-        android:layout_marginBottom="1dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/cardView"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="1dp">
+        tools:layout_editor_absoluteX="0dp">
 
     </FrameLayout>
 

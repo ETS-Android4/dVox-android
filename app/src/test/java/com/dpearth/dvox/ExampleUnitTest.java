@@ -1,4 +1,4 @@
-package com.example.projectdies;
+package com.dpearth.dvox;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.example.projectdies.models;
+package com.dpearth.dvox.models;
 
 /**
  *

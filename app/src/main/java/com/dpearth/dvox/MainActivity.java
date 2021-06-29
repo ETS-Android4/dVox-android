@@ -1,4 +1,4 @@
-package com.example.projectdies;
+package com.dpearth.dvox;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,12 +7,11 @@ import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import com.example.projectdies.models.Post;
-import com.example.projectdies.models.fragments.AddFragment;
-import com.example.projectdies.models.fragments.HomeFragment;
-import com.example.projectdies.models.fragments.UserFragment;
+import com.dpearth.dvox.models.fragments.AddFragment;
+import com.dpearth.dvox.models.fragments.HomeFragment;
+import com.dpearth.dvox.models.fragments.UserFragment;
+import com.dpearth.dvox.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {

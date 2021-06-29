@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.projectdies">
+    package="com.dpearth.dvox">
     <application
         android:allowBackup="true"
         android:icon="@mipmap/dies_logo"
@@ -8,7 +8,7 @@
         android:roundIcon="@mipmap/dies_logo_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjectDIES">
-        <activity android:name=".LoginActivity"
+        <activity android:name="com.dpearth.dvox.LoginActivity"
             android:theme="@style/LoginTheme.ProjectDIES"
             android:windowSoftInputMode="stateUnchanged|adjustPan"
             android:screenOrientation="portrait">
@@ -18,7 +18,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name="com.dpearth.dvox.MainActivity"
             android:theme="@style/LoginTheme.ProjectDIES"
             android:windowSoftInputMode="stateUnchanged|adjustPan"
             android:screenOrientation="portrait">

@@ -1,2 +1,2 @@
-rootProject.name = "ProjectDIES"
+rootProject.name = "dVox"
 include ':app'

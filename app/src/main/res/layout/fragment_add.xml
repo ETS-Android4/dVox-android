@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/BlackColor"
-    tools:context=".models.fragments.AddFragment">
+    tools:context="com.dpearth.dvox.models.fragments.AddFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
