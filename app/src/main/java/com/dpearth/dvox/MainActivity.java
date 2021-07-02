@@ -1,5 +1,7 @@
 package com.dpearth.dvox;
 
+import static com.dpearth.dvox.RandomNameGenerator.getRandomlyGeneratedName;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -7,11 +9,13 @@ import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.dpearth.dvox.models.fragments.AddFragment;
 import com.dpearth.dvox.models.fragments.HomeFragment;
 import com.dpearth.dvox.models.fragments.UserFragment;
 import com.dpearth.dvox.R;
+import com.dpearth.dvox.models.fragments.UserProfile;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -39,7 +43,8 @@ public class MainActivity extends AppCompatActivity {
                         //Toast.makeText(MainActivity.this, "Home!", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.ic_user:
-                        //Toast.makeText(MainActivity.this, "Profile!", Toast.LENGTH_SHORT).show();
+                        //String a = getRandomlyGeneratedName();    //Testing Randomly generated names
+                        //Toast.makeText(MainActivity.this, a, Toast.LENGTH_SHORT).show();
                         fragment = new UserFragment();
                         break;
                     default:
@@ -52,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         });
         bottomNavigationView.setSelectedItemId(R.id.ic_home);
     }
+
 
 
 
