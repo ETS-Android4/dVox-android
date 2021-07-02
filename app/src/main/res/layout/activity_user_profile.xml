@@ -25,17 +25,16 @@
             android:layout_marginEnd="-17dp"
             android:layout_marginBottom="-22dp"
             android:fontFamily="@font/montserrat_bold"
+            android:gravity="center"
             android:scrollbarSize="20sp"
             android:text="David Guetta"
-            android:textColor="#ffffff"
-            android:gravity="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#ffffff" />
 
         <ImageView
             android:id="@+id/profile_image"
             android:layout_width="wrap_content"
             android:layout_height="251dp"
-            android:layout_ceneterVertical="true"
             app:srcCompat="@drawable/_02_koala" />
 
     </RelativeLayout>
@@ -94,7 +93,7 @@
 
 
 
-        </androidx.cardview.widget.CardView>
+        </androidx.cardview.widget.CardView>te
 
         <androidx.cardview.widget.CardView
             android:layout_width="0dp"
