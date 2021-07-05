@@ -1,6 +1,7 @@
 package com.dpearth.dvox;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -58,8 +59,6 @@ public class LoginActivity extends AppCompatActivity {
                 if (checkEmailInput()) {
                     googleLogin(emailInput.getText().toString());
                     saveEmail(emailInput.getText().toString());
-
-                    //switchToMainActivity();
                 }
                 else{
                     shake();
@@ -90,8 +89,8 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         if (auth.isSignInWithEmailLink(emailLink)) {
                             // Retrieve this from wherever you stored it
-                            String email = "aleksandr.molchagin19@kzoo.edu";
-
+                            SharedPreferences sharedPreferences = getSharedPreferences("Settings", Context.MODE_PRIVATE);
+                            String email = sharedPreferences.getString("email", "defaultValue");
                             // The client SDK will parse the code from the link for you.
                             auth.signInWithEmailLink(email, emailLink)
                                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -108,6 +107,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 // result.getAdditionalUserInfo().getProfile() == null
                                                 // You can check if the user is new or existing:
                                                 // result.getAdditionalUserInfo().isNewUser()
+                                                switchToMainActivity();
                                             } else {
                                                 Log.e(LOGIN_TAG, "Error signing in with email link", task.getException());
                                                 StyleableToast.makeText(LoginActivity.this, "Error. Request a new link.", Toast.LENGTH_LONG, R.style.LoginToast).show();
@@ -190,7 +190,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void saveEmail(String email){
         // Get shared preferences
-        SharedPreferences sharedPreferences = getSharedPreferences("MySharedPref",MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("Settings", Context.MODE_PRIVATE);
         // Create an editor for shared preferences
         SharedPreferences.Editor myEdit = sharedPreferences.edit();
         // Put email
