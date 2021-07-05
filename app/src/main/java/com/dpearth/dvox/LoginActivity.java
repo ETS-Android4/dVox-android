@@ -26,6 +26,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.ActionCodeSettings;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 import com.muddzdev.styleabletoast.StyleableToast;
@@ -65,6 +66,10 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            switchToMainActivity();
+        }
 
         FirebaseDynamicLinks.getInstance()
                 .getDynamicLink(getIntent())
@@ -101,13 +106,13 @@ public class LoginActivity extends AppCompatActivity {
                                                 Log.d(LOGIN_TAG, "Successfully signed in with email link!");
                                                 StyleableToast.makeText(LoginActivity.this, "Success!", Toast.LENGTH_LONG, R.style.LoginToast).show();
 
-                                                AuthResult result = task.getResult();
                                                 // You can access the new user via result.getUser()
                                                 // Additional user info profile *not* available via:
                                                 // result.getAdditionalUserInfo().getProfile() == null
                                                 // You can check if the user is new or existing:
                                                 // result.getAdditionalUserInfo().isNewUser()
                                                 switchToMainActivity();
+                                                AuthResult result = task.getResult();
                                             } else {
                                                 Log.e(LOGIN_TAG, "Error signing in with email link", task.getException());
                                                 StyleableToast.makeText(LoginActivity.this, "Error. Request a new link.", Toast.LENGTH_LONG, R.style.LoginToast).show();
