@@ -8,7 +8,7 @@ android {
     compileSdkVersion 30
 
     defaultConfig {
-        applicationId "com.example.projectdies"
+        applicationId "com.dpearth.dvox"
         minSdkVersion 19
         targetSdkVersion 30
         versionCode 1
