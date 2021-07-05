@@ -41,14 +41,17 @@ dependencies {
     implementation 'com.google.firebase:firebase-bom:28.1.0'
     implementation 'com.google.firebase:firebase-auth:21.0.1'
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
+    implementation 'com.google.firebase:firebase-dynamic-links:20.1.0'
+    implementation 'com.google.firebase:firebase-analytics:19.0.0'
+
 
     //Visual dependencies
     implementation "androidx.cardview:cardview:1.0.0"                   //CardView
     implementation 'com.daimajia.androidanimations:library:2.4@aar'     //Android Simple Animations
     implementation 'com.muddzdev:styleabletoast:2.3.0'                  //Stylable Toasts
     implementation 'com.intuit.ssp:ssp-android:1.0.6'                   //Scalable SP units
-    implementation 'com.intuit.sdp:sdp-android:1.0.6'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//Scalable DP units
+    implementation 'com.intuit.sdp:sdp-android:1.0.6'                   //Scalable DP units
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

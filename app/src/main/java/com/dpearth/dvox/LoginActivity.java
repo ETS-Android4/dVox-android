@@ -2,6 +2,7 @@ package com.dpearth.dvox;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -26,7 +27,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public static final String ANDROID_PACKAGE = "com.dpearth.dvox";
     public static final String IOS_PACKAGE = "com.dpearth.dvox";
-    public static final String FIREBASE_LINK = "https://projectdies-55a14.firebaseapp.com/";
+    public static final String FIREBASE_LINK = "https://dvox.page.link/sign";
 
     public static final String LOGIN_TAG = "LoginActivity_projectDIES" ; //A string for debug purposes
 
@@ -35,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         //Create login activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
@@ -48,8 +50,10 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (checkEmailInput()) {
-                    //googleLogin();
-                    switchToMainActivity();
+                    googleLogin(emailInput.getText().toString());
+                    saveEmail(emailInput.getText().toString());
+
+                    //switchToMainActivity();
                 }
                 else{
                     shake();
@@ -64,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @SuppressLint("LongLogTag")
-    private void googleLogin(){
+    private void googleLogin(String email){
         ActionCodeSettings actionCodeSettings =
                 ActionCodeSettings.newBuilder()
                         // URL you want to redirect back to. The domain (www.example.com) for this
@@ -80,7 +84,7 @@ public class LoginActivity extends AppCompatActivity {
                         .build();
         Log.d(LOGIN_TAG, FIREBASE_LINK + "finishSignUp?cartId=1234");
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        auth.sendSignInLinkToEmail(emailInput.getText().toString(), actionCodeSettings)
+        auth.sendSignInLinkToEmail(email, actionCodeSettings)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -108,6 +112,17 @@ public class LoginActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    private void saveEmail(String email){
+        // Get shared preferences
+        SharedPreferences sharedPreferences = getSharedPreferences("MySharedPref",MODE_PRIVATE);
+        // Create an editor for shared preferences
+        SharedPreferences.Editor myEdit = sharedPreferences.edit();
+        // Put email
+        myEdit.putString("email", email);
+        // Commit changes
+        myEdit.commit();
     }
 
     private void shake(){
