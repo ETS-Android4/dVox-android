@@ -3,6 +3,7 @@ package com.dpearth.dvox;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,9 +19,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.ActionCodeSettings;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 import com.muddzdev.styleabletoast.StyleableToast;
 
 public class LoginActivity extends AppCompatActivity {
@@ -60,6 +66,73 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+
+        FirebaseDynamicLinks.getInstance()
+                .getDynamicLink(getIntent())
+                .addOnSuccessListener(this, new OnSuccessListener<PendingDynamicLinkData>() {
+                    @Override
+                    public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
+                        // Get deep link from result (may be null if no link is found)
+                        Uri deepLink = null;
+                        if (pendingDynamicLinkData != null) {
+                            deepLink = pendingDynamicLinkData.getLink();
+                        }
+
+                        FirebaseAuth auth = FirebaseAuth.getInstance();
+                        Intent intent = getIntent();
+
+                        String emailLink = "";
+                        if (deepLink != null)
+                            try {
+                                emailLink = deepLink.toString();
+                            } catch (Exception error){
+                                StyleableToast.makeText(LoginActivity.this, "Error. Request a new link.", Toast.LENGTH_LONG, R.style.LoginToast).show();
+                            }
+                        if (auth.isSignInWithEmailLink(emailLink)) {
+                            // Retrieve this from wherever you stored it
+                            String email = "aleksandr.molchagin19@kzoo.edu";
+
+                            // The client SDK will parse the code from the link for you.
+                            auth.signInWithEmailLink(email, emailLink)
+                                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                        @SuppressLint("LongLogTag")
+                                        @Override
+                                        public void onComplete(@NonNull Task<AuthResult> task) {
+                                            if (task.isSuccessful()) {
+                                                Log.d(LOGIN_TAG, "Successfully signed in with email link!");
+                                                StyleableToast.makeText(LoginActivity.this, "Success!", Toast.LENGTH_LONG, R.style.LoginToast).show();
+
+                                                AuthResult result = task.getResult();
+                                                // You can access the new user via result.getUser()
+                                                // Additional user info profile *not* available via:
+                                                // result.getAdditionalUserInfo().getProfile() == null
+                                                // You can check if the user is new or existing:
+                                                // result.getAdditionalUserInfo().isNewUser()
+                                            } else {
+                                                Log.e(LOGIN_TAG, "Error signing in with email link", task.getException());
+                                                StyleableToast.makeText(LoginActivity.this, "Error. Request a new link.", Toast.LENGTH_LONG, R.style.LoginToast).show();
+                                            }
+                                        }
+                                    });
+                        }
+
+
+                        // Handle the deep link. For example, open the linked
+                        // content, or apply promotional credit to the user's
+                        // account.
+                        // ...
+
+                        // ...
+                    }
+                })
+                .addOnFailureListener(this, new OnFailureListener() {
+                    @SuppressLint("LongLogTag")
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(LOGIN_TAG, "getDynamicLink:onFailure", e);
+                    }
+                });
+
     }
 
     private void switchToMainActivity() {
@@ -90,6 +163,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Log.d(LOGIN_TAG, "Email sent.");
+                            StyleableToast.makeText(LoginActivity.this, "The link was sent!", Toast.LENGTH_LONG, R.style.LoginToast).show();
                         }
                         else {
                             Log.d(LOGIN_TAG, "Failed. Error: " + task.getException());
