@@ -7,8 +7,18 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.dpearth.dvox.LoginActivity;
+import com.dpearth.dvox.MainActivity;
 import com.dpearth.dvox.R;
+import com.kenai.jffi.Main;
+import com.muddzdev.styleabletoast.StyleableToast;
+
+import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.methods.response.Web3ClientVersion;
+import org.web3j.protocol.http.HttpService;
+import org.web3j.tx.Contract;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +26,8 @@ import com.dpearth.dvox.R;
  * create an instance of this fragment.
  */
 public class HomeFragment extends Fragment {
+
+    private static final String API_KEY = "";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -55,6 +67,19 @@ public class HomeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        Web3j web3j = Web3j.build(new HttpService("https://rinkeby.infura.io/v3/" + API_KEY));
+        try {
+            Web3ClientVersion clientVersion = web3j.web3ClientVersion()
+                    .sendAsync().get();
+            if (!clientVersion.hasError()) {
+                StyleableToast.makeText(getActivity(), "Connected.", Toast.LENGTH_LONG, R.style.LoginToast).show();
+            } else {
+                StyleableToast.makeText(getActivity(), clientVersion.getError().getMessage(), Toast.LENGTH_LONG, R.style.LoginToast).show();
+            }
+        } catch (Exception e) {
+            StyleableToast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG, R.style.LoginToast).show();
+        }
+
     }
 
     @Override
