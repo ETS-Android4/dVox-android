@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,13 +13,23 @@ import android.widget.Toast;
 import com.dpearth.dvox.LoginActivity;
 import com.dpearth.dvox.MainActivity;
 import com.dpearth.dvox.R;
+import com.dpearth.dvox.smartcontract.PostContract;
 import com.kenai.jffi.Main;
 import com.muddzdev.styleabletoast.StyleableToast;
 
+import org.web3j.crypto.Credentials;
+import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.tx.Contract;
+
+import java.math.BigInteger;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+
+import java8.util.concurrent.CompletableFuture;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,13 +38,12 @@ import org.web3j.tx.Contract;
  */
 public class HomeFragment extends Fragment {
 
-    private static final String API_KEY = "";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -67,19 +77,40 @@ public class HomeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        Web3j web3j = Web3j.build(new HttpService("https://rinkeby.infura.io/v3/" + API_KEY));
+
+        // The address of our contract
+        String contractAddress = "PUT IT HERE";
+        // The infura address
+        String infuraURL = "PUT IT HERE";
+        // Connect to the ethereum network
+        Web3j web3j = Web3j.build(new HttpService(infuraURL));
+        // Wallet credentials
+        Credentials credentials = Credentials.create("PUT IT HERE");
+        // Gas limit
+        BigInteger gasLimit = BigInteger.valueOf(20_000_000_000L);
+        // Price limit
+        BigInteger gasPrice = BigInteger.valueOf(4300000);
+        // Get the our contract from Java wrapper file (./smartcontract/PostContract)
+        PostContract postContract = PostContract.load(contractAddress, web3j, credentials, gasLimit, gasPrice);
+        // Send request
+        CompletableFuture<BigInteger> getNumberOfPosts = postContract.postCount().sendAsync();
         try {
-            Web3ClientVersion clientVersion = web3j.web3ClientVersion()
-                    .sendAsync().get();
-            if (!clientVersion.hasError()) {
-                StyleableToast.makeText(getActivity(), "Connected.", Toast.LENGTH_LONG, R.style.LoginToast).show();
-            } else {
-                StyleableToast.makeText(getActivity(), clientVersion.getError().getMessage(), Toast.LENGTH_LONG, R.style.LoginToast).show();
-            }
-        } catch (Exception e) {
-            StyleableToast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG, R.style.LoginToast).show();
+            // Get the result
+            BigInteger numberOfPosts = getNumberOfPosts.get();
+            // Print as a string
+            StyleableToast.makeText(getActivity(), "Number of all ethereum posts: " + numberOfPosts.toString(), Toast.LENGTH_LONG, R.style.LoginToast).show();
+        } catch (InterruptedException e) {
+            // Print interrupted error
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            // Print execution error
+            e.printStackTrace();
         }
 
+    }
+
+    private String getAddress(Credentials credentials) {
+        return credentials.getAddress();
     }
 
     @Override
