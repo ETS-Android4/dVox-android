@@ -14,6 +14,7 @@ import com.dpearth.dvox.LoginActivity;
 import com.dpearth.dvox.MainActivity;
 import com.dpearth.dvox.R;
 import com.dpearth.dvox.smartcontract.PostContract;
+import com.dpearth.dvox.smartcontract.SmartContract;
 import com.kenai.jffi.Main;
 import com.muddzdev.styleabletoast.StyleableToast;
 
@@ -79,13 +80,13 @@ public class HomeFragment extends Fragment {
         }
 
         // The address of our contract
-        String contractAddress = "PUT IT HERE";
+        String contractAddress = "";
         // The infura address
-        String infuraURL = "PUT IT HERE";
+        String infuraURL = "";
         // Connect to the ethereum network
         Web3j web3j = Web3j.build(new HttpService(infuraURL));
         // Wallet credentials
-        Credentials credentials = Credentials.create("PUT IT HERE");
+        Credentials credentials = Credentials.create("");
         // Gas limit
         BigInteger gasLimit = BigInteger.valueOf(20_000_000_000L);
         // Price limit
@@ -94,18 +95,16 @@ public class HomeFragment extends Fragment {
         PostContract postContract = PostContract.load(contractAddress, web3j, credentials, gasLimit, gasPrice);
         // Send request
         CompletableFuture<BigInteger> getNumberOfPosts = postContract.postCount().sendAsync();
-        try {
-            // Get the result
-            BigInteger numberOfPosts = getNumberOfPosts.get();
-            // Print as a string
-            StyleableToast.makeText(getActivity(), "Number of all ethereum posts: " + numberOfPosts.toString(), Toast.LENGTH_LONG, R.style.LoginToast).show();
-        } catch (InterruptedException e) {
-            // Print interrupted error
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            // Print execution error
-            e.printStackTrace();
-        }
+
+
+
+        SmartContract smartContract = new SmartContract(contractAddress, infuraURL, credentials,
+                BigInteger.valueOf(200000000000000l), BigInteger.valueOf(10000));
+
+
+
+
+            StyleableToast.makeText(getActivity(), "POST MESSAGE: " + smartContract.getPost(1), Toast.LENGTH_LONG, R.style.LoginToast).show();
 
     }
 
