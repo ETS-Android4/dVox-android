@@ -104,7 +104,7 @@ public class HomeFragment extends Fragment {
 
 
 
-            StyleableToast.makeText(getActivity(), "POST MESSAGE: " + smartContract.getPost(1), Toast.LENGTH_LONG, R.style.LoginToast).show();
+            StyleableToast.makeText(getActivity(), "POST MESSAGE: " + smartContract.getPost(1).toString(), Toast.LENGTH_LONG, R.style.LoginToast).show();
 
     }
 

@@ -45,19 +45,40 @@ public class SmartContract {
         return getNumberOfPosts;
     }
 
-    public String getPost(long postNumber){
+    public Post getPost(long postNumber){
+        BigInteger id = null;
+        String title = null;
+        String author = null;
         String message = null;
+        String hashtag = null;
+        BigInteger votes = null;
+        boolean ban = false;
+
+        Post post = new Post();
+
         try {
-//            postContract.posts(BigInteger.valueOf(1L)).sendAsync().get();
+            id = postContract.posts(BigInteger.valueOf(postNumber)).sendAsync().get().component1();
+            title = postContract.posts(BigInteger.valueOf(postNumber)).sendAsync().get().component2();
+            author = postContract.posts(BigInteger.valueOf(postNumber)).sendAsync().get().component3();
             message = postContract.posts(BigInteger.valueOf(postNumber)).sendAsync().get().component4();
-//            (String) results.get(3).getValue()
+            votes = postContract.posts(BigInteger.valueOf(postNumber)).sendAsync().get().component6();
+            ban = postContract.posts(BigInteger.valueOf(postNumber)).sendAsync().get().component7();
+
+            post.setId(id);
+            post.setTitle(title);
+            post.setAuthor(author);
+            post.setMessage(message);
+            post.setHashtag(hashtag);
+            post.setVotes(votes);
+            post.setBan(ban);
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
 
-        return message;
+        return post;
     }
 
 
