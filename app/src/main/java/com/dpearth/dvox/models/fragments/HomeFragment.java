@@ -101,9 +101,6 @@ public class HomeFragment extends Fragment {
         SmartContract smartContract = new SmartContract(contractAddress, infuraURL, credentials,
                 BigInteger.valueOf(200000000000000l), BigInteger.valueOf(10000));
 
-
-
-
             StyleableToast.makeText(getActivity(), "POST MESSAGE: " + smartContract.getPost(1).toString(), Toast.LENGTH_LONG, R.style.LoginToast).show();
 
     }

@@ -3,6 +3,8 @@ package com.dpearth.dvox.smartcontract;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.http.HttpService;
+import org.web3j.tuples.Tuple;
+import org.web3j.tuples.generated.Tuple7;
 
 import java.math.BigInteger;
 import java.util.concurrent.ExecutionException;
@@ -57,12 +59,13 @@ public class SmartContract {
         Post post = new Post();
 
         try {
-            id = postContract.posts(BigInteger.valueOf(postNumber)).sendAsync().get().component1();
-            title = postContract.posts(BigInteger.valueOf(postNumber)).sendAsync().get().component2();
-            author = postContract.posts(BigInteger.valueOf(postNumber)).sendAsync().get().component3();
-            message = postContract.posts(BigInteger.valueOf(postNumber)).sendAsync().get().component4();
-            votes = postContract.posts(BigInteger.valueOf(postNumber)).sendAsync().get().component6();
-            ban = postContract.posts(BigInteger.valueOf(postNumber)).sendAsync().get().component7();
+            Tuple7<BigInteger, String, String, String, String, BigInteger, Boolean> a = postContract.posts((BigInteger.valueOf(postNumber))).sendAsync().get();
+            id = a.component1();
+            title = a.component2();
+            author = a.component3();
+            message = a.component4();
+            votes = a.component6();
+            ban = a.component7();
 
             post.setId(id);
             post.setTitle(title);
