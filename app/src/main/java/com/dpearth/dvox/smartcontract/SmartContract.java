@@ -48,32 +48,19 @@ public class SmartContract {
     }
 
     public Post getPost(long postNumber){
-        BigInteger id = null;
-        String title = null;
-        String author = null;
-        String message = null;
-        String hashtag = null;
-        BigInteger votes = null;
-        boolean ban = false;
 
         Post post = new Post();
 
         try {
-            Tuple7<BigInteger, String, String, String, String, BigInteger, Boolean> a = postContract.posts((BigInteger.valueOf(postNumber))).sendAsync().get();
-            id = a.component1();
-            title = a.component2();
-            author = a.component3();
-            message = a.component4();
-            votes = a.component6();
-            ban = a.component7();
+            Tuple7<BigInteger, String, String, String, String, BigInteger, Boolean> contractPost = postContract.posts((BigInteger.valueOf(postNumber))).sendAsync().get();
 
-            post.setId(id);
-            post.setTitle(title);
-            post.setAuthor(author);
-            post.setMessage(message);
-            post.setHashtag(hashtag);
-            post.setVotes(votes);
-            post.setBan(ban);
+            post.setId(contractPost.component1());
+            post.setTitle(contractPost.component2());
+            post.setAuthor(contractPost.component3());
+            post.setMessage(contractPost.component4());
+            post.setHashtag(contractPost.component5());
+            post.setVotes(contractPost.component6());
+            post.setBan(contractPost.component7());
 
         } catch (InterruptedException e) {
             e.printStackTrace();
