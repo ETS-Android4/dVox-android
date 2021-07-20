@@ -83,27 +83,21 @@ public class HomeFragment extends Fragment {
         String contractAddress = "";
         // The infura address
         String infuraURL = "";
-        // Connect to the ethereum network
-        Web3j web3j = Web3j.build(new HttpService(infuraURL));
         // Wallet credentials
         Credentials credentials = Credentials.create("");
-        // Gas limit
-        BigInteger gasLimit = BigInteger.valueOf(20_000_000_000L);
-        // Price limit
-        BigInteger gasPrice = BigInteger.valueOf(4300000);
-        // Get the our contract from Java wrapper file (./smartcontract/PostContract)
-        PostContract postContract = PostContract.load(contractAddress, web3j, credentials, gasLimit, gasPrice);
-        // Send request
-        CompletableFuture<BigInteger> getNumberOfPosts = postContract.postCount().sendAsync();
 
 
+        // Connect to the ethereum network
+        Web3j web3j = Web3j.build(new HttpService(infuraURL));
 
-        SmartContract smartContract = new SmartContract(contractAddress, infuraURL, credentials,
-                BigInteger.valueOf(20_000_000_000L), BigInteger.valueOf(4300000));
 
-        smartContract.createPost("AndriodPost", "Revaz", "TestPost", "#Test");
+        SmartContract smartContract = new SmartContract(contractAddress, infuraURL, credentials);
 
-            StyleableToast.makeText(getActivity(), "POST MESSAGE: " + smartContract.getPost(2).toString(), Toast.LENGTH_LONG, R.style.LoginToast).show();
+        //smartContract.createPost("Lol", "Lol", "Lol", "Lol");
+        //smartContract.addVote(2, 1);
+
+
+        StyleableToast.makeText(getActivity(), "POST MESSAGE: " + smartContract.getPost(4).toString(), Toast.LENGTH_LONG, R.style.LoginToast).show();
 
     }
 

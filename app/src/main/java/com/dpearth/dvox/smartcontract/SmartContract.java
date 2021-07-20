@@ -1,10 +1,13 @@
 package com.dpearth.dvox.smartcontract;
 
+import android.util.Log;
+
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.tuples.Tuple;
 import org.web3j.tuples.generated.Tuple7;
+import org.web3j.tx.gas.DefaultGasProvider;
 
 import java.math.BigInteger;
 import java.util.concurrent.ExecutionException;
@@ -12,6 +15,7 @@ import java.util.concurrent.ExecutionException;
 import java8.util.concurrent.CompletableFuture;
 
 /**
+ * PROVIDE DESCRIPTION
 *
 *
 *
@@ -28,13 +32,15 @@ public class SmartContract {
 
     private PostContract postContract;
 
-    public SmartContract(String contractAddress, String infuraURL, Credentials credentials, BigInteger gasLimit, BigInteger gasPrice) {
+    public SmartContract(String contractAddress, String infuraURL, Credentials credentials) {
         Web3j web3j = Web3j.build(new HttpService(infuraURL));
-        this.postContract = PostContract.load(contractAddress, web3j, credentials, gasLimit, gasPrice);
+        this.postContract = PostContract.load(contractAddress, web3j, credentials, new DefaultGasProvider());
     }
 
-
-    public BigInteger postCount(){
+    /** PROVIDE COMMENTS
+     *
+     */
+    public BigInteger getPostCount(){
         BigInteger getNumberOfPosts = BigInteger.valueOf(0L);
         try {
             getNumberOfPosts = postContract.postCount().sendAsync().get();
@@ -47,6 +53,10 @@ public class SmartContract {
         return getNumberOfPosts;
     }
 
+    /** PROVIDE COMMENTS
+     *
+     * @param id
+     */
     public Post getPost(long id){
 
         Post post = new Post();
@@ -71,42 +81,41 @@ public class SmartContract {
         return post;
     }
 
-    /**
-     *
-     * @param title
-     * @param author
-     * @param message
-     * @param hashtag
-     * @return
-     */
-    public Post createPost(String title, String author, String message, String hashtag){
-        return new Post(title, author, message, hashtag);
-    }
-
-    /**NEEEEDS TO BE FIXED. CANNOT INCREMENT VOTES
-     *
-     * Vote = true -> Upvote
-     * Vote = false -> Downvote
-     *
+    /** PROVIDE COMMENTS
      *
      * @param id
      * @param vote
      */
-    public void addVote(long id, boolean vote){
-
-            BigInteger currentVotes = getPost(id).getVotes();
-
-            if (vote) {
-                //Increment
-                BigInteger newVotes = currentVotes.add(BigInteger.valueOf(1));
-                getPost(id).setVotes(newVotes);
+    public boolean addVote(long id, int vote){
+        if (vote == 1 || vote == -1 ) {
+            try {
+                postContract.addVote(BigInteger.valueOf(id), BigInteger.valueOf(vote)).sendAsync().get();
+            } catch (Exception error) {
+                Log.d("SMART_CONTRACT_DEBUG", "Create Post Error: ", error);
+                return false;
             }
-            else {
-                //Decrement
-                BigInteger newVotes = currentVotes.add(BigInteger.valueOf(-1));
-                getPost(id).setVotes(newVotes);
-            }
-
+            return true;
+        }
+        return false;
     }
+
+    /** PROVIDE COMMENTS
+     *
+     * @param _title
+     * @param _author
+     * @param _message
+     * @param _hashtag
+     *
+     */
+    public boolean createPost(String _title, String _author, String _message, String _hashtag){
+        try {
+            postContract.createPost(_title, _author, _message, _hashtag).sendAsync().get();
+        } catch (Exception error) {
+            Log.d("SMART_CONTRACT_DEBUG", "Add Vote Error: ", error);
+            return false;
+        }
+        return true;
+    }
+
 
 }
