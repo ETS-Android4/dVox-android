@@ -11,7 +11,7 @@ import java.util.concurrent.ExecutionException;
 
 import java8.util.concurrent.CompletableFuture;
 
-/*
+/**
 *
 *
 *
@@ -47,12 +47,12 @@ public class SmartContract {
         return getNumberOfPosts;
     }
 
-    public Post getPost(long postNumber){
+    public Post getPost(long id){
 
         Post post = new Post();
 
         try {
-            Tuple7<BigInteger, String, String, String, String, BigInteger, Boolean> contractPost = postContract.posts((BigInteger.valueOf(postNumber))).sendAsync().get();
+            Tuple7<BigInteger, String, String, String, String, BigInteger, Boolean> contractPost = postContract.posts((BigInteger.valueOf(id))).sendAsync().get();
 
             post.setId(contractPost.component1());
             post.setTitle(contractPost.component2());
@@ -71,5 +71,42 @@ public class SmartContract {
         return post;
     }
 
+    /**
+     *
+     * @param title
+     * @param author
+     * @param message
+     * @param hashtag
+     * @return
+     */
+    public Post createPost(String title, String author, String message, String hashtag){
+        return new Post(title, author, message, hashtag);
+    }
+
+    /**NEEEEDS TO BE FIXED. CANNOT INCREMENT VOTES
+     *
+     * Vote = true -> Upvote
+     * Vote = false -> Downvote
+     *
+     *
+     * @param id
+     * @param vote
+     */
+    public void addVote(long id, boolean vote){
+
+            BigInteger currentVotes = getPost(id).getVotes();
+
+            if (vote) {
+                //Increment
+                BigInteger newVotes = currentVotes.add(BigInteger.valueOf(1));
+                getPost(id).setVotes(newVotes);
+            }
+            else {
+                //Decrement
+                BigInteger newVotes = currentVotes.add(BigInteger.valueOf(-1));
+                getPost(id).setVotes(newVotes);
+            }
+
+    }
 
 }

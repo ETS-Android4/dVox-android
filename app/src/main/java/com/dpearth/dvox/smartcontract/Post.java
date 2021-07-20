@@ -1,6 +1,7 @@
 package com.dpearth.dvox.smartcontract;
 
 import java.math.BigInteger;
+import java.util.Objects;
 
 /**
  *
@@ -12,13 +13,14 @@ import java.math.BigInteger;
 
 
 public class Post {
-    BigInteger id;
-    String title;
-    String author;
-    String message;
-    String hashtag;
-    BigInteger votes;
-    boolean ban;
+    private BigInteger id;
+    private static BigInteger counter = BigInteger.valueOf(1l);
+    private String title;
+    private String author;
+    private String message;
+    private String hashtag;
+    private BigInteger votes;
+    private boolean ban;
 
     //////////////////
     /* Constructors */
@@ -31,18 +33,34 @@ public class Post {
      *      @param   _author    (String) author of the post
      *      @param   _message   (String) message of the post
      */
-    public Post(BigInteger _id, String _title, String _author, String _message, String _hashtag, BigInteger _votes, boolean _ban){
-        this.id = _id;
-        this.title = _title;
-        this.author = _author;
-        this.message = _message;
-        this.hashtag = _hashtag;
-        this.votes = _votes;
-        this.ban = _ban;
+//    public Post(BigInteger _id, String _title, String _author, String _message, String _hashtag, BigInteger _votes, boolean _ban){
+//        this.id = _id;
+//        this.title = _title;
+//        this.author = _author;
+//        this.message = _message;
+//        this.hashtag = _hashtag;
+//        this.votes = _votes;
+//        this.ban = _ban;
+//    }
+
+    public Post(String title, String author, String message, String hashtag) {
+
+        //Auto Generating ID
+        this.id = BigInteger.valueOf(0);
+        id = id.add(counter);
+
+        this.title = title;
+        this.author = author;
+        this.message = message;
+        this.hashtag = hashtag;
+
+        this.votes = BigInteger.valueOf(0);
+        this.ban = false;
+
     }
 
     public Post(){
-
+        this(null, null, null, null);
     }
 
     public BigInteger getId() {
@@ -112,5 +130,18 @@ public class Post {
                 ", votes=" + votes +
                 ", ban=" + ban +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Post post = (Post) o;
+        return id.equals(post.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
