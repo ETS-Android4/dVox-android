@@ -40,6 +40,7 @@ import java8.util.concurrent.CompletableFuture;
 public class HomeFragment extends Fragment {
 
 
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -48,6 +49,7 @@ public class HomeFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
 
     public HomeFragment() {
         // Required empty public constructor
@@ -79,25 +81,8 @@ public class HomeFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        // The address of our contract
-        String contractAddress = "";
-        // The infura address
-        String infuraURL = "";
-        // Wallet credentials
-        Credentials credentials = Credentials.create("");
 
-
-        // Connect to the ethereum network
-        Web3j web3j = Web3j.build(new HttpService(infuraURL));
-
-
-        SmartContract smartContract = new SmartContract(contractAddress, infuraURL, credentials);
-
-        //smartContract.createPost("Lol", "Lol", "Lol", "Lol");
-        //smartContract.addVote(2, 1);
-
-
-        StyleableToast.makeText(getActivity(), "POST MESSAGE: " + smartContract.getPost(4).toString(), Toast.LENGTH_LONG, R.style.LoginToast).show();
+        //See Smart Contract & Post in MainActivity.java
 
     }
 

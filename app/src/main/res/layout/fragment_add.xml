@@ -102,6 +102,7 @@
                         android:text="post"
                         android:textColor="@color/black"
                         android:textSize="@dimen/_14ssp"
+                        android:onClick="startThread"
                         app:backgroundTint="@color/WhiteColor"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
