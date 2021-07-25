@@ -1,6 +1,9 @@
 package com.dpearth.dvox.smartcontract;
 
+
+
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -143,5 +146,17 @@ public class Post {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    private static int lastPostId = 0;
+
+    public static ArrayList<Post> createPostList(int numPosts) {
+        ArrayList<Post> posts = new ArrayList<>();
+
+        for (int i = 0; i <= numPosts; i++) {
+            posts.add(new Post());
+        }
+
+        return posts;
     }
 }

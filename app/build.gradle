@@ -53,6 +53,11 @@ dependencies {
     implementation 'com.intuit.sdp:sdp-android:1.0.6'                   //Scalable DP units
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'           //Recycle View
+
+//    implementation "com.github.parse-community.Parse-SDK-Android:parse:1.18.5"
+
+
     // Web3js
     implementation 'org.web3j:core:4.6.0-android'
     

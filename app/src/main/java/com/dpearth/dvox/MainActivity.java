@@ -35,10 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private static String contractAddress = "";
     private static String infuraURL = "";
     private static Credentials credentials = Credentials.create("");
-    private static SmartContract smartContract = new SmartContract(contractAddress, infuraURL, credentials);;
-
-    // Connect to the ethereum network
-    private static Web3j web3j = Web3j.build(new HttpService(infuraURL));
+    private static SmartContract smartContract = new SmartContract(contractAddress, infuraURL, credentials);
 
 
     private EditText postTitle, postTheme, postContent;
@@ -104,9 +101,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void run() {
 
-
-
-
                 //Fetching String values from ADD page
                 postTitle = findViewById(R.id.post_title);
                 postTheme = findViewById(R.id.post_theme);
@@ -120,27 +114,28 @@ public class MainActivity extends AppCompatActivity {
                         String content = postContent.getText().toString();
 
 
-                        for (int i = 0; i < seconds; i++) {
+//                        for (int i = 0; i < seconds; i++) {
 //                            System.out.println("\n\ttitle: " + title + "\ntheme: " +
 //                                    theme + "\ncontent: " + content + "\n counter: " + i);
 
                             long startTime = System.nanoTime();
-                            smartContract.addVote(4, 1);
+                            //smartContract.addVote(4, 1);
+                            //smartContract.createPost(title, "Revaz", theme, content);
+                            String a = smartContract.getPost(7).toString();
                             long endTime = System.nanoTime();
-
                             long totalTime = NANOSECONDS.toMillis(endTime - startTime);
 
-                            System.out.println("Votes: " + smartContract.getPost(4).getVotes()
+                            System.out.println("POST: \n\t" + a
                             + "\nTime for addvote: " + totalTime + " ms");
 
 
-                            try {
-                                //Sleep for testing Thread
-                                Thread.sleep(1000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
+//                            try {
+//                                //Sleep for testing Thread
+//                                Thread.sleep(1000);
+//                            } catch (InterruptedException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
 
 
 
