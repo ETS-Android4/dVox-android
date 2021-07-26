@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -77,22 +78,21 @@ public class HomeFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-//        setContentView(R.layout.);
-
-//        // Lookup the recyclerview in activity layout
-//        RecyclerView recvPosts = (RecyclerView) findViewById(R.id.rvPosts);
+//        setContentView(R.layout.custome_design);
 //
-//        // Initialize contacts
+////      Lookup the recyclerview in activity layout
+//        RecyclerView recvPosts = (RecyclerView) findViewById(R.id.cardview_clayout);
+//
+//
+////        Initialize post
 //        posts = Post.createPostList(5);
-//        // Create adapter passing in the sample user data
+////        Create adapter passing in the sample user data
 //        RecyclerAdapter adapter = new RecyclerAdapter(posts);
-//        // Attach the adapter to the recyclerview to populate items
+////        Attach the adapter to the recyclerview to populate items
 //        recvPosts.setAdapter(adapter);
-//        // Set layout manager to position the items
+////        Set layout manager to position the items
 //        recvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
 
-
-        //See Smart Contract & Post in MainActivity.java
 
     }
 
@@ -103,8 +103,6 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
@@ -112,46 +110,5 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        rvPosts = view.findViewById(R.id.rvPosts);
-
-//        queryPosts();
     }
-
-    //    @Override
-//    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-//        super.onViewCreated(view, savedInstanceState);
-//        rvPosts = view.findViewById(R.id.rvPosts);
-//
-//
-//        rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
-//        adapter = new RecyclerAdapter(getContext(), monthNames);
-//        rvPosts.setAdapter(adapter);
-//    }
-
-//    protected void queryPosts(String title, String author, String message, String hashtag) {
-//        Post post = new Post();
-//        post.setTitle(title);
-//        post.setAuthor(author);
-//        post.setMessage(message);
-//        post.setHashtag(hashtag);
-//    }
-
-
-
-//    protected void queryPosts() {
-//        ParseQuery<Post> query =  ParseQuery.getQuery(Post.class);
-//        query.include(Post.DEFAULT_PIN);
-//        query.findInBackground(new FindCallback<Post>() {
-//            @Override
-//            public void done(List<Post> posts, ParseException e) {
-//                if (e != null) {
-//                    Log.e(TAG, "Issue with getting posts", e);
-//                    return;
-//                }
-//                for (Post post: posts) {
-//                    Log.e(TAG, "Post: " + post.toString() + " , username: " + post.getAuthor());
-//                }
-//            }
-//        });
-//    }
 }

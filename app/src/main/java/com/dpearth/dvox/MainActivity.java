@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.text.InputType;
@@ -19,7 +21,9 @@ import android.widget.Toast;
 
 import com.dpearth.dvox.models.fragments.AddFragment;
 import com.dpearth.dvox.models.fragments.HomeFragment;
+import com.dpearth.dvox.models.fragments.RecyclerAdapter;
 import com.dpearth.dvox.models.fragments.UserFragment;
+import com.dpearth.dvox.smartcontract.Post;
 import com.dpearth.dvox.smartcontract.SmartContract;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.muddzdev.styleabletoast.StyleableToast;
@@ -27,6 +31,8 @@ import com.muddzdev.styleabletoast.StyleableToast;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.http.HttpService;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
     private static Credentials credentials = Credentials.create("");
     private static SmartContract smartContract = new SmartContract(contractAddress, infuraURL, credentials);
 
+    private RecyclerView rvPosts;
+    private ArrayList<Post> posts;
 
     private EditText postTitle, postTheme, postContent;
     private Button buttonSave;
@@ -49,36 +57,50 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate (Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        bottomNavigationView = findViewById(R.id.bottom_navigation);
+//        setContentView(R.layout.activity_main);
+//        bottomNavigationView = findViewById(R.id.bottom_navigation);
+//
+//        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+//            @Override
+//            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+//                Fragment fragment;
+//                switch (menuItem.getItemId()) {
+//                    case R.id.ic_add:
+//                        fragment = new AddFragment();
+//                        //Toast.makeText(MainActivity.this, "Compose!", Toast.LENGTH_SHORT).show();
+//                        break;
+//                    case R.id.ic_home:
+//                        fragment = new HomeFragment();
+//                        //Toast.makeText(MainActivity.this, "Home!", Toast.LENGTH_SHORT).show();
+//                        break;
+//                    case R.id.ic_user:
+//                        //String a = getRandomlyGeneratedName();    //Testing Randomly generated names
+//                        //Toast.makeText(MainActivity.this, a, Toast.LENGTH_SHORT).show();
+//                        fragment = new UserFragment();
+//                        break;
+//                    default:
+//                        fragment = new HomeFragment();
+//                        break;
+//                }
+//                fragmentManager.beginTransaction().replace(R.id.fl_wrapper, fragment).commit();
+//                return true;
+//            }
+//        });
+//        bottomNavigationView.setSelectedItemId(R.id.ic_home);
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                Fragment fragment;
-                switch (menuItem.getItemId()) {
-                    case R.id.ic_add:
-                        fragment = new AddFragment();
-                        //Toast.makeText(MainActivity.this, "Compose!", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.ic_home:
-                        fragment = new HomeFragment();
-                        //Toast.makeText(MainActivity.this, "Home!", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.ic_user:
-                        //String a = getRandomlyGeneratedName();    //Testing Randomly generated names
-                        //Toast.makeText(MainActivity.this, a, Toast.LENGTH_SHORT).show();
-                        fragment = new UserFragment();
-                        break;
-                    default:
-                        fragment = new HomeFragment();
-                        break;
-                }
-                fragmentManager.beginTransaction().replace(R.id.fl_wrapper, fragment).commit();
-                return true;
-            }
-        });
-        bottomNavigationView.setSelectedItemId(R.id.ic_home);
+
+        setContentView(R.layout.custome_design);
+
+//      Lookup the recyclerview in activity layout
+        rvPosts = (RecyclerView) findViewById(R.id.rvPosts);
+//        Initialize post
+        posts = Post.createPostList(5);
+//        Create adapter passing in the sample user data
+        RecyclerAdapter adapter = new RecyclerAdapter(posts);
+//        Attach the adapter to the recyclerview to populate items
+        rvPosts.setAdapter(adapter);
+//        Set layout manager to position the items
+        rvPosts.setLayoutManager(new LinearLayoutManager(this));
     }
 
     //Maybe this belongs in AddFragment class

@@ -29,13 +29,13 @@ public class Post {
     /* Constructors */
     //////////////////
 
-    /**
-     * Constructs a new post.
-     *
-     *      @param   _title   (String) title of the post
-     *      @param   _author    (String) author of the post
-     *      @param   _message   (String) message of the post
-     */
+//    /**
+//     * Constructs a new post.
+//     *
+//     *      @param   _title   (String) title of the post
+//     *      @param   _author    (String) author of the post
+//     *      @param   _message   (String) message of the post
+//     */
 //    public Post(BigInteger _id, String _title, String _author, String _message, String _hashtag, BigInteger _votes, boolean _ban){
 //        this.id = _id;
 //        this.title = _title;
@@ -154,7 +154,7 @@ public class Post {
         ArrayList<Post> posts = new ArrayList<>();
 
         for (int i = 0; i <= numPosts; i++) {
-            posts.add(new Post());
+            posts.add(new Post("Let's display this post", "Revaz", "Trying to display this POST",  "#weCanDoThis"));
         }
 
         return posts;
