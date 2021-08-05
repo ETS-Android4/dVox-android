@@ -1,5 +1,7 @@
 package com.dpearth.dvox;
 
+import static com.dpearth.dvox.RandomNameGenerator.getRandomlyGeneratedName;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +14,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import androidx.annotation.NonNull;
@@ -29,7 +33,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.muddzdev.styleabletoast.StyleableToast;
+
+import org.web3j.crypto.Credentials;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -42,6 +50,15 @@ public class LoginActivity extends AppCompatActivity {
     private EditText emailInput;
     private Button verifyButton;
 
+    private FirebaseFirestore fstore;
+    private String userID;
+
+    private static String contractAddress = "";
+    private static String infuraURL = "";
+    private static Credentials credentials = Credentials.create("");
+
+    private static final String anonymousUserName = getRandomlyGeneratedName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -52,6 +69,9 @@ public class LoginActivity extends AppCompatActivity {
         //Assign buttons
         emailInput = findViewById(R.id.email_input);
         verifyButton = findViewById(R.id.verify_button);
+
+        //Need to instantiate fStore
+        fstore = FirebaseFirestore.getInstance();
 
         //Verify button method
         verifyButton.setOnClickListener(new View.OnClickListener() {
@@ -119,6 +139,26 @@ public class LoginActivity extends AppCompatActivity {
                                             }
                                         }
                                     });
+
+                            //Adding Data to USERS
+
+                            DocumentReference documentReference = fstore.collection("users").document(userID);
+                            userID = auth.getCurrentUser().getUid();
+                            Map<String, Object> user = new HashMap<>();
+
+                            user.put("contractAddress", contractAddress);
+                            user.put("infuraURL", infuraURL);
+                            user.put("credentials", credentials);
+                            user.put("anonymousUserName", anonymousUserName);
+
+                            documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    Log.d("addingUserData ", "onSuccess: User Profile is created for " + userID);
+                                }
+                            });
+
+
                         }
 
 

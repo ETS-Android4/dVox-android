@@ -24,10 +24,12 @@ import java.util.List;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
-    private List<Post> mPosts;
+    private Context context;
+    private List<Post> posts;
 
-    public RecyclerAdapter(List<Post> posts) {
-        mPosts = posts;
+    public RecyclerAdapter(Context context, List<Post> posts) {
+        this.context = context;
+        this.posts = posts;
     }
 
     /** Create new view
@@ -40,7 +42,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @Override
     public RecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
         View view = layoutInflater.inflate(R.layout.custome_design, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
@@ -54,7 +56,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull RecyclerAdapter.ViewHolder holder, int position) {
         // Get the data model based on position
-        Post post = mPosts.get(position);
+        Post post = posts.get(position);
 
         // Set item views based on your views and data model
         TextView titleView = holder.title;
@@ -81,7 +83,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
      */
     @Override
     public int getItemCount() {
-        return mPosts.size();
+        return posts.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
