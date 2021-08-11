@@ -3,8 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/BlackColor">
+
+
+
 
     <androidx.cardview.widget.CardView
         android:id="@+id/main_cardview"
@@ -13,6 +16,7 @@
         android:layout_marginStart="@dimen/_15sdp"
         android:layout_marginTop="@dimen/_15sdp"
         android:layout_marginEnd="@dimen/_15sdp"
+        android:layout_marginBottom="@dimen/_15sdp"
         app:cardCornerRadius="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -20,10 +24,30 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cardview_clayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+
+            <ImageView
+                android:id="@+id/comment_button3"
+                android:layout_width="@dimen/_19sdp"
+                android:layout_height="@dimen/_19sdp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:rotationY="0"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/downvote_button"
+                app:layout_constraintTop_toBottomOf="@+id/message_text"
+                app:layout_constraintVertical_bias="0.0"
+                app:srcCompat="@drawable/fi_rr_comment"
+                tools:ignore="MissingConstraints" />
 
             <ImageView
                 android:id="@+id/upvote_button"
@@ -40,24 +64,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/message_text"
                 app:layout_constraintVertical_bias="0.0"
                 app:srcCompat="@drawable/fi_rr_thumbs_up"
-                tools:ignore="MissingConstraints" />
-
-            <ImageView
-                android:id="@+id/comment_button"
-                android:layout_width="@dimen/_19sdp"
-                android:layout_height="@dimen/_19sdp"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                android:layout_marginBottom="@dimen/_10sdp"
-                android:rotationY="0"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/downvote_button"
-                app:layout_constraintTop_toBottomOf="@+id/message_text"
-                app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@drawable/fi_rr_comment"
                 tools:ignore="MissingConstraints" />
 
             <ImageView
@@ -78,6 +84,48 @@
                 tools:ignore="MissingConstraints" />
 
             <TextView
+                android:id="@+id/upvote_number"
+                android:layout_width="@dimen/_31sdp"
+                android:layout_height="@dimen/_19sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:text="2314"
+                android:textAlignment="center"
+                android:textSize="@dimen/_10ssp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/downvote_button"
+                app:layout_constraintStart_toEndOf="@+id/upvote_button"
+                app:layout_constraintTop_toBottomOf="@+id/downvote_button" />
+
+            <TextView
+                android:id="@+id/upvote_number2"
+                android:layout_width="@dimen/_31sdp"
+                android:layout_height="@dimen/_19sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:text="100"
+                android:textSize="@dimen/_10ssp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/comment_button3"
+                app:layout_constraintTop_toBottomOf="@+id/comment_button3"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <TextView
+                android:id="@+id/hashtag_text"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:text="#iamthethemelolrevazmakesmetyping"
+                android:textAlignment="textEnd"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textSize="@dimen/_10ssp"
+                app:autoSizeTextType="uniform"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/message_text" />
+
+            <TextView
                 android:id="@+id/author_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -85,7 +133,7 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginBottom="@dimen/_10sdp"
                 android:fontFamily="@font/montserrat_extra_light"
-                android:text="@Anonymous_Panda_123"
+                android:text="Author"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_10ssp"
                 app:layout_constraintBottom_toTopOf="@+id/message_text"
@@ -103,7 +151,7 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginBottom="@dimen/_10sdp"
                 android:fontFamily="@font/montserrat_bold"
-                android:text="Welcome message"
+                android:text="Title of the post "
                 android:textColor="@color/black"
                 android:textSize="@dimen/_14ssp"
                 app:layout_constraintBottom_toTopOf="@+id/message_text"
@@ -122,14 +170,16 @@
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:layout_marginBottom="@dimen/_10sdp"
                 android:fontFamily="@font/montserrat_regular"
-                android:text="Welcome to the app! I believe that everyone should have an opportunity to share their own thoughts privately. This is why me and my friends developed this platform."
+                android:text="Ullamco nulla reprehenderit fugiat pariatur. Aliqua in laboris commodo nisi aute tempor dolor nulla. Laboris deserunt deserunt occaecat cupidatat. Deserunt velit ullamco nisi deserunt sint reprehenderit ea. Proident deserunt irure culpa ea ad dolor magna aute aliquip ullamco. Laboris deserunt nisi amet elit velit dolor laboris aute. Adipisicing do velit cillum fugiat nostrud et veniam laboris laboris velit ut dolor ad."
                 android:textColor="@color/black"
                 android:textSize="@dimen/_11ssp"
+                app:autoSizeTextType="uniform"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/avatar_cardview"
                 app:layout_constraintVertical_bias="0.0" />
+
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/avatar_cardview"
@@ -151,6 +201,10 @@
                     tools:srcCompat="@drawable/_02_koala" />
             </androidx.cardview.widget.CardView>
 
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+
     </androidx.cardview.widget.CardView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

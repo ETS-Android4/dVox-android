@@ -1,25 +1,18 @@
 package com.dpearth.dvox.models.fragments;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dpearth.dvox.R;
 import com.dpearth.dvox.smartcontract.Post;
 
-import org.w3c.dom.Text;
-
-import java.math.BigInteger;
 import java.util.List;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
@@ -43,7 +36,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public RecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         LayoutInflater layoutInflater = LayoutInflater.from(context);
-        View view = layoutInflater.inflate(R.layout.custome_design, parent, false);
+        View view = layoutInflater.inflate(R.layout.item_post, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }

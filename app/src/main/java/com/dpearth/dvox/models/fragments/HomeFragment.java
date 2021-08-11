@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,10 +36,8 @@ public class HomeFragment extends Fragment {
 
     public static final String TAG = "HomeFragment";
 
+    private RecyclerView rvPosts;
 
-//  private RecyclerView rvPosts;
-    private RecyclerAdapter adapter;
-    private ArrayList<Post> posts;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -78,31 +77,6 @@ public class HomeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-        SharedPreferences preferences = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
-        String cred = preferences.getString("Credentials", "error");
-        Log.d(TAG, cred);
-
-        SmartContract contract = new SmartContract(preferences);
-
-        Log.d(TAG, contract.getPostCount().toString());
-
-//        setContentView(R.layout.custome_design);
-//
-////      Lookup the recyclerview in activity layout
-//        RecyclerView recvPosts = (RecyclerView) findViewById(R.id.cardview_clayout);
-//
-//
-////        Initialize post
-//        posts = Post.createPostList(5);
-////        Create adapter passing in the sample user data
-//        RecyclerAdapter adapter = new RecyclerAdapter(posts);
-////        Attach the adapter to the recyclerview to populate items
-//        recvPosts.setAdapter(adapter);
-////        Set layout manager to position the items
-//        recvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
-
-
     }
 
     private String getAddress(Credentials credentials) {
@@ -119,5 +93,30 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        rvPosts = view.findViewById(R.id.rvPosts);
+
+        queryPosts(5);
+    }
+
+    /**
+     * Retrieves the certain number of last posts from the smart contract.
+     *
+     * @param numberOfPosts - the number of posts to get
+     */
+    private void queryPosts(int numberOfPosts) {
+        SharedPreferences preferences = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
+        SmartContract contract = new SmartContract(preferences);
+
+        int postCount = contract.getPostCount();
+        if (!(numberOfPosts > postCount) && postCount > 0){
+            Post[] posts = new Post[postCount+1];
+            for (int i = postCount; i > postCount - numberOfPosts; i--){
+                Post post = contract.getPost(i);
+                posts[i] = post;
+                Log.d(TAG, post.toString());
+            }
+
+        };
+
     }
 }

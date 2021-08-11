@@ -3,6 +3,7 @@ package com.dpearth.dvox.smartcontract;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import org.web3j.abi.datatypes.Int;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.http.HttpService;
@@ -49,7 +50,7 @@ public class SmartContract {
     /** PROVIDE COMMENTS
      *
      */
-    public BigInteger getPostCount(){
+    public int getPostCount(){
         if (loaded == true) {
             BigInteger getNumberOfPosts = BigInteger.valueOf(0L);
             try {
@@ -59,10 +60,10 @@ public class SmartContract {
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
-            return getNumberOfPosts;
+            return (getNumberOfPosts.intValue())-1;
 
         }
-        return BigInteger.valueOf(-1);
+        return -1;
     }
 
     /** PROVIDE COMMENTS
