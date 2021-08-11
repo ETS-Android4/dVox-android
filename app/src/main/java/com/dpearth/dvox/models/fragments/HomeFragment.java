@@ -61,8 +61,6 @@ public class HomeFragment extends Fragment {
         SharedPreferences preferences = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
         SmartContract contract = new SmartContract(preferences);
 
-        allPosts.add(new Post("lol","lol","lol","lol" ));
-
         int postCount = contract.getPostCount();
         if (!(numberOfPosts > postCount) && postCount > 0){
             Post[] posts = new Post[postCount+1];
