@@ -37,7 +37,6 @@ public class APIs {
              */
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                SharedPreferences.Editor prefsEditor = preferences.edit();
                 if (task.isSuccessful()) {
 
                     //Getting results of the document

@@ -63,11 +63,8 @@ public class HomeFragment extends Fragment {
 
         int postCount = contract.getPostCount();
         if (!(numberOfPosts > postCount) && postCount > 0){
-            Post[] posts = new Post[postCount+1];
             for (int i = postCount; i > postCount - numberOfPosts; i--){
                 Post post = contract.getPost(i);
-                posts[i] = post;
-                Log.d(TAG, post.toString());
                 allPosts.add(post);
             }
             postAdapter.notifyDataSetChanged();
