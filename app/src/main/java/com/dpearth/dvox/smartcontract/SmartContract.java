@@ -1,18 +1,16 @@
 package com.dpearth.dvox.smartcontract;
 
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.http.HttpService;
-import org.web3j.tuples.Tuple;
 import org.web3j.tuples.generated.Tuple7;
 import org.web3j.tx.gas.DefaultGasProvider;
 
 import java.math.BigInteger;
 import java.util.concurrent.ExecutionException;
-
-import java8.util.concurrent.CompletableFuture;
 
 /**
  * PROVIDE DESCRIPTION
@@ -32,25 +30,39 @@ public class SmartContract {
 
     private PostContract postContract;
 
-    public SmartContract(String contractAddress, String infuraURL, Credentials credentials) {
-        Web3j web3j = Web3j.build(new HttpService(infuraURL));
-        this.postContract = PostContract.load(contractAddress, web3j, credentials, new DefaultGasProvider());
+    private boolean loaded = false;
+
+    public SmartContract(SharedPreferences preferences) {
+
+            String Credentials = preferences.getString("Credentials", "error");
+            String InfuraURL = preferences.getString("InfuraURL", "error");
+            String ContractAddress = preferences.getString("Address", "error");
+
+            if (!ContractAddress.equals("error") && !Credentials.equals("error") && !InfuraURL.equals("error")) {
+                Web3j web3j = Web3j.build(new HttpService(InfuraURL));
+                Credentials credentials = org.web3j.crypto.Credentials.create(Credentials);
+                postContract = PostContract.load(ContractAddress, web3j, credentials, new DefaultGasProvider());
+                loaded = true;
+            }
     }
 
     /** PROVIDE COMMENTS
      *
      */
     public BigInteger getPostCount(){
-        BigInteger getNumberOfPosts = BigInteger.valueOf(0L);
-        try {
-            getNumberOfPosts = postContract.postCount().sendAsync().get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+        if (loaded == true) {
+            BigInteger getNumberOfPosts = BigInteger.valueOf(0L);
+            try {
+                getNumberOfPosts = postContract.postCount().sendAsync().get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+            return getNumberOfPosts;
 
-        return getNumberOfPosts;
+        }
+        return BigInteger.valueOf(-1);
     }
 
     /** PROVIDE COMMENTS

@@ -1,26 +1,29 @@
 package com.dpearth.dvox.models.fragments;
 
+
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.dpearth.dvox.MainActivity;
 import com.dpearth.dvox.R;
 import com.dpearth.dvox.smartcontract.Post;
+import com.dpearth.dvox.smartcontract.SmartContract;
+import com.google.gson.Gson;
+import com.kenai.jffi.Main;
 
 import org.web3j.crypto.Credentials;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -33,7 +36,7 @@ public class HomeFragment extends Fragment {
     public static final String TAG = "HomeFragment";
 
 
-//    private RecyclerView rvPosts;
+//  private RecyclerView rvPosts;
     private RecyclerAdapter adapter;
     private ArrayList<Post> posts;
 
@@ -41,11 +44,11 @@ public class HomeFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    
+
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
 
     public HomeFragment() {
         // Required empty public constructor
@@ -68,7 +71,6 @@ public class HomeFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +78,14 @@ public class HomeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        SharedPreferences preferences = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
+        String cred = preferences.getString("Credentials", "error");
+        Log.d(TAG, cred);
+
+        SmartContract contract = new SmartContract(preferences);
+
+        Log.d(TAG, contract.getPostCount().toString());
 
 //        setContentView(R.layout.custome_design);
 //
