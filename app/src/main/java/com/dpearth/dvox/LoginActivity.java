@@ -14,8 +14,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.HashMap;
-import java.util.Map;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStreamReader;
 import java.util.regex.Pattern;
 
 import androidx.annotation.NonNull;
@@ -53,131 +55,115 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseFirestore fstore;
     private String userID;
 
-    private static String contractAddress = "";
-    private static String infuraURL = "";
-    private static Credentials credentials = Credentials.create("");
 
     private static final String anonymousUserName = getRandomlyGeneratedName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        //Create login activity
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        //Checking to see if phone is rooted
+        if (isRootGiven()){
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.phone_is_rooted);
+            Log.d("Rooted Phone", "onCreate: Phone is rooted. Can't access the app");
+        } else {
 
-        //Assign buttons
-        emailInput = findViewById(R.id.email_input);
-        verifyButton = findViewById(R.id.verify_button);
+            //Create login activity
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_login);
 
-        //Need to instantiate fStore
-        fstore = FirebaseFirestore.getInstance();
+            //Assign buttons
+            emailInput = findViewById(R.id.email_input);
+            verifyButton = findViewById(R.id.verify_button);
 
-        //Verify button method
-        verifyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (checkEmailInput()) {
-                    googleLogin(emailInput.getText().toString());
-                    saveEmail(emailInput.getText().toString());
+            //Need to instantiate fStore
+            fstore = FirebaseFirestore.getInstance();
+
+            //Verify button method
+            verifyButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (checkEmailInput()) {
+                        googleLogin(emailInput.getText().toString());
+                        saveEmail(emailInput.getText().toString());
+                    } else {
+                        shake();
+                    }
                 }
-                else{
-                    shake();
-                }
+            });
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null) {
+                switchToMainActivity();
             }
-        });
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            switchToMainActivity();
-        }
 
-        FirebaseDynamicLinks.getInstance()
-                .getDynamicLink(getIntent())
-                .addOnSuccessListener(this, new OnSuccessListener<PendingDynamicLinkData>() {
-                    @Override
-                    public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
-                        // Get deep link from result (may be null if no link is found)
-                        Uri deepLink = null;
-                        if (pendingDynamicLinkData != null) {
-                            deepLink = pendingDynamicLinkData.getLink();
-                        }
-
-                        FirebaseAuth auth = FirebaseAuth.getInstance();
-                        Intent intent = getIntent();
-
-                        String emailLink = "";
-                        if (deepLink != null)
-                            try {
-                                emailLink = deepLink.toString();
-                            } catch (Exception error){
-                                StyleableToast.makeText(LoginActivity.this, "Error. Request a new link.", Toast.LENGTH_LONG, R.style.LoginToast).show();
+            FirebaseDynamicLinks.getInstance()
+                    .getDynamicLink(getIntent())
+                    .addOnSuccessListener(this, new OnSuccessListener<PendingDynamicLinkData>() {
+                        @Override
+                        public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
+                            // Get deep link from result (may be null if no link is found)
+                            Uri deepLink = null;
+                            if (pendingDynamicLinkData != null) {
+                                deepLink = pendingDynamicLinkData.getLink();
                             }
-                        if (auth.isSignInWithEmailLink(emailLink)) {
-                            // Retrieve this from wherever you stored it
-                            SharedPreferences sharedPreferences = getSharedPreferences("Settings", Context.MODE_PRIVATE);
-                            String email = sharedPreferences.getString("email", "defaultValue");
-                            // The client SDK will parse the code from the link for you.
-                            auth.signInWithEmailLink(email, emailLink)
-                                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                        @SuppressLint("LongLogTag")
-                                        @Override
-                                        public void onComplete(@NonNull Task<AuthResult> task) {
-                                            if (task.isSuccessful()) {
-                                                Log.d(LOGIN_TAG, "Successfully signed in with email link!");
-                                                StyleableToast.makeText(LoginActivity.this, "Success!", Toast.LENGTH_LONG, R.style.LoginToast).show();
 
-                                                // You can access the new user via result.getUser()
-                                                // Additional user info profile *not* available via:
-                                                // result.getAdditionalUserInfo().getProfile() == null
-                                                // You can check if the user is new or existing:
-                                                // result.getAdditionalUserInfo().isNewUser()
-                                                switchToMainActivity();
-                                                AuthResult result = task.getResult();
-                                            } else {
-                                                Log.e(LOGIN_TAG, "Error signing in with email link", task.getException());
-                                                StyleableToast.makeText(LoginActivity.this, "Error. Request a new link.", Toast.LENGTH_LONG, R.style.LoginToast).show();
-                                            }
-                                        }
-                                    });
+                            FirebaseAuth auth = FirebaseAuth.getInstance();
+                            Intent intent = getIntent();
 
-                            //Adding Data to USERS
-
-                            DocumentReference documentReference = fstore.collection("users").document(userID);
-                            userID = auth.getCurrentUser().getUid();
-                            Map<String, Object> user = new HashMap<>();
-
-                            user.put("contractAddress", contractAddress);
-                            user.put("infuraURL", infuraURL);
-                            user.put("credentials", credentials);
-                            user.put("anonymousUserName", anonymousUserName);
-
-                            documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                    Log.d("addingUserData ", "onSuccess: User Profile is created for " + userID);
+                            String emailLink = "";
+                            if (deepLink != null)
+                                try {
+                                    emailLink = deepLink.toString();
+                                } catch (Exception error) {
+                                    StyleableToast.makeText(LoginActivity.this, "Error. Request a new link.", Toast.LENGTH_LONG, R.style.LoginToast).show();
                                 }
-                            });
+                            if (auth.isSignInWithEmailLink(emailLink)) {
+                                // Retrieve this from wherever you stored it
+                                SharedPreferences sharedPreferences = getSharedPreferences("Settings", Context.MODE_PRIVATE);
+                                String email = sharedPreferences.getString("email", "defaultValue");
+                                // The client SDK will parse the code from the link for you.
+                                auth.signInWithEmailLink(email, emailLink)
+                                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                            @SuppressLint("LongLogTag")
+                                            @Override
+                                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                                if (task.isSuccessful()) {
+                                                    Log.d(LOGIN_TAG, "Successfully signed in with email link!");
+                                                    StyleableToast.makeText(LoginActivity.this, "Success!", Toast.LENGTH_LONG, R.style.LoginToast).show();
+
+                                                    // You can access the new user via result.getUser()
+                                                    // Additional user info profile *not* available via:
+                                                    // result.getAdditionalUserInfo().getProfile() == null
+                                                    // You can check if the user is new or existing:
+                                                    // result.getAdditionalUserInfo().isNewUser()
+                                                    switchToMainActivity();
+                                                    AuthResult result = task.getResult();
+                                                } else {
+                                                    Log.e(LOGIN_TAG, "Error signing in with email link", task.getException());
+                                                    StyleableToast.makeText(LoginActivity.this, "Error. Request a new link.", Toast.LENGTH_LONG, R.style.LoginToast).show();
+                                                }
+                                            }
+                                        });
+                            }
 
 
+                            // Handle the deep link. For example, open the linked
+                            // content, or apply promotional credit to the user's
+                            // account.
+                            // ...
+
+                            // ...
                         }
+                    })
+                    .addOnFailureListener(this, new OnFailureListener() {
+                        @SuppressLint("LongLogTag")
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d(LOGIN_TAG, "getDynamicLink:onFailure", e);
+                        }
+                    });
 
-
-                        // Handle the deep link. For example, open the linked
-                        // content, or apply promotional credit to the user's
-                        // account.
-                        // ...
-
-                        // ...
-                    }
-                })
-                .addOnFailureListener(this, new OnFailureListener() {
-                    @SuppressLint("LongLogTag")
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(LOGIN_TAG, "getDynamicLink:onFailure", e);
-                    }
-                });
-
+        }
     }
 
     private void switchToMainActivity() {
@@ -246,5 +232,34 @@ public class LoginActivity extends AppCompatActivity {
 
     private void shake(){
         YoYo.with(Techniques.Shake).playOn(findViewById(R.id.email_input));
+    }
+
+    public static boolean isRootGiven(){
+        if (isRootAvailable()) {
+            Process process = null;
+            try {
+                process = Runtime.getRuntime().exec(new String[]{"su", "-c", "id"});
+                BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                String output = in.readLine();
+                if (output != null && output.toLowerCase().contains("uid=0"))
+                    return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (process != null)
+                    process.destroy();
+            }
+        }
+
+        return false;
+    }
+
+    public static boolean isRootAvailable(){
+        for(String pathDir : System.getenv("PATH").split(":")){
+            if(new File(pathDir, "su").exists()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

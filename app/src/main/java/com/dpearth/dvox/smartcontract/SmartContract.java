@@ -14,8 +14,8 @@ import java.math.BigInteger;
 import java.util.concurrent.ExecutionException;
 
 /**
- * PROVIDE DESCRIPTION
-*
+ * The class lets interactions with the real Smart Contract. After instantiating a SmartContract Object,
+*   the following methods interact with Smart Contract
 *
 *
 *   1 - uint id;
@@ -33,12 +33,18 @@ public class SmartContract {
 
     private boolean loaded = false;
 
+    /** Instantiates the Smart Contract that serves as a backend of the application
+     *
+     * @param preferences
+     */
     public SmartContract(SharedPreferences preferences) {
 
+        /** Getting keys **/
             String Credentials = preferences.getString("Credentials", "error");
             String InfuraURL = preferences.getString("InfuraURL", "error");
             String ContractAddress = preferences.getString("Address", "error");
 
+        /** Instantiating SmartContract **/
             if (!ContractAddress.equals("error") && !Credentials.equals("error") && !InfuraURL.equals("error")) {
                 Web3j web3j = Web3j.build(new HttpService(InfuraURL));
                 Credentials credentials = org.web3j.crypto.Credentials.create(Credentials);
@@ -47,7 +53,8 @@ public class SmartContract {
             }
     }
 
-    /** PROVIDE COMMENTS
+    /** Returns the number of posts
+     *  -1 if posts cannot be loaded
      *
      */
     public int getPostCount(){
@@ -66,7 +73,7 @@ public class SmartContract {
         return -1;
     }
 
-    /** PROVIDE COMMENTS
+    /** Returns post based on specified id
      *
      * @param id
      */
@@ -94,7 +101,7 @@ public class SmartContract {
         return post;
     }
 
-    /** PROVIDE COMMENTS
+    /** Lets upvote or downvote a post after specifying id
      *
      * @param id
      * @param vote
@@ -112,7 +119,7 @@ public class SmartContract {
         return false;
     }
 
-    /** PROVIDE COMMENTS
+    /** Creates a new post
      *
      * @param _title
      * @param _author
