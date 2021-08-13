@@ -8,6 +8,7 @@ import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.tuples.generated.Tuple7;
+import org.web3j.tuples.generated.Tuple9;
 import org.web3j.tx.gas.DefaultGasProvider;
 
 import java.math.BigInteger;
@@ -84,7 +85,7 @@ public class SmartContract {
         Post post = new Post();
 
         try {
-            Tuple7<BigInteger, String, String, String, String, BigInteger, Boolean> contractPost = postContract.posts((BigInteger.valueOf(id))).sendAsync().get();
+            Tuple9<BigInteger, String, String, String, String, BigInteger, BigInteger, BigInteger, Boolean> contractPost = postContract.posts((BigInteger.valueOf(id))).sendAsync().get();
 
             post.setId(contractPost.component1());
             post.setTitle(contractPost.component2());
@@ -92,7 +93,8 @@ public class SmartContract {
             post.setMessage(contractPost.component4());
             post.setHashtag(contractPost.component5());
             post.setVotes(contractPost.component6());
-            post.setBan(contractPost.component7());
+            //missing comp 7 and 8
+            post.setBan(contractPost.component9());
 
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -111,7 +113,7 @@ public class SmartContract {
     public boolean addVote(long id, int vote){
         if (vote == 1 || vote == -1 ) {
             try {
-                postContract.addVote(BigInteger.valueOf(id), BigInteger.valueOf(vote)).sendAsync().get();
+                postContract.upVote(BigInteger.valueOf(id), BigInteger.valueOf(vote)).sendAsync().get();
             } catch (Exception error) {
                 Log.d("SMART_CONTRACT_DEBUG", "Create Post Error: ", error);
                 return false;
