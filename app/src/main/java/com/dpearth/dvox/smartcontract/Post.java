@@ -29,23 +29,6 @@ public class Post {
     /* Constructors */
     //////////////////
 
-//    /**
-//     * Constructs a new post.
-//     *
-//     *      @param   _title   (String) title of the post
-//     *      @param   _author    (String) author of the post
-//     *      @param   _message   (String) message of the post
-//     */
-//    public Post(BigInteger _id, String _title, String _author, String _message, String _hashtag, BigInteger _votes, boolean _ban){
-//        this.id = _id;
-//        this.title = _title;
-//        this.author = _author;
-//        this.message = _message;
-//        this.hashtag = _hashtag;
-//        this.votes = _votes;
-//        this.ban = _ban;
-//    }
-
     public Post(String title, String author, String message, String hashtag) {
 
         //Auto Generating ID
@@ -141,22 +124,5 @@ public class Post {
         if (o == null || getClass() != o.getClass()) return false;
         Post post = (Post) o;
         return id.equals(post.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    private static int lastPostId = 0;
-
-    public static ArrayList<Post> createPostList(int numPosts) {
-        ArrayList<Post> posts = new ArrayList<>();
-
-        for (int i = 0; i <= numPosts; i++) {
-            posts.add(new Post("Let's display this post", "Revaz", "Trying to display this POST",  "#weCanDoThis"));
-        }
-
-        return posts;
     }
 }

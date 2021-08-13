@@ -56,6 +56,8 @@ public class SmartContract {
     /** Returns the number of posts
      *  -1 if posts cannot be loaded
      *
+     *  !!!!!!!!!!!!!!! getPostCount + 1 for getting the last Post
+     *
      */
     public int getPostCount(){
         if (loaded == true) {

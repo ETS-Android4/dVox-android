@@ -1,12 +1,9 @@
 package com.dpearth.dvox;
 
-import static java.util.concurrent.TimeUnit.NANOSECONDS;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -20,16 +17,10 @@ import com.dpearth.dvox.firebasedata.APIs;
 import com.dpearth.dvox.models.fragments.AddFragment;
 import com.dpearth.dvox.models.fragments.HomeFragment;
 import com.dpearth.dvox.models.fragments.UserFragment;
-import com.dpearth.dvox.smartcontract.Post;
+import com.dpearth.dvox.smartcontract.SmartContract;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.util.ArrayList;
-
 public class MainActivity extends AppCompatActivity {
-
-
-    private RecyclerView rvPosts;
-    private ArrayList<Post> posts = new ArrayList<>();
 
     private EditText postTitle, postTheme, postContent;
     private Button buttonSave;
@@ -55,15 +46,11 @@ public class MainActivity extends AppCompatActivity {
                 switch (menuItem.getItemId()) {
                     case R.id.ic_add:
                         fragment = new AddFragment();
-                        //Toast.makeText(MainActivity.this, "Compose!", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.ic_home:
                         fragment = new HomeFragment();
-                        //Toast.makeText(MainActivity.this, "Home!", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.ic_user:
-                        //String a = getRandomlyGeneratedName();    //Testing Randomly generated names
-                        //Toast.makeText(MainActivity.this, a, Toast.LENGTH_SHORT).show();
                         fragment = new UserFragment();
                         break;
                     default:
@@ -93,99 +80,61 @@ public class MainActivity extends AppCompatActivity {
 //        rvPosts.setLayoutManager(new LinearLayoutManager(this));
     }
 
+
+
+
     //Maybe this belongs in AddFragment class
     public void startThread(View view){
-        ExampleThread thread = new ExampleThread(100);
+        CreatePostThread thread = new CreatePostThread();
         thread.start();
     }
 
-    public void stopThread(View view){
 
-    }
+    class CreatePostThread extends Thread {
 
-    class ExampleThread extends Thread {
-        int seconds;
-
-        ExampleThread(int seconds){
-            this.seconds = seconds;
+        CreatePostThread(){
         }
 
         @Override
         public void run() {
 
-                //Fetching String values from ADD page
-                postTitle = findViewById(R.id.post_title);
-                postTheme = findViewById(R.id.post_theme);
-                postContent = findViewById(R.id.content_post);
+            //Fetching String values from ADD page
+            postTitle = findViewById(R.id.post_title);
+            postTheme = findViewById(R.id.post_theme);
+            postContent = findViewById(R.id.content_post);
+            buttonSave = findViewById(R.id.publich_post);
 
-                buttonSave = findViewById(R.id.publich_post);
-
-
-                        String title = postTitle.getText().toString();
-                        String theme = postTheme.getText().toString();
-                        String content = postContent.getText().toString();
-
-
-//                        for (int i = 0; i < seconds; i++) {
-//                            System.out.println("\n\ttitle: " + title + "\ntheme: " +
-//                                    theme + "\ncontent: " + content + "\n counter: " + i);
-
-                            long startTime = System.nanoTime();
-                            //smartContract.addVote(4, 1);
-                            //smartContract.createPost(title, "Revaz", theme, content);
-
-                            //String a = smartContract.getPost(7).toString();
-                            long endTime = System.nanoTime();
-                            long totalTime = NANOSECONDS.toMillis(endTime - startTime);
-
-                            //System.out.println("POST: \n\t" + a
-                            //+ "\nTime for addvote: " + totalTime + " ms");
-
-
-//                            try {
-//                                //Sleep for testing Thread
-//                                Thread.sleep(1000);
-//                            } catch (InterruptedException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-
-
+            String title = postTitle.getText().toString();
+            String theme = postTheme.getText().toString();
+            String content = postContent.getText().toString();
 
             //<-- Create POST -->\\
-            //smartContract.createPost(title, "Revaz", content, theme);
-            //smartContract.addVote(2, 1);
+            SharedPreferences preferences = getSharedPreferences("pref", Context.MODE_PRIVATE);
+            SmartContract smartContract = new SmartContract(preferences);
+            smartContract.createPost(title, "Revaz", content, theme);
 
-            //System.out.println("POST MESSAGE: " + smartContract.getPost(4).toString());
-
-
-
-
-            //smartContract = new SmartContract(contractAddress, infuraURL, credentials);
-
-/*
-            //Testing Thread
-            for (int i = 0; i < seconds; i++) {
-
-                System.out.println("Testing Thread \nThread #" + i);
-                try {
-                    //Sleep for testing Thread
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-
- */
-
-
-
-
+//          System.out.println("Last POST: " + smartContract.getPost(smartContract.getPostCount() + 1).toString());
         }
     }
 
+//    class GetPostThread extends Thread {
+//
+//        public GetPostThread() {
+//        }
+//
+//        @Override
+//        public void run() {
+//
+//        }
+//    }
+
+
+
+
+
+
     /**
-     * Gets new API keys by reseting them and getting new.
+     * Gets new API keys by resetting them and getting new.
      *
      * !!! SHOULD BE USED AT THE BEGINNING OF THE MAIN ACTIVITY
      *
