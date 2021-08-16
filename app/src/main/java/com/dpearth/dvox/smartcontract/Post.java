@@ -4,6 +4,7 @@ package com.dpearth.dvox.smartcontract;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -17,36 +18,39 @@ import java.util.Objects;
 
 public class Post {
     private BigInteger id;
-    private static BigInteger counter = BigInteger.valueOf(1l);
     private String title;
     private String author;
     private String message;
     private String hashtag;
-    private BigInteger votes;
+    private BigInteger upVotes;
+    private BigInteger downVotes;
+    private BigInteger commentCount;
     private boolean ban;
+    private List<Comment> comments;
 
     //////////////////
     /* Constructors */
     //////////////////
 
-    public Post(String title, String author, String message, String hashtag) {
+    public Post(){
+        this(null, null, null, null, null);
+    }
 
-        //Auto Generating ID
-        this.id = BigInteger.valueOf(0);
-        id = id.add(counter);
+    public Post(BigInteger id, String title, String author, String message, String hashtag) {
+
+        this.id = id;
 
         this.title = title;
         this.author = author;
         this.message = message;
         this.hashtag = hashtag;
 
-        this.votes = BigInteger.valueOf(0);
+        this.upVotes = BigInteger.valueOf(0);
+        this.downVotes = BigInteger.valueOf(0);
+        this.commentCount = BigInteger.valueOf(0);
         this.ban = false;
+        this.comments = new ArrayList<>();
 
-    }
-
-    public Post(){
-        this(null, null, null, null);
     }
 
     public BigInteger getId() {
@@ -89,12 +93,28 @@ public class Post {
         this.hashtag = hashtag;
     }
 
-    public BigInteger getVotes() {
-        return votes;
+    public BigInteger getUpVotes() {
+        return upVotes;
     }
 
-    public void setVotes(BigInteger votes) {
-        this.votes = votes;
+    public void setUpVotes(BigInteger upVotes) {
+        this.upVotes = upVotes;
+    }
+
+    public BigInteger getDownVotes() {
+        return downVotes;
+    }
+
+    public void setDownVotes(BigInteger downVotes) {
+        this.downVotes = downVotes;
+    }
+
+    public BigInteger getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(BigInteger commentCount) {
+        this.commentCount = commentCount;
     }
 
     public boolean isBan() {
@@ -105,6 +125,14 @@ public class Post {
         this.ban = ban;
     }
 
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
     @Override
     public String toString() {
         return "Post{" +
@@ -113,8 +141,10 @@ public class Post {
                 ", author='" + author + '\'' +
                 ", message='" + message + '\'' +
                 ", hashtag='" + hashtag + '\'' +
-                ", votes=" + votes +
+                ", upVotes=" + upVotes +
+                ", downVotes=" + downVotes +
                 ", ban=" + ban +
+                ", comments=" + comments +
                 '}';
     }
 
@@ -123,6 +153,7 @@ public class Post {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Post post = (Post) o;
-        return id.equals(post.id);
+        return ban == post.ban && Objects.equals(id, post.id) && Objects.equals(title, post.title) && Objects.equals(author, post.author) && Objects.equals(message, post.message) && Objects.equals(hashtag, post.hashtag) && Objects.equals(upVotes, post.upVotes) && Objects.equals(downVotes, post.downVotes) && Objects.equals(comments, post.comments);
     }
+
 }

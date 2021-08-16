@@ -96,7 +96,7 @@
                         android:layout_height="@dimen/_40sdp"
                         android:background="@color/white"
                         android:fontFamily="@font/montserrat_bold"
-                        android:onClick="startThread"
+                        android:onClick="startCreatePostThread"
                         android:scaleX="1.5"
                         android:scaleY="1.5"
                         android:text="post"

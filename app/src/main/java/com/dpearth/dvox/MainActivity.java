@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.dpearth.dvox.firebasedata.APIs;
 import com.dpearth.dvox.models.fragments.AddFragment;
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.ic_home:
                         fragment = new HomeFragment();
+                        RandomNameGenerator.getRandomlyGeneratedName(); //To test RNG
                         break;
                     case R.id.ic_user:
                         fragment = new UserFragment();
@@ -57,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
                         fragment = new HomeFragment();
                         break;
                 }
+                //I think this needs to change into Home Fragment
                 fragmentManager.beginTransaction().replace(R.id.fl_wrapper, fragment).commit();
                 return true;
             }
@@ -84,9 +87,14 @@ public class MainActivity extends AppCompatActivity {
 
 
     //Maybe this belongs in AddFragment class
-    public void startThread(View view){
-        CreatePostThread thread = new CreatePostThread();
-        thread.start();
+    public void startCreatePostThread(View view){
+        CreatePostThread createPostThread = new CreatePostThread();
+        createPostThread.start();
+    }
+
+    public void startGetPostThread(View view){
+        GetPostThread getPostThread = new GetPostThread();
+        getPostThread.start();
     }
 
 
@@ -113,20 +121,26 @@ public class MainActivity extends AppCompatActivity {
             SmartContract smartContract = new SmartContract(preferences);
             smartContract.createPost(title, "Revaz", content, theme);
 
+            //Clearing fields after Posing
+
+            //Toast "You have successfully Posted
+
+
 //          System.out.println("Last POST: " + smartContract.getPost(smartContract.getPostCount() + 1).toString());
         }
     }
 
-//    class GetPostThread extends Thread {
-//
-//        public GetPostThread() {
-//        }
-//
-//        @Override
-//        public void run() {
-//
-//        }
-//    }
+    class GetPostThread extends Thread {
+
+        public GetPostThread() {
+
+        }
+
+        @Override
+        public void run() {
+            HomeFragment fragment = new HomeFragment();
+        }
+    }
 
 
 

@@ -1,8 +1,25 @@
 package com.dpearth.dvox;
 
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
+
 import java.io.File;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class RandomNameGenerator {
@@ -50,7 +67,7 @@ public class RandomNameGenerator {
         "Former",
         "Scarce",
         "Tense",
-        "Black-and-white",
+        "Black-and-White",
         "Tangy",
         "Wrong",
         "Sloppy",
@@ -116,14 +133,14 @@ public class RandomNameGenerator {
         "Beetle",
         "Tiger",
         "Pigeon",
-        "Bearded_dragon",
+        "Bearded_Dragon",
         "Bat",
         "Hippo",
         "Crocodile",
         "Monkey",
     };
 
-    private static HashMap<String, String> animalImages = new HashMap<>();
+    private static String[] numbers = new String[100];
 
 
     private String adjective;
@@ -133,79 +150,135 @@ public class RandomNameGenerator {
     public RandomNameGenerator() {
     }
 
-    private static void animalImagesInitializer(){
-        animalImages.put("Boar", "");
-        animalImages.put("Koala", "");
-        animalImages.put("Snake", "");
-        animalImages.put("Frog", "");
-        animalImages.put("Parrot", "");
-        animalImages.put("Lion", "");
-        animalImages.put("Pig", "");
-        animalImages.put("Rhino", "");
-        animalImages.put("Sloth", "");
-        animalImages.put("Horse", "");
-        animalImages.put("Sheep", "");
-        animalImages.put("Chameleon", "");
-        animalImages.put("Giraffe", "");
-        animalImages.put("Yak", "");
-        animalImages.put("Cat", "");
-        animalImages.put("Dog", "");
-        animalImages.put("Penguin", "");
-        animalImages.put("Elephant", "");
-        animalImages.put("Fox", "");
-        animalImages.put("Otter", "");
-        animalImages.put("Gorilla", "");
-        animalImages.put("Rabbit", "");
-        animalImages.put("Raccoon", "");
-        animalImages.put("Wolf", "");
-        animalImages.put("Panda", "");
-        animalImages.put("Goat", "");
-        animalImages.put("Chicken", "");
-        animalImages.put("Duck", "");
-        animalImages.put("Cow", "");
-        animalImages.put("Ray", "");
-        animalImages.put("Catfish", "");
-        animalImages.put("Ladybug", "");
-        animalImages.put("Dragonfly", "");
-        animalImages.put("Owl", "");
-        animalImages.put("Beaver", "");
-        animalImages.put("Alpaca", "");
-        animalImages.put("Mouse", "");
-        animalImages.put("Walrus", "");
-        animalImages.put("Kangaroo", "");
-        animalImages.put("Butterfly", "");
-        animalImages.put("Jellyfish", "");
-        animalImages.put("Deer", "");
-        animalImages.put("Beetle", "");
-        animalImages.put("Tiger", "");
-        animalImages.put("Pigeon", "");
-        animalImages.put("Bearded_dragon", "");
-        animalImages.put("Bat", "");
-        animalImages.put("Hippo", "");
-        animalImages.put("Crocodile", "");
-        animalImages.put("Monkey,", "");
-    }
 
     public static String getRandomlyGeneratedName() {
+
+        for (int i = 0; i < 100; i++){
+            numbers[i] = String.valueOf(i);
+        }
 
         Random random = new Random();
         int randAdj = random.nextInt(adjectives.length);
         int randAnimal = random.nextInt(animals.length);
+        int randNumber = random.nextInt(numbers.length);
 
-        String part1 = adjectives[randAdj];
-        String part2 = animals[randAnimal];
-        String generateName = part1 + " " + part2;
+        String adjective = adjectives[randAdj];
+        String animal = animals[randAnimal];
+        String number = numbers[randNumber];
+
+//        //For Testing Purposes
+//        String adjective = "Pale";
+//        String animal = "Sheep";
+//        String number = "60";
+
+        String generateName = "@" + adjective + "_" + animal + "_" + number;
+
+        DocumentReference firebaseAnimal = FirebaseFirestore.getInstance().collection("Nicknames").document(animal);
 
 
-        //Needs to be changed! add numbers (While loop)
-        if (alreadyUsedName.contains(generateName)){
-            return getRandomlyGeneratedName();
-        } else {
-            alreadyUsedName.add(generateName);
-            return generateName;
-        }
+//        checkAndAddGeneratedNameFireStore(firebaseAnimal, animal, adjective, number, generateName);
+        addGeneratedNameFireStore(firebaseAnimal, adjective, number, generateName);
+
+        return generateName;
 
     }
 
+    /**
+     * Deleting name from FireStore
+     *
+     * @param firebaseAnimal
+     * @param generatedName
+     */
+    public static void deleteNameFromFireStore(DocumentReference firebaseAnimal, String generatedName){
 
+        String nameToSplit = generatedName.substring(1);
+
+        String[] a = nameToSplit.split("_", 3);
+
+        String adjective = a[0];
+        String animal = a[1];
+        String number = a[2];
+
+        Map<String, Object> animalToDelete = new HashMap<>();
+
+        animalToDelete.put(adjective + "_" + number, FieldValue.delete());
+
+        firebaseAnimal.update(animalToDelete).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                    Log.d("RNG Delete", "Successfully deleted generatedName: " + generatedName);
+            }
+        });
+
+
+    }
+
+    /**     Maybe this one was not necessary
+     * Checking if name exists in firebase and adding afterwards
+     *
+     * @param firebaseAnimal
+     * @param animal
+     * @param adjective
+     * @param number
+     * @param generateName
+     */
+    private static void checkAndAddGeneratedNameFireStore(DocumentReference firebaseAnimal, String animal, String  adjective, String number, String generateName){
+
+        firebaseAnimal.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+
+                    DocumentSnapshot document = task.getResult();
+
+                    //Checking if animal exists
+                    if (document.exists()){
+
+                        //Checking if Adjective & number combination exists
+                        if (document.getBoolean(adjective + "_" + number) != null){
+                            Log.d("firebase RNG", generateName + " exists");
+                        } else {
+                            Log.d("firebase RNG", generateName + " DOES NOT exist");
+
+                            addGeneratedNameFireStore(firebaseAnimal, adjective, number, generateName);
+                        }
+
+
+                    } else {
+                        Log.d("firebase RNG", "animal " + animal + " DOES NOT exist");
+                    }
+
+                } else {
+                    Log.d("firebase RNG", "Task Failed with: " + task.getException());
+                }
+            }
+        });
+    }
+
+
+    /**
+     *  Adding generated name to Firebase
+     *
+     * @param firebaseAnimal
+     * @param adjective
+     * @param number
+     * @param generateName
+     */
+    private static void addGeneratedNameFireStore(DocumentReference firebaseAnimal, String adjective, String number, String generateName) {
+
+        Map<String, Boolean> animalToAdd = new HashMap<>();
+        animalToAdd.put(adjective + "_" + number, true);
+
+        firebaseAnimal.set(animalToAdd, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.d("firebase RNG", "animal " + generateName + " successfully written!");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("firebase RNG", "Error writing " + generateName, e);
+            }
+        });
+    }
 }

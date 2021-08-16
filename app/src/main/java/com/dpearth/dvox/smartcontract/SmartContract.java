@@ -3,15 +3,20 @@ package com.dpearth.dvox.smartcontract;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.dpearth.dvox.PostContract;
+
 import org.web3j.abi.datatypes.Int;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.RemoteFunctionCall;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.tuples.generated.Tuple7;
 import org.web3j.tuples.generated.Tuple9;
 import org.web3j.tx.gas.DefaultGasProvider;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -24,8 +29,11 @@ import java.util.concurrent.ExecutionException;
     3 - string author;
     4 - string message;
     5 - string hashtag;
-    6 - int votes;
-    7 - bool ban;
+    6 - int upVotes;
+    7 - int downVotes;
+    8 - int commentCount;
+    9 - bool ban;
+    10 - ArrayList comments;
 *
 * */
 public class SmartContract {
@@ -57,7 +65,6 @@ public class SmartContract {
     /** Returns the number of posts
      *  -1 if posts cannot be loaded
      *
-     *  !!!!!!!!!!!!!!! getPostCount + 1 for getting the last Post
      *
      */
     public int getPostCount(){
@@ -70,7 +77,7 @@ public class SmartContract {
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
-            return (getNumberOfPosts.intValue())-1;
+            return (getNumberOfPosts.intValue());
 
         }
         return -1;
@@ -87,14 +94,21 @@ public class SmartContract {
         try {
             Tuple9<BigInteger, String, String, String, String, BigInteger, BigInteger, BigInteger, Boolean> contractPost = postContract.posts((BigInteger.valueOf(id))).sendAsync().get();
 
-            post.setId(contractPost.component1());
+            post.setId(BigInteger.valueOf(id));
             post.setTitle(contractPost.component2());
             post.setAuthor(contractPost.component3());
             post.setMessage(contractPost.component4());
             post.setHashtag(contractPost.component5());
-            post.setVotes(contractPost.component6());
-            //missing comp 7 and 8
+            post.setUpVotes(contractPost.component6());
+            post.setDownVotes(contractPost.component7());
+            post.setCommentCount(contractPost.component8());
             post.setBan(contractPost.component9());
+
+
+            //I hope this works :)
+//            for (int i = 0; i < post.getCommentCount().longValue(); i++) {
+//                post.setComments();
+//            }
 
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -105,23 +119,66 @@ public class SmartContract {
         return post;
     }
 
-    /** Lets upvote or downvote a post after specifying id
+    public Comment getComment (long postId, long commentID) {
+
+        Comment comment = new Comment();
+
+        try {
+            postContract.getComment(BigInteger.valueOf(postId), BigInteger.valueOf(commentID)).sendAsync().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+
+        return comment;
+    }
+
+    public List<Comment> getAllComments (long postId){
+
+        List<Comment> commentList = new ArrayList<>();
+
+        for (int i = 0; i < getPost(postId).getCommentCount().longValue(); i++) {
+            RemoteFunctionCall<PostContract.Comment> postContractComment = postContract.getComment(BigInteger.valueOf(postId), BigInteger.valueOf(i));
+        }
+
+        return commentList;
+    }
+
+
+
+    /** Lets upvote a post after specifying id
      *
      * @param id
-     * @param vote
      */
-    public boolean addVote(long id, int vote){
-        if (vote == 1 || vote == -1 ) {
+    public boolean upVote(long id){
+
             try {
-                postContract.upVote(BigInteger.valueOf(id), BigInteger.valueOf(vote)).sendAsync().get();
+                postContract.upVote(BigInteger.valueOf(id)).sendAsync().get();
             } catch (Exception error) {
                 Log.d("SMART_CONTRACT_DEBUG", "Create Post Error: ", error);
                 return false;
             }
             return true;
-        }
-        return false;
+
     }
+
+    /** Lets downvote a post after specifying id
+     *
+     * @param id
+     */
+    public boolean downVote(long id){
+            try {
+                postContract.downVote(BigInteger.valueOf(id)).sendAsync().get();
+            } catch (Exception error) {
+                Log.d("SMART_CONTRACT_DEBUG", "Create Post Error: ", error);
+                return false;
+            }
+            return true;
+
+    }
+
 
     /** Creates a new post
      *
