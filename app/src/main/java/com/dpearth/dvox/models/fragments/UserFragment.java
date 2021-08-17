@@ -1,6 +1,5 @@
 package com.dpearth.dvox.models.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,14 +11,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
-import com.dpearth.dvox.LoginActivity;
 import com.dpearth.dvox.R;
 import com.dpearth.dvox.RandomNameGenerator;
 
 
 public class UserFragment extends Fragment {
-    private Button button;
+    private Button generateNewNameButton;
+    private TextView generatedNameTextView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -33,15 +33,22 @@ public class UserFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        button = getActivity()//.findViewById(R.layout.activity_user_profile2)
-                .findViewById(R.id.generate_new_name_button);
-
-        button.setOnClickListener(new View.OnClickListener() {
+        /*  Button for Regenerating a new name  */
+        generateNewNameButton = getActivity().findViewById(R.id.generate_new_name_button);
+        generateNewNameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 RandomNameGenerator.getRandomlyGeneratedName();
             }
         });
+
+        
+
+        /*  Displaying newly generated name  */
+        generatedNameTextView = getActivity().findViewById(R.id.profile_username);
+        generatedNameTextView.setText("Rez-Master-Y");
     }
+
+
 }
 

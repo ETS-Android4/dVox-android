@@ -167,16 +167,16 @@ public class RandomNameGenerator {
 //        String number = numbers[randNumber];
 
         //For Testing Purposes
-        String adjective = "Royal";
+        String adjective = adjectives[randAdj];
         String animal = "Butterfly";
-        String number = "69";
+        String number = numbers[randNumber];
 
         String generateName = "@" + adjective + "_" + animal + "_" + number;
 
         DocumentReference firebaseAnimal = FirebaseFirestore.getInstance().collection("Nicknames").document(animal);
 
 
-//        checkAndAddGeneratedNameFireStore(firebaseAnimal, generateName, false);
+        checkAndAddGeneratedNameFireStore(firebaseAnimal, generateName, false);
 //        addGeneratedNameFireStore(firebaseAnimal, generateName, true);
 //        deleteNameFromFireStore(firebaseAnimal, generateName);
 
