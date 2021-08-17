@@ -6,11 +6,11 @@ import android.os.Bundle;
 
 import com.dpearth.dvox.R;
 
-public class UserProfile extends AppCompatActivity {
+public class UserProfileChangeName extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_profile);
+        setContentView(R.layout.activity_user_profile_change_name);
     }
 }

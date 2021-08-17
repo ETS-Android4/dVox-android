@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjectDIES">
         <activity
-            android:name=".models.fragments.UserProfile"
+            android:name=".models.fragments.UserProfileChangeName"
             android:exported="true" />
         <activity
             android:name=".LoginActivity"

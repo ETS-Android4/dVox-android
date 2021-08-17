@@ -162,14 +162,14 @@ public class RandomNameGenerator {
         int randAnimal = random.nextInt(animals.length);
         int randNumber = random.nextInt(numbers.length);
 
-        String adjective = adjectives[randAdj];
-        String animal = animals[randAnimal];
-        String number = numbers[randNumber];
+//        String adjective = adjectives[randAdj];
+//        String animal = animals[randAnimal];
+//        String number = numbers[randNumber];
 
-//        //For Testing Purposes
-//        String adjective = "Pale";
-//        String animal = "Sheep";
-//        String number = "60";
+        //For Testing Purposes
+        String adjective = "Horrible";
+        String animal = "Butterfly";
+        String number = "52";
 
         String generateName = "@" + adjective + "_" + animal + "_" + number;
 
@@ -177,7 +177,9 @@ public class RandomNameGenerator {
 
 
 //        checkAndAddGeneratedNameFireStore(firebaseAnimal, animal, adjective, number, generateName);
-        addGeneratedNameFireStore(firebaseAnimal, adjective, number, generateName);
+   //     addGeneratedNameFireStore(firebaseAnimal, adjective, number, generateName);
+
+//        deleteNameFromFireStore(firebaseAnimal, generateName);
 
         return generateName;
 
