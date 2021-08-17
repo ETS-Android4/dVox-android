@@ -1,5 +1,7 @@
 package com.dpearth.dvox.models.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,6 +17,8 @@ import android.widget.TextView;
 
 import com.dpearth.dvox.R;
 import com.dpearth.dvox.RandomNameGenerator;
+
+import java.util.Set;
 
 
 public class UserFragment extends Fragment {
@@ -42,11 +46,19 @@ public class UserFragment extends Fragment {
             }
         });
 
-        
-
-        /*  Displaying newly generated name  */
+//        SharedPreferences.Editor prefsEditor;
+//
+//
+//        SharedPreferences usernamePreferences = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
+//        SharedPreferences.Editor usernamePreferencesEditor = usernamePreferences.edit().putString("UserName", "Rez-Master-Y");
+//        usernamePreferencesEditor.commit();
+//
+//        usernamePreferences.getString("UserName");
+//
+//
+//        /*  Displaying newly generated name  */
         generatedNameTextView = getActivity().findViewById(R.id.profile_username);
-        generatedNameTextView.setText("Rez-Master-Y");
+        generatedNameTextView.setText("Revaz");
     }
 
 

@@ -64,7 +64,7 @@ public class APIs {
                 }
             }
         });
-    };
+    }
 
     /**
      * Function to execute if the data is retrieved successfully.

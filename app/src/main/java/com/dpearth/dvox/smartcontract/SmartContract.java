@@ -3,14 +3,10 @@ package com.dpearth.dvox.smartcontract;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.dpearth.dvox.PostContract;
-
-import org.web3j.abi.datatypes.Int;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.RemoteFunctionCall;
 import org.web3j.protocol.http.HttpService;
-import org.web3j.tuples.generated.Tuple7;
 import org.web3j.tuples.generated.Tuple9;
 import org.web3j.tx.gas.DefaultGasProvider;
 
@@ -135,12 +131,13 @@ public class SmartContract {
         return comment;
     }
 
+    //DOES NOT WORK YET
     public List<Comment> getAllComments (long postId){
 
         List<Comment> commentList = new ArrayList<>();
 
         for (int i = 0; i < getPost(postId).getCommentCount().longValue(); i++) {
-            RemoteFunctionCall<PostContract.Comment> postContractComment = postContract.getComment(BigInteger.valueOf(postId), BigInteger.valueOf(i));
+//            RemoteFunctionCall<PostContract> postContractComment = postContract.getComment(BigInteger.valueOf(postId), BigInteger.valueOf(i));
         }
 
         return commentList;
