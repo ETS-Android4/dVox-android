@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.ic_home:
                         fragment = new HomeFragment();
-                        RandomNameGenerator.getRandomlyGeneratedName(); //To test RNG
                         break;
                     case R.id.ic_user:
                         fragment = new UserFragment();

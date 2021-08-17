@@ -167,18 +167,17 @@ public class RandomNameGenerator {
 //        String number = numbers[randNumber];
 
         //For Testing Purposes
-        String adjective = "Horrible";
+        String adjective = "Royal";
         String animal = "Butterfly";
-        String number = "52";
+        String number = "69";
 
         String generateName = "@" + adjective + "_" + animal + "_" + number;
 
         DocumentReference firebaseAnimal = FirebaseFirestore.getInstance().collection("Nicknames").document(animal);
 
 
-//        checkAndAddGeneratedNameFireStore(firebaseAnimal, animal, adjective, number, generateName);
-   //     addGeneratedNameFireStore(firebaseAnimal, adjective, number, generateName);
-
+//        checkAndAddGeneratedNameFireStore(firebaseAnimal, generateName, false);
+//        addGeneratedNameFireStore(firebaseAnimal, generateName, true);
 //        deleteNameFromFireStore(firebaseAnimal, generateName);
 
         return generateName;
@@ -219,12 +218,18 @@ public class RandomNameGenerator {
      * Checking if name exists in firebase and adding afterwards
      *
      * @param firebaseAnimal
-     * @param animal
-     * @param adjective
-     * @param number
-     * @param generateName
+     * @param generatedName
+     * @param isNameUsed
      */
-    private static void checkAndAddGeneratedNameFireStore(DocumentReference firebaseAnimal, String animal, String  adjective, String number, String generateName){
+    private static void checkAndAddGeneratedNameFireStore(DocumentReference firebaseAnimal, String generatedName, boolean isNameUsed){
+
+        String nameToSplit = generatedName.substring(1);
+
+        String[] a = nameToSplit.split("_", 3);
+
+        String adjective = a[0];
+        String animal = a[1];
+        String number = a[2];
 
         firebaseAnimal.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -238,11 +243,11 @@ public class RandomNameGenerator {
 
                         //Checking if Adjective & number combination exists
                         if (document.getBoolean(adjective + "_" + number) != null){
-                            Log.d("firebase RNG", generateName + " exists");
+                            Log.d("firebase RNG", generatedName + " exists");
                         } else {
-                            Log.d("firebase RNG", generateName + " DOES NOT exist");
+                            Log.d("firebase RNG", generatedName + " DOES NOT exist");
 
-                            addGeneratedNameFireStore(firebaseAnimal, adjective, number, generateName);
+                            addGeneratedNameFireStore(firebaseAnimal, generatedName, isNameUsed);
                         }
 
 
@@ -262,24 +267,31 @@ public class RandomNameGenerator {
      *  Adding generated name to Firebase
      *
      * @param firebaseAnimal
-     * @param adjective
-     * @param number
-     * @param generateName
+     * @param generatedName
+     * @param isNameUsed
      */
-    private static void addGeneratedNameFireStore(DocumentReference firebaseAnimal, String adjective, String number, String generateName) {
+    private static void addGeneratedNameFireStore(DocumentReference firebaseAnimal, String generatedName, boolean isNameUsed) {
+
+        String nameToSplit = generatedName.substring(1);
+
+        String[] a = nameToSplit.split("_", 3);
+
+        String adjective = a[0];
+        String animal = a[1];
+        String number = a[2];
 
         Map<String, Boolean> animalToAdd = new HashMap<>();
-        animalToAdd.put(adjective + "_" + number, true);
+        animalToAdd.put(adjective + "_" + number, isNameUsed);
 
         firebaseAnimal.set(animalToAdd, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                Log.d("firebase RNG", "animal " + generateName + " successfully written!");
+                Log.d("firebase RNG", "animal " + generatedName + " successfully written!");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.w("firebase RNG", "Error writing " + generateName, e);
+                Log.w("firebase RNG", "Error writing " + generatedName, e);
             }
         });
     }
