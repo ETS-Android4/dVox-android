@@ -21,25 +21,32 @@ import android.widget.Toast;
 
 import com.dpearth.dvox.R;
 import com.dpearth.dvox.RandomNameGenerator;
-import com.dpearth.dvox.databinding.ActivityMainBinding;
+import com.dpearth.dvox.databinding.ActivityUserProfile2Binding;
 import com.dpearth.dvox.livedata.User;
+
 
 
 public class UserFragment extends Fragment {
     private Button generateNewNameButton;
     private TextView generatedNameTextView;
     public static final String USERNAME_PREFS = "usernamePrefs";
-
     private String username;
 
+    private ActivityUserProfile2Binding binding;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.activity_user_profile2, container, false);
+        //return inflater.inflate(R.layout.activity_user_profile2, container, false);
+
+        binding = DataBindingUtil.inflate(inflater, R.layout.activity_user_profile2, container, false);
+        SharedPreferences preferences = getActivity().getSharedPreferences(USERNAME_PREFS, Context.MODE_PRIVATE);
+        String name = preferences.getString(USERNAME_PREFS, "");
+        binding.setUser(new User(name));
+        View view = binding.getRoot();
+        return view;
     }
 
     @Override
@@ -47,7 +54,6 @@ public class UserFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 //        ActivityMainBinding binding = DataBindingUtil.setContentView(getActivity(), R.layout.activity_main);
-
 
 
         /*  Button for Regenerating a new name  */
@@ -59,7 +65,9 @@ public class UserFragment extends Fragment {
         generateNewNameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveData();
+                binding.setUser(new User("data works"));
+
+                //saveData();
             }
         });
 

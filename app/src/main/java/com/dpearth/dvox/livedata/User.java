@@ -1,28 +1,41 @@
 package com.dpearth.dvox.livedata;
 
-public class User {
+import android.graphics.drawable.Drawable;
 
-    private String firstName;
-    private String lastName;
+import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
 
-    public User(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+import com.dpearth.dvox.BR;
+import com.dpearth.dvox.R;
+
+public class User  extends BaseObservable {
+
+    private String name;
+    private int image = R.drawable._03_snake;
+
+    public User(String name) {
+        this.name = name;
+        image = R.drawable._03_snake;
     }
 
-    public String getFirstName() {
-        return this.firstName;
+    @Bindable
+    public String getName() {
+        return this.name;
     }
 
-    public String getLastName() {
-        return this.lastName;
+    public void setName(String name) {
+        this.name = name;
+        notifyPropertyChanged(BR.name);
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    @Bindable
+    public int getImage() {
+        return image;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setImage(int image) {
+        this.image = image;
+        notifyPropertyChanged(BR.image);
+
     }
 }

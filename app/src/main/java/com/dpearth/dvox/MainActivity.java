@@ -17,7 +17,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.dpearth.dvox.databinding.ActivityMainBinding;
 import com.dpearth.dvox.firebasedata.APIs;
 import com.dpearth.dvox.livedata.User;
 import com.dpearth.dvox.models.fragments.AddFragment;
@@ -46,10 +45,6 @@ public class MainActivity extends AppCompatActivity {
         getAPIs(preferences);
 
         super.onCreate(savedInstanceState);
-
-        User user =  new User("Kalamazoo", "User");
-        ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        binding.setUser(user); // generated setter based on the data in the layout file
 
         setContentView(R.layout.activity_main);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
