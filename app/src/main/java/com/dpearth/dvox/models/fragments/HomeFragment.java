@@ -58,17 +58,38 @@ public class HomeFragment extends Fragment {
      * @param numberOfPosts - the number of posts to get
      */
     private void queryPosts(int numberOfPosts) {
+
         SharedPreferences preferences = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
+
         SmartContract contract = new SmartContract(preferences);
 
         int postCount = contract.getPostCount();
-        if (!(numberOfPosts > postCount) && postCount > 0){
+
+        Log.i("Post loader", "Trying to print..." + postCount);
+
+        Log.i("Post loader", "Trying to print..." + postCount);
+
+        if ( postCount > 0){
             for (int i = postCount; i > postCount - numberOfPosts; i--){
-                Post post = contract.getPost(i);
-                allPosts.add(post);
+                if (i > 0) {
+                    Post post = contract.getPost(i);
+                    Log.i("Post loader", "Post:" + post.toString());
+                    allPosts.add(post);
+                }
             }
             postAdapter.notifyDataSetChanged();
         };
 
+    }
+}
+class GetPostThread extends Thread {
+
+    public GetPostThread() {
+
+    }
+
+    @Override
+    public void run() {
+        HomeFragment fragment = new HomeFragment();
     }
 }

@@ -45,9 +45,11 @@ public class SmartContract {
     public SmartContract(SharedPreferences preferences) {
 
         /** Getting keys **/
-            String Credentials = preferences.getString("Credentials", "error");
-            String InfuraURL = preferences.getString("InfuraURL", "error");
-            String ContractAddress = preferences.getString("Address", "error");
+            String Credentials = preferences.getString("credentials", "error");
+            String InfuraURL = preferences.getString("infuraURL", "error");
+            String ContractAddress = preferences.getString("contractAddress", "error");
+
+            Log.i("Post loader", "C: " + Credentials + " URL: " + InfuraURL +" CA: " + ContractAddress);
 
         /** Instantiating SmartContract **/
             if (!ContractAddress.equals("error") && !Credentials.equals("error") && !InfuraURL.equals("error")) {

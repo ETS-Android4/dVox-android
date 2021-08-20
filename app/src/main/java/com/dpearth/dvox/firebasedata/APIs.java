@@ -28,6 +28,9 @@ public class APIs {
      * @param preferences - SharedPreferences object
      */
     public APIs(SharedPreferences preferences) {
+
+        setOnError(preferences);
+
         //Get the reference to the Firestore API document
         DocumentReference Doc = FirebaseFirestore.getInstance().collection("APIs").document("7rMOmCufceCpoXgxLRKo");
 
@@ -77,9 +80,9 @@ public class APIs {
     private void setOnSuccess(SharedPreferences preferences, String Credentials, String ContractAddress, String InfuraURL){
         SharedPreferences.Editor prefsEditor = preferences.edit();
 
-        prefsEditor.putString("Address", ContractAddress);
-        prefsEditor.putString("Credentials", Credentials);
-        prefsEditor.putString("InfuraURL", InfuraURL);
+        prefsEditor.putString("contractAddress", ContractAddress);
+        prefsEditor.putString("credentials", Credentials);
+        prefsEditor.putString("infuraURL", InfuraURL);
 
         prefsEditor.commit();
     }
@@ -92,9 +95,9 @@ public class APIs {
     private void setOnError(SharedPreferences preferences){
         SharedPreferences.Editor prefsEditor = preferences.edit();
 
-        prefsEditor.putString("Credentials", "error");
-        prefsEditor.putString("ContractAddress", "error");
-        prefsEditor.putString("InfuraURL", "error");
+        prefsEditor.putString("credentials", "error");
+        prefsEditor.putString("contractAddress", "error");
+        prefsEditor.putString("infuraURL", "error");
 
         prefsEditor.commit();
     }
