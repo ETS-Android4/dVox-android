@@ -7,6 +7,10 @@ plugins {
 android {
     compileSdkVersion 30
 
+    dataBinding {
+        enabled = true
+    }
+
     defaultConfig {
         applicationId "com.dpearth.dvox"
         minSdkVersion 21
@@ -64,6 +68,7 @@ dependencies {
     // Web3js
     implementation 'org.web3j:core:4.6.0-android'
     implementation 'com.google.firebase:firebase-firestore:21.4.0'
+    implementation 'androidx.databinding:databinding-runtime:4.1.3'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

@@ -173,10 +173,9 @@ public class RandomNameGenerator {
 
         String generateName = "@" + adjective + "_" + animal + "_" + number;
 
-        DocumentReference firebaseAnimal = FirebaseFirestore.getInstance().collection("Nicknames").document(animal);
 
 
-        checkAndAddGeneratedNameFireStore(firebaseAnimal, generateName, false);
+//        checkAndAddGeneratedNameFireStore(firebaseAnimal, generateName, false);
 //        addGeneratedNameFireStore(firebaseAnimal, generateName, true);
 //        deleteNameFromFireStore(firebaseAnimal, generateName);
 
@@ -217,11 +216,10 @@ public class RandomNameGenerator {
     /**     Maybe this one was not necessary
      * Checking if name exists in firebase and adding afterwards
      *
-     * @param firebaseAnimal
      * @param generatedName
      * @param isNameUsed
      */
-    private static void checkAndAddGeneratedNameFireStore(DocumentReference firebaseAnimal, String generatedName, boolean isNameUsed){
+    public static void checkAndAddGeneratedNameFireStore(String generatedName, boolean isNameUsed){
 
         String nameToSplit = generatedName.substring(1);
 
@@ -230,6 +228,9 @@ public class RandomNameGenerator {
         String adjective = a[0];
         String animal = a[1];
         String number = a[2];
+
+        DocumentReference firebaseAnimal = FirebaseFirestore.getInstance().collection("Nicknames").document(animal);
+
 
         firebaseAnimal.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -247,7 +248,7 @@ public class RandomNameGenerator {
                         } else {
                             Log.d("firebase RNG", generatedName + " DOES NOT exist");
 
-                            addGeneratedNameFireStore(firebaseAnimal, generatedName, isNameUsed);
+                            addGeneratedNameFireStore(generatedName, isNameUsed);
                         }
 
 
@@ -266,11 +267,10 @@ public class RandomNameGenerator {
     /**
      *  Adding generated name to Firebase
      *
-     * @param firebaseAnimal
      * @param generatedName
      * @param isNameUsed
      */
-    private static void addGeneratedNameFireStore(DocumentReference firebaseAnimal, String generatedName, boolean isNameUsed) {
+    private static void addGeneratedNameFireStore(String generatedName, boolean isNameUsed) {
 
         String nameToSplit = generatedName.substring(1);
 
@@ -279,6 +279,8 @@ public class RandomNameGenerator {
         String adjective = a[0];
         String animal = a[1];
         String number = a[2];
+
+        DocumentReference firebaseAnimal = FirebaseFirestore.getInstance().collection("Nicknames").document(animal);
 
         Map<String, Boolean> animalToAdd = new HashMap<>();
         animalToAdd.put(adjective + "_" + number, isNameUsed);
