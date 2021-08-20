@@ -59,37 +59,59 @@ public class HomeFragment extends Fragment {
      */
     private void queryPosts(int numberOfPosts) {
 
-        SharedPreferences preferences = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // ################# GET ALL POSTS #################//
+                SharedPreferences preferences = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
 
-        SmartContract contract = new SmartContract(preferences);
+                SmartContract contract = new SmartContract(preferences);
 
-        int postCount = contract.getPostCount();
+                int postCount = contract.getPostCount();
 
-        Log.i("Post loader", "Trying to print..." + postCount);
+                Log.i("Post loader", "Trying to print..." + postCount);
 
-        Log.i("Post loader", "Trying to print..." + postCount);
+                Log.i("Post loader", "Trying to print..." + postCount);
 
-        if ( postCount > 0){
-            for (int i = postCount; i > postCount - numberOfPosts; i--){
-                if (i > 0) {
-                    Post post = contract.getPost(i);
-                    Log.i("Post loader", "Post:" + post.toString());
-                    allPosts.add(post);
-                }
+                if ( postCount > 0){
+                    for (int i = postCount; i > postCount - numberOfPosts; i--){
+                        if (i > 0) {
+                            Post post = contract.getPost(i);
+                            Log.i("Post loader", "Post:" + post.toString());
+                            allPosts.add(post);
+                        }
+                    }
+                };
+                // ################# GET ALL POSTS #################//
+               getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //UPDATE UI
+                        postAdapter.notifyDataSetChanged();
+                    }
+                });
             }
-            postAdapter.notifyDataSetChanged();
-        };
-
+        });
+        thread.start();
     }
 }
-class GetPostThread extends Thread {
 
-    public GetPostThread() {
-
-    }
-
-    @Override
-    public void run() {
-        HomeFragment fragment = new HomeFragment();
-    }
-}
+//################# EXAMPLE OF BACKGROUND THREAD #################//
+//
+//    Thread thread = new Thread(new Runnable() {
+//        @Override
+//        public void run() {
+//            //PERFORM BACKGROUND ACTION
+//
+//            getActivity().runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    //UPDATE UI ACTION
+//                }
+//            });
+//        }
+//    });
+//
+//    thread.start();
+//
+//################# EXAMPLE OF BACKGROUND THREAD #################//
