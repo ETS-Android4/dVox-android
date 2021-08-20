@@ -46,7 +46,8 @@
                 app:srcCompat="@drawable/fi_rr_comment"
                 tools:ignore="MissingConstraints" />
 
-            <ImageView
+
+                <ImageButton
                 android:id="@+id/upvote_button"
                 android:layout_width="@dimen/_19sdp"
                 android:layout_height="@dimen/_19sdp"
@@ -63,7 +64,8 @@
                 app:srcCompat="@drawable/fi_rr_thumbs_up"
                 tools:ignore="MissingConstraints" />
 
-            <ImageView
+
+            <ImageButton
                 android:id="@+id/downvote_button"
                 android:layout_width="@dimen/_19sdp"
                 android:layout_height="@dimen/_19sdp"
