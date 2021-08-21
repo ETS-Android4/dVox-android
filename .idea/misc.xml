@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/dVox-android/app/src/main/res/drawable/tiger.xml" value="0.2898148148148148" />
         <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/dVox-android/app/src/main/res/layout/activity_login.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/dVox-android/app/src/main/res/layout/activity_main.xml" value="0.2296195652173913" />
         <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/dVox-android/app/src/main/res/layout/activity_user_profile.xml" value="0.2" />
@@ -71,8 +72,7 @@
         <entry key="app/src/main/res/layout/fragment_add.xml" value="0.20199275362318841" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.27751333456261457" />
         <entry key="app/src/main/res/layout/fragment_user.xml" value="0.1956521739130435" />
-        <entry key="app/src/main/res/layout/item_post.xml" value="0.40910938640177213" />
-        <entry key="app/src/main/res/layout/phone_is_rooted.xml" value="0.15989583333333332" />
+        <entry key="app/src/main/res/layout/item_post.xml" value="0.5548827363320381" />
         <entry key="app/src/main/res/layout/temp1_activity_user_profile.xml" value="0.2852446660909537" />
         <entry key="app/src/main/res/menu/navigation_menu.xml" value="0.2520833333333333" />
       </map>

@@ -168,7 +168,7 @@ public class RandomNameGenerator {
 
         //For Testing Purposes
         String adjective = adjectives[randAdj];
-        String animal = "Butterfly";
+        String animal =  animals[randAnimal];//"Butterfly";
         String number = numbers[randNumber];
 
         String generateName = "@" + adjective + "_" + animal + "_" + number;

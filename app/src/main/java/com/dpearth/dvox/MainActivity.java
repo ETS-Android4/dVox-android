@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Binder;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -49,21 +50,6 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences preferencesUsernames = getSharedPreferences(USERNAME_PREFS, Context.MODE_PRIVATE);
 
 
-
-//        // Check if user already has name
-//        if (preferencesUsernames.getString("username", "").equals("")) {
-//
-//            UserFragment userFragment = new UserFragment();
-//            userFragment.saveData();
-//
-//
-////            String randomNameGenerator = RandomNameGenerator.getRandomlyGeneratedName();
-////            SharedPreferences.Editor usernamePreferencesEditor = preferencesUsernames.edit().putString(USERNAME_PREFS, randomNameGenerator);
-////            RandomNameGenerator.checkAndAddGeneratedNameFireStore(randomNameGenerator, false);
-////            usernamePreferencesEditor.apply();
-//
-//        }
-
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
@@ -78,6 +64,10 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.ic_home:
                         fragment = new HomeFragment();
+
+//                        //Testing username in home fragment
+//                        String a = preferencesUsernames.getString(USERNAME_PREFS, "");
+//                        Log.d("USERNAME IN OTHER ACTIVITY", "username is: " + a);
                         break;
                     case R.id.ic_user:
                         fragment = new UserFragment();
