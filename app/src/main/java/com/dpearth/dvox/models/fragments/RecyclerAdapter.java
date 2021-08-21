@@ -4,7 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -65,8 +65,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         hashtagView.setText(post.getHashtag());
 
         //Only Upvotes for now
-        TextView votesView = holder.upvote;
-        votesView.setText(post.getHashtag());
+        TextView upvoteNumberView = holder.upvote_number;
+        upvoteNumberView.setText(post.getUpVotes().toString());
+
+        TextView downvoteNumberView = holder.downvote_number;
+        downvoteNumberView.setText(post.getDownVotes().toString());
+
+        TextView commentNumberView = holder.comment_number;
+        commentNumberView.setText(post.getCommentCount().toString());
 
     }
 
@@ -86,20 +92,27 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         public TextView author;
         public TextView content;
         public TextView theme;
-        public Button upvote;
-        public Button downvote;
+        public ImageView upvote;
+        public ImageView downvote;
+        public ImageView comment;
+        public TextView upvote_number;
+        public TextView downvote_number;
+        public TextView comment_number;
 
         public ViewHolder(@NonNull View itemView){
             super(itemView);
 
-            drawableRes = R.drawable._01_boar;
+            drawableRes = R.drawable.boar;
             title = (TextView) itemView.findViewById(R.id.post_title);
             author = (TextView) itemView.findViewById(R.id.author_text);
             content = (TextView) itemView.findViewById(R.id.content_post);
             theme = (TextView) itemView.findViewById(R.id.post_theme);
-//            upvote;
-//            downvote;
-
+            upvote = (ImageView) itemView.findViewById(R.id.upvote_button);
+            downvote = (ImageView) itemView.findViewById(R.id.downvote_button);
+            comment = (ImageView) itemView.findViewById(R.id.comment_button);
+            upvote_number = (TextView) itemView.findViewById(R.id.upvote_number);
+            downvote_number = (TextView) itemView.findViewById(R.id.downvote_number);
+            comment_number = (TextView) itemView.findViewById(R.id.comment_number);
         }
     }
 }

@@ -1,7 +1,5 @@
 package com.dpearth.dvox.livedata;
 
-import android.graphics.drawable.Drawable;
-
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
@@ -11,11 +9,11 @@ import com.dpearth.dvox.R;
 public class User  extends BaseObservable {
 
     private String name;
-    private int image = R.drawable._03_snake;
+    private int image = R.drawable.snake;
 
     public User(String name) {
         this.name = name;
-        image = R.drawable._03_snake;
+        image = R.drawable.snake;
     }
 
     @Bindable

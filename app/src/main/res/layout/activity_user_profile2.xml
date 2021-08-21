@@ -55,7 +55,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView2"
-                    android:src="@{user.image, default=@drawable/_02_koala}" />
+                    android:src="@{user.image, default=@drawable/koala}" />
 
                 <TextView
                     android:id="@+id/profile_username"
