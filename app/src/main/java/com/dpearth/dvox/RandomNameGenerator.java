@@ -219,7 +219,9 @@ public class RandomNameGenerator {
      * @param generatedName
      * @param isNameUsed
      */
-    public static void checkAndAddGeneratedNameFireStore(String generatedName, boolean isNameUsed){
+    public static boolean checkAndAddGeneratedNameFireStore(String generatedName, boolean isNameUsed){
+
+        final boolean[] nameAdded = {false};
 
         String nameToSplit = generatedName.substring(1);
 
@@ -247,7 +249,7 @@ public class RandomNameGenerator {
                             Log.d("firebase RNG", generatedName + " exists");
                         } else {
                             Log.d("firebase RNG", generatedName + " DOES NOT exist");
-
+                            nameAdded[0] = true;
                             addGeneratedNameFireStore(generatedName, isNameUsed);
                         }
 
@@ -261,6 +263,8 @@ public class RandomNameGenerator {
                 }
             }
         });
+        Log.d("firebase RNG", "nameAdded = " + nameAdded[0]);
+        return nameAdded[0];
     }
 
 

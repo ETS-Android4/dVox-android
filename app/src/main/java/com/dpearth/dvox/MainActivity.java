@@ -33,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     private EditText postTitle, postTheme, postContent;
     private Button buttonSave;
 
+    public static final String USERNAME_PREFS = "usernamePrefs";
+
 
     final FragmentManager fragmentManager = getSupportFragmentManager();
     private BottomNavigationView bottomNavigationView;
@@ -41,8 +43,26 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate (Bundle savedInstanceState){
         //Get shared preferences and put new APIs there
-        SharedPreferences preferences = getSharedPreferences("pref", Context.MODE_PRIVATE);
-        getAPIs(preferences);
+        SharedPreferences preferencesKeys = getSharedPreferences("pref", Context.MODE_PRIVATE);
+        getAPIs(preferencesKeys);
+
+        SharedPreferences preferencesUsernames = getSharedPreferences(USERNAME_PREFS, Context.MODE_PRIVATE);
+
+
+
+//        // Check if user already has name
+//        if (preferencesUsernames.getString("username", "").equals("")) {
+//
+//            UserFragment userFragment = new UserFragment();
+//            userFragment.saveData();
+//
+//
+////            String randomNameGenerator = RandomNameGenerator.getRandomlyGeneratedName();
+////            SharedPreferences.Editor usernamePreferencesEditor = preferencesUsernames.edit().putString(USERNAME_PREFS, randomNameGenerator);
+////            RandomNameGenerator.checkAndAddGeneratedNameFireStore(randomNameGenerator, false);
+////            usernamePreferencesEditor.apply();
+//
+//        }
 
         super.onCreate(savedInstanceState);
 

@@ -79,7 +79,7 @@ public class Username {
         map.put(47, "Bat");
         map.put(48, "Hippo");
         map.put(49, "Crocodile");
-        map.put(50, "Monkey,");
+        map.put(50, "Monkey");
     }
 
     public String getUsername() {

@@ -65,14 +65,13 @@ public class UserFragment extends Fragment {
         generateNewNameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                binding.setUser(new User("data works"));
 
-                //saveData();
+                saveData();
             }
         });
 
-//        loadData();
-//        updateViews();
+        loadData();
+        updateViews();
 
     }
 
@@ -96,17 +95,26 @@ public class UserFragment extends Fragment {
 
     public void saveData() {
 
-        String name = RandomNameGenerator.getRandomlyGeneratedName();
-//        RandomNameGenerator.checkAndAddGeneratedNameFireStore(name, false);
+        boolean nameSuccessfullyAdded = false;
 
-        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(USERNAME_PREFS, Context.MODE_PRIVATE);
+        while (!nameSuccessfullyAdded) {
 
-        SharedPreferences.Editor editor = sharedPreferences.edit().putString(USERNAME_PREFS, name);
+            String name = RandomNameGenerator.getRandomlyGeneratedName();
 
-        editor.apply();
+            if (!RandomNameGenerator.checkAndAddGeneratedNameFireStore(name, true)) {
+                RandomNameGenerator.checkAndAddGeneratedNameFireStore(name, false);
+                binding.setUser(new User(name));
 
-        Toast.makeText(getActivity(), "Data Saved", Toast.LENGTH_SHORT).show();
 
+                SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(USERNAME_PREFS, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit().putString(USERNAME_PREFS, name);
+
+                editor.apply();
+
+                Toast.makeText(getActivity(), "Data Saved", Toast.LENGTH_SHORT).show();
+                break;
+            }
+        }
     }
 
     public void loadData(){
