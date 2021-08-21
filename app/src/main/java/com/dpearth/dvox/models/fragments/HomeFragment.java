@@ -63,15 +63,27 @@ public class HomeFragment extends Fragment {
             @Override
             public void run() {
                 // ################# GET ALL POSTS #################//
+
                 SharedPreferences preferences = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
+
+
+                while (preferences.getString("credentials", "error").equals("error") ||
+                        preferences.getString("contractAddress", "error").equals("error") ||
+                        preferences.getString("credentials", "error").equals("error")) {
+
+                    try {
+                        Thread.sleep(250);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                }
 
                 SmartContract contract = new SmartContract(preferences);
 
                 int postCount = contract.getPostCount();
 
-                Log.i("Post loader", "Trying to print..." + postCount);
-
-                Log.i("Post loader", "Trying to print..." + postCount);
+                Log.i("Post loader", "Trying to print... in total:" + postCount);
 
                 if ( postCount > 0){
                     for (int i = postCount; i > postCount - numberOfPosts; i--){
@@ -83,13 +95,16 @@ public class HomeFragment extends Fragment {
                     }
                 };
                 // ################# GET ALL POSTS #################//
-               getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //UPDATE UI
-                        postAdapter.notifyDataSetChanged();
-                    }
-                });
+
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //UPDATE UI
+                            postAdapter.notifyDataSetChanged();
+                        }
+                    });
+                }
             }
         });
         thread.start();
