@@ -21,9 +21,9 @@ public class User  extends BaseObservable {
         populateMap();
         this.name = name;
 
-        String[] splitName = name.split("_", 3);
-        String animal = splitName[1];
-        image = map.get(animal.toLowerCase());
+//        String[] splitName = name.split("_", 3);
+//        String animal = splitName[1];
+//        image = map.get(animal.toLowerCase());
     }
 
     @Bindable
