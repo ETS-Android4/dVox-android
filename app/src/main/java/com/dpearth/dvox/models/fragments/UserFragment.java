@@ -40,6 +40,10 @@ public class UserFragment extends Fragment {
 
         //return inflater.inflate(R.layout.activity_user_profile2, container, false);
 
+        //for all fragments
+//        Usename uSername = new Username();
+        //username.retrievedata(true);
+
         binding = DataBindingUtil.inflate(inflater, R.layout.activity_user_profile2, container, false);
         SharedPreferences preferences = getActivity().getSharedPreferences(USERNAME_PREFS, Context.MODE_PRIVATE);
         String name = preferences.getString(USERNAME_PREFS, "");

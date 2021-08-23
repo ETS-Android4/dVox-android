@@ -1,5 +1,6 @@
 package com.dpearth.dvox.username;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -14,6 +15,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
@@ -57,11 +59,14 @@ public class Username {
     };
 
     public static final String USERNAME_PREFS = "usernamePrefs";
+    private static Context mContext;
 
-    public Username() {
+    /*  Need to pass contexts as Username is non-activity but a helper class    */
+    public Username(Context mContext) {
         this.animal = "Retrieving";
         this.adjective = "The username";
         this.number = "0";
+        this.mContext = mContext;
 
     }
 
@@ -127,7 +132,7 @@ public class Username {
             return this.animal;
         } else {
             //@ is additional
-            return "@" + this.adjective + "_" + this.animal + "_" + this.number;
+            return this.adjective + "_" + this.animal + "_" + this.number;
         }
     }
 
@@ -151,8 +156,22 @@ public class Username {
         }
     }
 
-    /*  Need to pass contexts as Username is non-activity but a helper class    */
-    public void retrieveUsername(boolean firstRun, Context mContext) {
+    public void retrieveUsername(boolean firstRun) {
+
+//        Thread thread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                //PERFORM BACKGROUND ACTION
+//                Activity activity = (Activity) mContext;
+//
+//                activity.runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        //UPDATE UI ACTION
+//                    }
+//                });
+//            }
+//        });
 
 
         SharedPreferences sharedPreferences = mContext.getSharedPreferences(USERNAME_PREFS, Context.MODE_PRIVATE);
@@ -160,56 +179,33 @@ public class Username {
         if (sharedPreferences.getString(USERNAME_PREFS, "").equals(null) ||
                 sharedPreferences.getString(USERNAME_PREFS, "").equals("")){
 
-//            this.generateNewUsername()
-            String usernameString = this.getUsernameString();
 
             //Add threads here
 
-            DocumentReference firebaseAnimal = FirebaseFirestore.getInstance().collection("Nicknames").document(this.animal);
+            this.generateUsername(firstRun);
 
-            Map<String, Boolean> animalToAdd = new HashMap<>();
-            animalToAdd.put(adjective + "_" + number, firstRun);
+            String usernameString = this.getUsernameString();
 
-            firebaseAnimal.set(animalToAdd, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void unused) {
-                    Log.d("firebase RNG", "animal " + adjective + animal + " successfully written!");
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.w("firebase RNG", "Error writing " + animal, e);
-                }
-            });
+           SharedPreferences.Editor editor = sharedPreferences.edit().putString(USERNAME_PREFS, usernameString);
+            editor.apply();
 
+            //Stop thread
 
-            this.stringToUsername();
+            if (!sharedPreferences.getString(USERNAME_PREFS, "").equals(null) ||
+                    !sharedPreferences.getString(USERNAME_PREFS, "").equals("")) {
+                Log.d("Username", "username was generated successfully");
+            } else {
+                Log.d("Username", "Error getting username");
+            }
 
-            //End here
+        } else {
 
+            this.stringToUsername(
+                    sharedPreferences.getString(USERNAME_PREFS, "")
+            );
 
-
-
-
-
+            Log.d("Username", "retrieveUsername: success");
         }
-
-//        SharedPreferences.Editor editor = sharedPreferences.edit().putString(USERNAME_PREFS, name);
-//        editor.apply();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
     public void getNewUsername() {
@@ -232,8 +228,66 @@ public class Username {
         this.number = numbers[randNumber];
     }
 
-    public Username generateNewUsername(boolean firstRun) {
-        return new Username();
+    public Username generateUsername(boolean firstRun) {
+
+
+        //Start new thread
+
+        DocumentReference firebaseAnimal = FirebaseFirestore.getInstance().collection("Nicknames")
+                .document(this.animal);
+
+        firebaseAnimal.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+
+                    DocumentSnapshot document = task.getResult();
+
+                    //Checking if animal exists
+                    if (document.exists()){
+                        String field = adjective + "_" + number;
+
+                        //Checking if Adjective & number combination exists
+                        if (document.getBoolean(field) == null){
+                            Log.d("Username", "We can create it");
+
+                            Map<String, Boolean> animalToAdd = new HashMap<>();
+                            animalToAdd.put(field, firstRun);
+
+
+                            //I hope this one is right !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                            firebaseAnimal.set(animalToAdd, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    Log.d("firebase RNG", "animal " + field + " successfully written!");
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w("firebase RNG", "Error writing " + field, e);
+                                }
+                            });
+                        }
+                        else {
+                            Log.d("Username", field + " already exists");
+                        }
+                    }
+                    else {
+                        Log.d("Username", "The document does not exists");
+
+                        animal = "Try";
+                        adjective = "Again";
+                        number = "404";
+                    }
+                }
+            }
+        });
+
+        //End thread
+
+
+        return this;
+
     }
 
     public void saveOldUsername() {
@@ -244,9 +298,93 @@ public class Username {
 
     public void userNameAbort() {
 
+
+        //Start thread
+        DocumentReference firebaseAnimal = FirebaseFirestore.getInstance().collection("Nicknames")
+                .document(this.animal);
+
+        firebaseAnimal.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+
+                    DocumentSnapshot document = task.getResult();
+
+                    //Checking if animal exists
+                    if (document.exists()){
+                        String field = adjective + "_" + number;
+
+                        Map<String, Object> animalToDelete = new HashMap<>();
+                        animalToDelete.put(adjective + "_" + number, FieldValue.delete());
+
+                        firebaseAnimal.update(animalToDelete).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Log.d("Username", "Successfully deleted generatedName: " + field);
+                            }
+                        });
+                    }
+                    else {
+                        Log.d("Username", "The document does not exists");
+                    }
+                }
+            }
+        });
+
+
+        //End thread
+        Log.d("Username", "userNameAbort: Creating aborted");
+        this.saveOldUsername();
     }
 
     public void userNameConfirm() {
+
+        //Start thread
+        DocumentReference firebaseAnimal = FirebaseFirestore.getInstance().collection("Nicknames")
+                .document(this.animal);
+
+        firebaseAnimal.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+
+                    DocumentSnapshot document = task.getResult();
+
+                    //Checking if animal exists
+                    if (document.exists()) {
+                        String field = adjective + "_" + number;
+
+                        Map<String, Boolean> animalToAdd = new HashMap<>();
+                        animalToAdd.put(field, true);
+
+                        //I hope this one is right !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        firebaseAnimal.set(field, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Log.d("firebase RNG", "animal " + field + " successfully written!");
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w("firebase RNG", "Error writing " + field, e);
+                            }
+                        });
+
+                        // End thread here
+                    } else {
+                        Log.d("Username", "The document does not exists");
+                    }
+                }
+            }
+        });
+
+        //End thread
+
+        Log.d("Username", "userName create Confirm");
+        //set pref
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences(USERNAME_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit().putString(USERNAME_PREFS, getUsernameString());
+        editor.apply();
 
     }
 }

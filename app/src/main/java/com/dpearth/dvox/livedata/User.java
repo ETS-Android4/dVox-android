@@ -30,13 +30,12 @@ public class User  extends BaseObservable {
             animal = splitName[1];
         } else if (splitName.length == 4){
             animal = splitName[1] + "_" + splitName[2];
+        } else {
+            animal = "Hacker";
         }
 
         image = map.get(animal.toLowerCase());
 
-//        String[] splitName = name.split("_", 3);
-//        String animal = splitName[1];
-//        image = map.get(animal.toLowerCase());
     }
 
     @Bindable
@@ -110,5 +109,6 @@ public class User  extends BaseObservable {
         map.put("hippo", R.drawable.hippo);
         map.put("crocodile", R.drawable.crocodile);
         map.put("monkey", R.drawable.monkey);
+        map.put("hacker", R.drawable.hacker);
     }
 }
