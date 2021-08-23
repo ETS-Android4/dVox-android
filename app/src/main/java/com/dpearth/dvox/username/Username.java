@@ -158,21 +158,6 @@ public class Username {
 
     public void retrieveUsername(boolean firstRun) {
 
-//        Thread thread = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                //PERFORM BACKGROUND ACTION
-//                Activity activity = (Activity) mContext;
-//
-//                activity.runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        //UPDATE UI ACTION
-//                    }
-//                });
-//            }
-//        });
-
 
         SharedPreferences sharedPreferences = mContext.getSharedPreferences(USERNAME_PREFS, Context.MODE_PRIVATE);
 
@@ -181,14 +166,29 @@ public class Username {
 
 
             //Add threads here
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    //PERFORM BACKGROUND ACTION
+                    Activity activity = (Activity) mContext;
 
-            this.generateUsername(firstRun);
+                    generateUsername(firstRun);
 
-            String usernameString = this.getUsernameString();
+                    String usernameString = getUsernameString();
 
-           SharedPreferences.Editor editor = sharedPreferences.edit().putString(USERNAME_PREFS, usernameString);
-            editor.apply();
+                    SharedPreferences.Editor editor = sharedPreferences.edit().putString(USERNAME_PREFS, usernameString);
+                    editor.apply();
 
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //UPDATE UI ACTION
+                        }
+                    });
+                }
+            });
+
+            thread.run();
             //Stop thread
 
             if (!sharedPreferences.getString(USERNAME_PREFS, "").equals(null) ||
@@ -232,59 +232,74 @@ public class Username {
 
 
         //Start new thread
-
-        DocumentReference firebaseAnimal = FirebaseFirestore.getInstance().collection("Nicknames")
-                .document(this.animal);
-
-        firebaseAnimal.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        Thread thread = new Thread(new Runnable() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()){
-
-                    DocumentSnapshot document = task.getResult();
-
-                    //Checking if animal exists
-                    if (document.exists()){
-                        String field = adjective + "_" + number;
-
-                        //Checking if Adjective & number combination exists
-                        if (document.getBoolean(field) == null){
-                            Log.d("Username", "We can create it");
-
-                            Map<String, Boolean> animalToAdd = new HashMap<>();
-                            animalToAdd.put(field, firstRun);
+            public void run() {
+                //PERFORM BACKGROUND ACTION
+                Activity activity = (Activity) mContext;
 
 
-                            //I hope this one is right !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                            firebaseAnimal.set(animalToAdd, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                    Log.d("firebase RNG", "animal " + field + " successfully written!");
+                DocumentReference firebaseAnimal = FirebaseFirestore.getInstance().collection("Nicknames")
+                        .document(animal);
+
+                firebaseAnimal.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()){
+
+                            DocumentSnapshot document = task.getResult();
+
+                            //Checking if animal exists
+                            if (document.exists()){
+                                String field = adjective + "_" + number;
+
+                                //Checking if Adjective & number combination exists
+                                if (document.getBoolean(field) == null){
+                                    Log.d("Username", "We can create it");
+
+                                    Map<String, Boolean> animalToAdd = new HashMap<>();
+                                    animalToAdd.put(field, firstRun);
+
+
+                                    //I hope this one is right !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                                    firebaseAnimal.set(animalToAdd, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            Log.d("firebase RNG", "animal " + field + " successfully written!");
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w("firebase RNG", "Error writing " + field, e);
+                                        }
+                                    });
                                 }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.w("firebase RNG", "Error writing " + field, e);
+                                else {
+                                    Log.d("Username", field + " already exists");
                                 }
-                            });
-                        }
-                        else {
-                            Log.d("Username", field + " already exists");
+                            }
+                            else {
+                                Log.d("Username", "The document does not exists");
+
+                                animal = "Try";
+                                adjective = "Again";
+                                number = "404";
+                            }
                         }
                     }
-                    else {
-                        Log.d("Username", "The document does not exists");
+                });
 
-                        animal = "Try";
-                        adjective = "Again";
-                        number = "404";
+
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //UPDATE UI ACTION
                     }
-                }
+                });
             }
         });
 
-        //End thread
-
+        thread.run();
 
         return this;
 
@@ -300,39 +315,55 @@ public class Username {
 
 
         //Start thread
-        DocumentReference firebaseAnimal = FirebaseFirestore.getInstance().collection("Nicknames")
-                .document(this.animal);
-
-        firebaseAnimal.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        Thread thread = new Thread(new Runnable() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()){
+            public void run() {
+                //PERFORM BACKGROUND ACTION
+                Activity activity = (Activity) mContext;
 
-                    DocumentSnapshot document = task.getResult();
+                DocumentReference firebaseAnimal = FirebaseFirestore.getInstance().collection("Nicknames")
+                        .document(animal);
 
-                    //Checking if animal exists
-                    if (document.exists()){
-                        String field = adjective + "_" + number;
+                firebaseAnimal.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()){
 
-                        Map<String, Object> animalToDelete = new HashMap<>();
-                        animalToDelete.put(adjective + "_" + number, FieldValue.delete());
+                            DocumentSnapshot document = task.getResult();
 
-                        firebaseAnimal.update(animalToDelete).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                Log.d("Username", "Successfully deleted generatedName: " + field);
+                            //Checking if animal exists
+                            if (document.exists()){
+                                String field = adjective + "_" + number;
+
+                                Map<String, Object> animalToDelete = new HashMap<>();
+                                animalToDelete.put(adjective + "_" + number, FieldValue.delete());
+
+                                firebaseAnimal.update(animalToDelete).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        Log.d("Username", "Successfully deleted generatedName: " + field);
+                                    }
+                                });
                             }
-                        });
+                            else {
+                                Log.d("Username", "The document does not exists");
+                            }
+                        }
                     }
-                    else {
-                        Log.d("Username", "The document does not exists");
+                });
+
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //UPDATE UI ACTION
                     }
-                }
+                });
             }
         });
 
-
+        thread.run();
         //End thread
+
         Log.d("Username", "userNameAbort: Creating aborted");
         this.saveOldUsername();
     }
@@ -340,48 +371,64 @@ public class Username {
     public void userNameConfirm() {
 
         //Start thread
-        DocumentReference firebaseAnimal = FirebaseFirestore.getInstance().collection("Nicknames")
-                .document(this.animal);
-
-        firebaseAnimal.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        Thread thread = new Thread(new Runnable() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
+            public void run() {
+                //PERFORM BACKGROUND ACTION
+                Activity activity = (Activity) mContext;
 
-                    DocumentSnapshot document = task.getResult();
+                DocumentReference firebaseAnimal = FirebaseFirestore.getInstance().collection("Nicknames")
+                        .document(animal);
 
-                    //Checking if animal exists
-                    if (document.exists()) {
-                        String field = adjective + "_" + number;
+                firebaseAnimal.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
 
-                        Map<String, Boolean> animalToAdd = new HashMap<>();
-                        animalToAdd.put(field, true);
+                            DocumentSnapshot document = task.getResult();
 
-                        //I hope this one is right !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                        firebaseAnimal.set(field, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                Log.d("firebase RNG", "animal " + field + " successfully written!");
+                            //Checking if animal exists
+                            if (document.exists()) {
+                                String field = adjective + "_" + number;
+
+                                Map<String, Boolean> animalToAdd = new HashMap<>();
+                                animalToAdd.put(field, true);
+
+                                //I hope this one is right !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                                firebaseAnimal.set(field, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        Log.d("firebase RNG", "animal " + field + " successfully written!");
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w("firebase RNG", "Error writing " + field, e);
+                                    }
+                                });
+
+                                // End thread here
+                            } else {
+                                Log.d("Username", "The document does not exists");
                             }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w("firebase RNG", "Error writing " + field, e);
-                            }
-                        });
-
-                        // End thread here
-                    } else {
-                        Log.d("Username", "The document does not exists");
+                        }
                     }
-                }
+                });
+
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //UPDATE UI ACTION
+                    }
+                });
             }
         });
 
+        thread.run();
         //End thread
 
         Log.d("Username", "userName create Confirm");
-        //set pref
+
         SharedPreferences sharedPreferences = mContext.getSharedPreferences(USERNAME_PREFS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit().putString(USERNAME_PREFS, getUsernameString());
         editor.apply();
