@@ -8,10 +8,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
 
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,45 +74,48 @@ public class UserFragment extends Fragment {
 
     }
 
-    public void initializeUsername() {
-
-        SharedPreferences usernamePreferences = getActivity().getSharedPreferences(USERNAME_PREFS, Context.MODE_PRIVATE);
-
-        if (usernamePreferences.getString(USERNAME_PREFS, "").equals("")) {
-            String randomNameGenerator = RandomNameGenerator.getRandomlyGeneratedName();
-
-            SharedPreferences.Editor usernamePreferencesEditor = usernamePreferences.edit().putString(USERNAME_PREFS, randomNameGenerator);
-            RandomNameGenerator.checkAndAddGeneratedNameFireStore(randomNameGenerator, false);
-
-            usernamePreferencesEditor.apply();
-
-            Toast.makeText(getActivity(), "Data Initialized", Toast.LENGTH_SHORT).show();
-
-        }
-
-    }
+//    public void initializeUsername() {
+//
+//        SharedPreferences usernamePreferences = getActivity().getSharedPreferences(USERNAME_PREFS, Context.MODE_PRIVATE);
+//
+//        if (usernamePreferences.getString(USERNAME_PREFS, "").equals("")) {
+//            String randomNameGenerator = RandomNameGenerator.getRandomlyGeneratedName();
+//
+//            SharedPreferences.Editor usernamePreferencesEditor = usernamePreferences.edit().putString(USERNAME_PREFS, randomNameGenerator);
+//            RandomNameGenerator.checkNameFireStore(randomNameGenerator, false);
+//
+//            usernamePreferencesEditor.apply();
+//
+//            Toast.makeText(getActivity(), "Data Initialized", Toast.LENGTH_SHORT).show();
+//
+//        }
+//
+//    }
 
     public void saveData() {
 
-        boolean nameSuccessfullyAdded = false;
-
-        while (!nameSuccessfullyAdded) {
 
             String name = RandomNameGenerator.getRandomlyGeneratedName();
 
-            if (!RandomNameGenerator.checkAndAddGeneratedNameFireStore(name, true)) {
-                RandomNameGenerator.checkAndAddGeneratedNameFireStore(name, false);
-                binding.setUser(new User(name));
+            generateName(name);
+    }
+
+    private void generateName(String name) {
+        if (!RandomNameGenerator.checkNameFireStore(name, false)) {
+
+            RandomNameGenerator.addNameFireStore(name, false);
+            binding.setUser(new User(name));
 
 
-                SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(USERNAME_PREFS, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit().putString(USERNAME_PREFS, name);
+            SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(USERNAME_PREFS, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit().putString(USERNAME_PREFS, name);
 
-                editor.apply();
+            editor.apply();
 
-                Toast.makeText(getActivity(), "Data Saved", Toast.LENGTH_SHORT).show();
-                break;
-            }
+            Toast.makeText(getActivity(), "Data Saved", Toast.LENGTH_SHORT).show();
+
+        } else {
+            Log.d("GENERATENAME", "Already exists  ");
         }
     }
 

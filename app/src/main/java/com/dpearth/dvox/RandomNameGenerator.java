@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.dpearth.dvox.models.fragments.PostAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -160,16 +161,19 @@ public class RandomNameGenerator {
         Random random = new Random();
         int randAdj = random.nextInt(adjectives.length);
         int randAnimal = random.nextInt(animals.length);
-        int randNumber = random.nextInt(numbers.length);
+//        int randNumber = random.nextInt(numbers.length);
+
+
+        int randNumber = random.nextInt(10);
 
 //        String adjective = adjectives[randAdj];
 //        String animal = animals[randAnimal];
 //        String number = numbers[randNumber];
 
         //For Testing Purposes
-        String adjective = adjectives[randAdj];
-        String animal =  animals[randAnimal];//"Butterfly";
-        String number = numbers[randNumber];
+        String adjective = "Cynical";//adjectives[randAdj];
+        String animal =  "Bearded_Dragon";//animals[randAnimal];//"Butterfly";
+        String number = numbers[randNumber];//numbers[randNumber];
 
         String generateName = "@" + adjective + "_" + animal + "_" + number;
 
@@ -193,11 +197,19 @@ public class RandomNameGenerator {
 
         String nameToSplit = generatedName.substring(1);
 
-        String[] a = nameToSplit.split("_", 3);
+        String[] a = nameToSplit.split("_");
 
         String adjective = a[0];
         String animal = a[1];
         String number = a[2];
+
+        if (a.length == 3){
+            animal = a[1];
+            number = a[2];
+        } else if (a.length == 4){
+            animal = a[1] + "_" + a[2];
+            number = a[3];
+        }
 
         Map<String, Object> animalToDelete = new HashMap<>();
 
@@ -216,24 +228,36 @@ public class RandomNameGenerator {
     /**     Maybe this one was not necessary
      * Checking if name exists in firebase and adding afterwards
      *
+     * Returns true if username does not exist
+     *
      * @param generatedName
      * @param isNameUsed
      */
-    public static boolean checkAndAddGeneratedNameFireStore(String generatedName, boolean isNameUsed){
+    public static boolean checkNameFireStore(String generatedName, boolean isNameUsed){
 
         final boolean[] nameAdded = {false};
 
         String nameToSplit = generatedName.substring(1);
 
-        String[] a = nameToSplit.split("_", 3);
+        String[] a = nameToSplit.split("_");
 
         String adjective = a[0];
         String animal = a[1];
         String number = a[2];
 
+
+        if (a.length == 3){
+            animal = a[1];
+            number = a[2];
+        } else if (a.length == 4){
+            animal = a[1] + "_" + a[2];
+            number = a[3];
+        }
+
         DocumentReference firebaseAnimal = FirebaseFirestore.getInstance().collection("Nicknames").document(animal);
 
 
+        String finalNumber = number;
         firebaseAnimal.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -245,25 +269,16 @@ public class RandomNameGenerator {
                     if (document.exists()){
 
                         //Checking if Adjective & number combination exists
-                        if (document.getBoolean(adjective + "_" + number) != null){
-                            Log.d("firebase RNG", generatedName + " exists");
+                        if (document.getBoolean(adjective + "_" + finalNumber) != null){
                         } else {
-                            Log.d("firebase RNG", generatedName + " DOES NOT exist");
                             nameAdded[0] = true;
-                            addGeneratedNameFireStore(generatedName, isNameUsed);
                         }
 
-
-                    } else {
-                        Log.d("firebase RNG", "animal " + animal + " DOES NOT exist");
                     }
-
-                } else {
-                    Log.d("firebase RNG", "Task Failed with: " + task.getException());
                 }
             }
         });
-        Log.d("firebase RNG", "nameAdded = " + nameAdded[0]);
+        Log.d("firebase RNG", "name Added: " + nameAdded[0]);
         return nameAdded[0];
     }
 
@@ -274,15 +289,23 @@ public class RandomNameGenerator {
      * @param generatedName
      * @param isNameUsed
      */
-    private static void addGeneratedNameFireStore(String generatedName, boolean isNameUsed) {
+    public static void addNameFireStore(String generatedName, boolean isNameUsed) {
 
         String nameToSplit = generatedName.substring(1);
 
-        String[] a = nameToSplit.split("_", 3);
+        String[] a = nameToSplit.split("_");
 
         String adjective = a[0];
         String animal = a[1];
         String number = a[2];
+
+        if (a.length == 3){
+            animal = a[1];
+            number = a[2];
+        } else if (a.length == 4){
+            animal = a[1] + "_" + a[2];
+            number = a[3];
+        }
 
         DocumentReference firebaseAnimal = FirebaseFirestore.getInstance().collection("Nicknames").document(animal);
 

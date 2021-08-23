@@ -1,88 +1,252 @@
 package com.dpearth.dvox.username;
 
-import android.database.Observable;
-import android.graphics.drawable.Drawable;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
 
-import androidx.databinding.ObservableBoolean;
-import androidx.databinding.ObservableField;
-import androidx.databinding.ObservableInt;
+import androidx.annotation.NonNull;
 
 import com.dpearth.dvox.R;
+import com.dpearth.dvox.livedata.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class Username {
 
-    private ObservableField<String> username;
-    private ObservableInt image;
-    private ObservableBoolean isUsed;
+    private String animal;
+    private String adjective;
+    private String number;  //Made it into a string
 
-    private static Map<Integer, String> map = new HashMap<>();
+    private String oldAnimal = "";
+    private String oldAdjective = "";
+    private String oldNumber = "0";
 
+    private static final String[] adjectivesList = new String[]{
+            "Sturdy", "Loud", "Delicious", "Decorous", "Pricey",
+            "Knowing", "Scientific", "Lazy", "Fair", "Loutish",
+            "Wonderful", "Strict", "Gaudy", "Innocent", "Horrible",
+            "Puzzled", "Happy", "Grandiose", "Observant", "Pumped",
+            "Pale", "Royal", "Flawless", "Actual", "Realistic", "Cynical",
+            "Clean", "Strict", "Super", "Powerful", "Mixed", "Slim",
+            "Ubiquitous", "Faithful", "Amusing", "Emotional", "Staking",
+            "Former", "Scarce", "Tense", "Black-and-White", "Tangy", "Wrong",
+            "Sloppy", "Regular", "Deafening", "Savory", "Classy", "First",
+            "Second", "Third", "Valuable", "Outgoing", "Free", "Terrific",
+            "Sleepy", "Adorable", "Cozy"
+    };
 
-    public Username(String username, boolean isUsed) {
-        this.username.set(username);
-        this.isUsed.set(isUsed);
-    }
+    private static final String[] animalsList = new String[]{
+            "Boar", "Koala", "Snake", "Frog", "Parrot", "Lion", "Pig",
+            "Rhino", "Sloth", "Horse", "Sheep", "Chameleon", "Giraffe",
+            "Yak", "Cat", "Dog", "Penguin", "Elephant", "Fox", "Otter",
+            "Gorilla", "Rabbit", "Raccoon", "Wolf", "Panda", "Goat", "Chicken",
+            "Duck", "Cow", "Ray", "Catfish", "Ladybug", "Dragonfly", "Owl", "Beaver",
+            "Alpaca", "Mouse", "Walrus", "Kangaroo", "Butterfly", "Jellyfish",
+            "Deer", "Beetle", "Tiger", "Pigeon", "Bearded_Dragon", "Bat",
+            "Hippo", "Crocodile", "Monkey",
+    };
+
+    public static final String USERNAME_PREFS = "usernamePrefs";
 
     public Username() {
+        this.animal = "Retrieving";
+        this.adjective = "The username";
+        this.number = "0";
+
     }
 
-    private void populateMap() {
-        map.put(1, "Boar");
-        map.put(2, "Koala");
-        map.put(3, "Snake");
-        map.put(4, "Frog");
-        map.put(5, "Parrot");
-        map.put(6, "Lion");
-        map.put(7, "Pig");
-        map.put(8, "Rhino");
-        map.put(9, "Sloth");
-        map.put(10, "Horse");
-        map.put(11, "Sheep");
-        map.put(12, "Chameleon");
-        map.put(13, "Giraffe");
-        map.put(14, "Yak");
-        map.put(15, "Cat");
-        map.put(16, "Dog");
-        map.put(17, "Penguin");
-        map.put(18, "Elephant");
-        map.put(19, "Fox");
-        map.put(20, "Otter");
-        map.put(21, "Gorilla");
-        map.put(22, "Rabbit");
-        map.put(23, "Raccoon");
-        map.put(24, "Wolf");
-        map.put(25, "Panda");
-        map.put(26, "Goat");
-        map.put(27, "Chicken");
-        map.put(28, "Duck");
-        map.put(29, "Cow");
-        map.put(30, "Ray");
-        map.put(31, "Catfish");
-        map.put(32, "Ladybug");
-        map.put(33, "Dragonfly");
-        map.put(34, "Owl");
-        map.put(35, "Beaver");
-        map.put(36, "Alpaca");
-        map.put(37, "Mouse");
-        map.put(38, "Walrus");
-        map.put(39, "Kangaroo");
-        map.put(40, "Butterfly");
-        map.put(41, "Jellyfish");
-        map.put(42, "Deer");
-        map.put(43, "Beetle");
-        map.put(44, "Tiger");
-        map.put(45, "Pigeon");
-        map.put(46, "Bearded_dragon");
-        map.put(47, "Bat");
-        map.put(48, "Hippo");
-        map.put(49, "Crocodile");
-        map.put(50, "Monkey");
+    /*Don't think its necessary*/
+    public int getAvatar() {
+        Map<String, Integer> map = new HashMap<>();
+        map.put("boar", R.drawable.boar);
+        map.put("koala", R.drawable.koala);
+        map.put("snake", R.drawable.snake);
+        map.put("frog", R.drawable.frog);
+        map.put("parrot", R.drawable.parrot);
+        map.put("lion", R.drawable.lion);
+        map.put("pig", R.drawable.pig);
+        map.put("rhino", R.drawable.rhino);
+        map.put("sloth", R.drawable.sloth);
+        map.put("horse", R.drawable.horse);
+        map.put("sheep", R.drawable.sheep);
+        map.put("chameleon", R.drawable.chameleon);
+        map.put("giraffe", R.drawable.giraffe);
+        map.put("yak", R.drawable.yak);
+        map.put("cat", R.drawable.cat);
+        map.put("dog", R.drawable.dog);
+        map.put("penguin", R.drawable.penguin);
+        map.put("elephant", R.drawable.elephant);
+        map.put("fox", R.drawable.fox);
+        map.put("otter", R.drawable.otter);
+        map.put("gorilla", R.drawable.gorilla);
+        map.put("rabbit", R.drawable.rabbit);
+        map.put("raccoon", R.drawable.raccoon);
+        map.put("wolf", R.drawable.wolf);
+        map.put("panda", R.drawable.panda);
+        map.put("goat", R.drawable.goat);
+        map.put("chicken", R.drawable.chicken);
+        map.put("duck", R.drawable.duck);
+        map.put("cow", R.drawable.cow);
+        map.put("ray", R.drawable.ray);
+        map.put("catfish", R.drawable.catfish);
+        map.put("ladybug", R.drawable.ladybug);
+        map.put("dragonfly", R.drawable.dragonfly);
+        map.put("owl", R.drawable.owl);
+        map.put("beaver", R.drawable.beaver);
+        map.put("alpaca", R.drawable.alpaca);
+        map.put("mouse", R.drawable.mouse);
+        map.put("walrus", R.drawable.walrus);
+        map.put("kangaroo", R.drawable.kangaroo);
+        map.put("butterfly", R.drawable.butterfly);
+        map.put("jellyfish", R.drawable.jellyfish);
+        map.put("deer", R.drawable.deer);
+        map.put("beetle", R.drawable.beetle);
+        map.put("tiger", R.drawable.tiger);
+        map.put("pigeon", R.drawable.pigeon);
+        map.put("bearded_dragon", R.drawable.bearded_dragon);
+        map.put("bat", R.drawable.bat);
+        map.put("hippo", R.drawable.hippo);
+        map.put("crocodile", R.drawable.crocodile);
+        map.put("monkey", R.drawable.monkey);
+
+        return map.get(this.animal.toLowerCase());
     }
 
-    public String getUsername() {
-        return username.get();
+    public String getUsernameString() {
+        if (this.animal.equals("Hacker")){
+            return this.animal;
+        } else {
+            //@ is additional
+            return "@" + this.adjective + "_" + this.animal + "_" + this.number;
+        }
+    }
+
+    public void stringToUsername(String usernameString) {
+        String[] splitName = usernameString.split("_");
+
+        if (splitName.length == 3){
+            this.adjective = splitName[0];
+            this.animal = splitName[1];
+            this.number = splitName[2];
+        }
+        else if (splitName.length == 4){
+            this.adjective = splitName[0];
+            animal = splitName[1] + "_" + splitName[2];
+            number = splitName[3];
+        }
+        else {
+            this.adjective = "Hacker";
+            this.adjective = "";
+            this.number = "";
+        }
+    }
+
+    /*  Need to pass contexts as Username is non-activity but a helper class    */
+    public void retrieveUsername(boolean firstRun, Context mContext) {
+
+
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences(USERNAME_PREFS, Context.MODE_PRIVATE);
+
+        if (sharedPreferences.getString(USERNAME_PREFS, "").equals(null) ||
+                sharedPreferences.getString(USERNAME_PREFS, "").equals("")){
+
+//            this.generateNewUsername()
+            String usernameString = this.getUsernameString();
+
+            //Add threads here
+
+            DocumentReference firebaseAnimal = FirebaseFirestore.getInstance().collection("Nicknames").document(this.animal);
+
+            Map<String, Boolean> animalToAdd = new HashMap<>();
+            animalToAdd.put(adjective + "_" + number, firstRun);
+
+            firebaseAnimal.set(animalToAdd, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void unused) {
+                    Log.d("firebase RNG", "animal " + adjective + animal + " successfully written!");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.w("firebase RNG", "Error writing " + animal, e);
+                }
+            });
+
+
+            this.stringToUsername();
+
+            //End here
+
+
+
+
+
+
+        }
+
+//        SharedPreferences.Editor editor = sharedPreferences.edit().putString(USERNAME_PREFS, name);
+//        editor.apply();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+
+    public void getNewUsername() {
+
+        String[] numbers = new String[100];
+
+        for (int i = 0; i < 100; i++){
+            numbers[i] = String.valueOf(i);
+        }
+
+        Random random = new Random();
+        int randomAdjective = random.nextInt(this.adjectivesList.length);
+        int randAnimal = random.nextInt(this.animalsList.length);
+        int randNumber = random.nextInt(100);
+
+
+
+        this.adjective = this.adjectivesList[randomAdjective];
+        this.animal = this.animalsList[randAnimal];
+        this.number = numbers[randNumber];
+    }
+
+    public Username generateNewUsername(boolean firstRun) {
+        return new Username();
+    }
+
+    public void saveOldUsername() {
+        this.oldAnimal = this.animal;
+        this.oldAdjective = this.adjective;
+        this.oldNumber = this.number;
+    }
+
+    public void userNameAbort() {
+
+    }
+
+    public void userNameConfirm() {
+
     }
 }

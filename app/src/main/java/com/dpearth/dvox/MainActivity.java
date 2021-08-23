@@ -64,10 +64,6 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.ic_home:
                         fragment = new HomeFragment();
-
-//                        //Testing username in home fragment
-//                        String a = preferencesUsernames.getString(USERNAME_PREFS, "");
-//                        Log.d("USERNAME IN OTHER ACTIVITY", "username is: " + a);
                         break;
                     case R.id.ic_user:
                         fragment = new UserFragment();
