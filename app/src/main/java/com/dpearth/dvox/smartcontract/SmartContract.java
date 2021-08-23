@@ -3,10 +3,13 @@ package com.dpearth.dvox.smartcontract;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.dpearth.dvox.PostContract;
+
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.RemoteFunctionCall;
 import org.web3j.protocol.http.HttpService;
+import org.web3j.tuples.generated.Tuple7;
 import org.web3j.tuples.generated.Tuple9;
 import org.web3j.tx.gas.DefaultGasProvider;
 
@@ -90,17 +93,17 @@ public class SmartContract {
         Post post = new Post();
 
         try {
-            Tuple9<BigInteger, String, String, String, String, BigInteger, BigInteger, BigInteger, Boolean> contractPost = postContract.posts((BigInteger.valueOf(id))).sendAsync().get();
+            Tuple7<BigInteger, String, String, String, String, BigInteger, Boolean> contractPost = postContract.posts((BigInteger.valueOf(id))).sendAsync().get();
 
             post.setId(BigInteger.valueOf(id));
             post.setTitle(contractPost.component2());
             post.setAuthor(contractPost.component3());
             post.setMessage(contractPost.component4());
             post.setHashtag(contractPost.component5());
-            post.setUpVotes(contractPost.component6());
-            post.setDownVotes(contractPost.component7());
-            post.setCommentCount(contractPost.component8());
-            post.setBan(contractPost.component9());
+            post.setUpVotes(BigInteger.valueOf(0));
+            post.setDownVotes(BigInteger.valueOf(0));
+            post.setCommentCount(contractPost.component6());
+            post.setBan(contractPost.component7());
 
 
             //I hope this works :)
@@ -151,32 +154,32 @@ public class SmartContract {
      *
      * @param id
      */
-    public boolean upVote(long id){
-
-            try {
-                postContract.upVote(BigInteger.valueOf(id)).sendAsync().get();
-            } catch (Exception error) {
-                Log.d("SMART_CONTRACT_DEBUG", "Create Post Error: ", error);
-                return false;
-            }
-            return true;
-
-    }
+//    public boolean upVote(long id){
+//
+//            try {
+//                postContract.upVote(BigInteger.valueOf(id)).sendAsync().get();
+//            } catch (Exception error) {
+//                Log.d("SMART_CONTRACT_DEBUG", "Create Post Error: ", error);
+//                return false;
+//            }
+//            return true;
+//
+//    }
 
     /** Lets downvote a post after specifying id
      *
      * @param id
      */
-    public boolean downVote(long id){
-            try {
-                postContract.downVote(BigInteger.valueOf(id)).sendAsync().get();
-            } catch (Exception error) {
-                Log.d("SMART_CONTRACT_DEBUG", "Create Post Error: ", error);
-                return false;
-            }
-            return true;
-
-    }
+//    public boolean downVote(long id){
+//            try {
+//                postContract.downVote(BigInteger.valueOf(id)).sendAsync().get();
+//            } catch (Exception error) {
+//                Log.d("SMART_CONTRACT_DEBUG", "Create Post Error: ", error);
+//                return false;
+//            }
+//            return true;
+//
+//    }
 
 
     /** Creates a new post
