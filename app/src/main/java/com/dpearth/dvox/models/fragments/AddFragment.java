@@ -46,10 +46,22 @@ public class AddFragment extends Fragment {
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                    text = text.replace("  ", " ");
+//                    text = text.replace("\n", " ");
+//                    String[] textArray = text.split(" ");
+
                     String text = content_post.getText().toString();
-                    text = text.replace("\n", " ");
-                    String[] textArray = text.split(" ");
-                    word_counter.setText("Words: " + textArray.length);
+
+                    int wordCounter = 0;
+
+                    char ch[]= new char[text.length()];
+                    for(int i=0;i<text.length();i++) {
+                        ch[i]= text.charAt(i);
+                        if( ((i>0)&&(ch[i]!=' ')&&(ch[i-1]==' ')) || ((ch[0]!=' ')&&(i==0)) )
+                            wordCounter++;
+                    }
+
+                    word_counter.setText("Words: " + wordCounter);
                 }
 
                 @Override
