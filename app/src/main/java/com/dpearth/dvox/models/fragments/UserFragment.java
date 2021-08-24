@@ -22,7 +22,7 @@ import com.dpearth.dvox.R;
 import com.dpearth.dvox.RandomNameGenerator;
 import com.dpearth.dvox.databinding.ActivityUserProfile2Binding;
 import com.dpearth.dvox.livedata.User;
-
+import com.dpearth.dvox.username.Username;
 
 
 public class UserFragment extends Fragment {
@@ -33,6 +33,8 @@ public class UserFragment extends Fragment {
 
     private ActivityUserProfile2Binding binding;
 
+    private Username usernameInstance;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,8 +43,8 @@ public class UserFragment extends Fragment {
         //return inflater.inflate(R.layout.activity_user_profile2, container, false);
 
         //for all fragments
-//        Usename uSername = new Username();
-        //username.retrievedata(true);
+        usernameInstance = new Username(getActivity());
+        usernameInstance.retrieveUsername(true);
 
         binding = DataBindingUtil.inflate(inflater, R.layout.activity_user_profile2, container, false);
         SharedPreferences preferences = getActivity().getSharedPreferences(USERNAME_PREFS, Context.MODE_PRIVATE);
@@ -69,7 +71,7 @@ public class UserFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                saveData();
+                generateName();
             }
         });
 
@@ -78,49 +80,23 @@ public class UserFragment extends Fragment {
 
     }
 
-//    public void initializeUsername() {
-//
-//        SharedPreferences usernamePreferences = getActivity().getSharedPreferences(USERNAME_PREFS, Context.MODE_PRIVATE);
-//
-//        if (usernamePreferences.getString(USERNAME_PREFS, "").equals("")) {
-//            String randomNameGenerator = RandomNameGenerator.getRandomlyGeneratedName();
-//
-//            SharedPreferences.Editor usernamePreferencesEditor = usernamePreferences.edit().putString(USERNAME_PREFS, randomNameGenerator);
-//            RandomNameGenerator.checkNameFireStore(randomNameGenerator, false);
-//
-//            usernamePreferencesEditor.apply();
-//
-//            Toast.makeText(getActivity(), "Data Initialized", Toast.LENGTH_SHORT).show();
-//
-//        }
-//
-//    }
+    private void generateName() {
 
-    public void saveData() {
+        usernameInstance.retrieveUsername(false);
+
+        username = usernameInstance.getUsernameString();
+        Log.d("Usernae", "generateName: " + username);
+
+        binding.setUser(new User(username));
+
+        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(USERNAME_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit().putString(USERNAME_PREFS, username);
+
+        editor.apply();
+
+        Toast.makeText(getActivity(), "Data Saved", Toast.LENGTH_SHORT).show();
 
 
-            String name = RandomNameGenerator.getRandomlyGeneratedName();
-
-            generateName(name);
-    }
-
-    private void generateName(String name) {
-        if (!RandomNameGenerator.checkNameFireStore(name, false)) {
-
-            RandomNameGenerator.addNameFireStore(name, false);
-            binding.setUser(new User(name));
-
-
-            SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(USERNAME_PREFS, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit().putString(USERNAME_PREFS, name);
-
-            editor.apply();
-
-            Toast.makeText(getActivity(), "Data Saved", Toast.LENGTH_SHORT).show();
-
-        } else {
-            Log.d("GENERATENAME", "Already exists  ");
-        }
     }
 
     public void loadData(){
