@@ -223,10 +223,10 @@ public class Username {
         Random random = new Random();
         int randomAdjective = random.nextInt(this.adjectivesList.length);
         int randAnimal = random.nextInt(this.animalsList.length);
-        int randNumber = random.nextInt(101) + 1;
+        int randNumber = random.nextInt(99) + 1;
 
-        this.adjective = this.adjectivesList[randomAdjective];
-        this.animal = this.animalsList[randAnimal];
+        this.adjective = adjectivesList[randomAdjective];
+        this.animal = animalsList[randAnimal];
         this.number = numbers[randNumber];
     }
 
@@ -234,16 +234,13 @@ public class Username {
 
         saveOldUsernameToAccessLater();
 
-
         Log.d("Username", "(regenerating) Current username: " +
                 mContext.getSharedPreferences(USERNAME_PREFS, Context.MODE_PRIVATE).getString(USERNAME_PREFS, ""));
 
         getNewUsername();
 
-
         //PERFORM BACKGROUND ACTION
         Activity activity = (Activity) mContext;
-
 
         DocumentReference firebaseAnimal = FirebaseFirestore.getInstance().collection("Nicknames")
                 .document(animal);
@@ -286,6 +283,7 @@ public class Username {
                         }
                         else {
                             Log.d("Username", field + " already exists");
+                            generateUsername(firstRun);
                         }
                     }
                     else {
@@ -312,48 +310,41 @@ public class Username {
 
     public void userNameAbort() {
 
-        //Start thread
-        Thread thread = new Thread(new Runnable() {
+
+        //PERFORM BACKGROUND ACTION
+        Activity activity = (Activity) mContext;
+
+        DocumentReference firebaseAnimal = FirebaseFirestore.getInstance().collection("Nicknames")
+                .document(animal);
+        firebaseAnimal.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void run() {
-                //PERFORM BACKGROUND ACTION
-                Activity activity = (Activity) mContext;
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d("Username", "DocumentSnapshot data: " + document.getData());
+                        String field = adjective + "_" + number;
 
-                DocumentReference firebaseAnimal = FirebaseFirestore.getInstance().collection("Nicknames")
-                        .document(animal);
-                firebaseAnimal.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                Log.d("Username", "DocumentSnapshot data: " + document.getData());
-                                String field = adjective + "_" + number;
+                        Map<String, Object> animalToDelete = new HashMap<>();
+                        animalToDelete.put(adjective + "_" + number, FieldValue.delete());
 
-                                Map<String, Object> animalToDelete = new HashMap<>();
-                                animalToDelete.put(adjective + "_" + number, FieldValue.delete());
-
-                                firebaseAnimal.update(animalToDelete).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        Log.d("Username", "Successfully deleted generatedName: " + field);
-                                    }
-                                });
-
-                                Log.d("Username", "DocumentSnapshot data: " + document.getData());
-                            } else {
-                                Log.d("Username", "No such document");
+                        firebaseAnimal.update(animalToDelete).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Log.d("Username", "Successfully deleted generatedName: " + field);
                             }
-                        } else {
-                            Log.d("Username", "get failed with ", task.getException());
-                        }
+                        });
+
+                        Log.d("Username", "DocumentSnapshot data: " + document.getData());
+                    } else {
+                        Log.d("Username", "No such document");
                     }
-                });
+                } else {
+                    Log.d("Username", "get failed with ", task.getException());
+                }
             }
         });
 
-        thread.run();
-        //End thread
 
         Log.d("Username", "userNameAbort: Creating aborted");
 
@@ -364,62 +355,54 @@ public class Username {
 
     public void userNameConfirm() {
 
-        //Start thread
-        Thread thread = new Thread(new Runnable() {
+        //PERFORM BACKGROUND ACTION
+        Activity activity = (Activity) mContext;
+
+        DocumentReference firebaseAnimal = FirebaseFirestore.getInstance().collection("Nicknames")
+                .document(animal);
+
+        firebaseAnimal.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void run() {
-                //PERFORM BACKGROUND ACTION
-                Activity activity = (Activity) mContext;
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
 
-                DocumentReference firebaseAnimal = FirebaseFirestore.getInstance().collection("Nicknames")
-                        .document(animal);
+                    DocumentSnapshot document = task.getResult();
 
-                firebaseAnimal.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
+                    //Checking if animal exists
+                    if (document.exists()) {
+                        String field = adjective + "_" + number;
 
-                            DocumentSnapshot document = task.getResult();
+                        Map<String, Boolean> animalToAdd = new HashMap<>();
+                        animalToAdd.put(field, true);
 
-                            //Checking if animal exists
-                            if (document.exists()) {
-                                String field = adjective + "_" + number;
-
-                                Map<String, Boolean> animalToAdd = new HashMap<>();
-                                animalToAdd.put(field, true);
-
-                                //I hope this one is right !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                                firebaseAnimal.update(field, true) .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void unused) {
-                                        Log.d("firebase RNG", "animal " + field + " successfully written!");
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.w("firebase RNG", "Error writing " + field, e);
-                                    }
-                                });
-
-                                // End thread here
-                            } else {
-                                Log.d("Username", "The document does not exists");
+                        //I hope this one is right !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        firebaseAnimal.update(field, true) .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Log.d("firebase RNG", "animal " + field + " successfully written!");
                             }
-                        }
-                    }
-                });
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w("firebase RNG", "Error writing " + field, e);
+                            }
+                        });
 
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //UPDATE UI ACTION
+                        // End thread here
+                    } else {
+                        Log.d("Username", "The document does not exists");
                     }
-                });
+                }
             }
         });
 
-        thread.run();
-        //End thread
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                //UPDATE UI ACTION
+            }
+        });
+
 
         Log.d("Username", "userName create Confirm");
 
