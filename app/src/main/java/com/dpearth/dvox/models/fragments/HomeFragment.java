@@ -65,7 +65,8 @@ public class HomeFragment extends Fragment {
         rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
 
 
-        swipeRefreshLayout = getActivity().findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout = getActivity().findViewById(R.id
+                .swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
