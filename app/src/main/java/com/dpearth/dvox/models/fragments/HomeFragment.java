@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +21,8 @@ import com.dpearth.dvox.MainActivity;
 import com.dpearth.dvox.R;
 import com.dpearth.dvox.smartcontract.Post;
 import com.dpearth.dvox.smartcontract.SmartContract;
+
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +34,8 @@ public class HomeFragment extends Fragment {
     private RecyclerView rvPosts;
     private PostAdapter postAdapter;
     private List<Post> allPosts;
+
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,7 +54,24 @@ public class HomeFragment extends Fragment {
         rvPosts.setAdapter(postAdapter);
         rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        queryPosts(5);
+        swipeRefreshLayout = getActivity().findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                //On refresh
+                allPosts.add(new Post(BigInteger.valueOf(1000), "refresh title", "Rezoie", "Irmebi moprinaven","koka kola"));
+                allPosts.add(new Post(BigInteger.valueOf(1001), "refresh title 2", "Rezoie", "gilocav axal wels","koka kola"));
+                allPosts.add(new Post(BigInteger.valueOf(1002), "refresh title 3", "Rezoie", "Irmebi xtian","koka kola"));
+                allPosts.add(new Post(BigInteger.valueOf(1003), "refresh title 4", "Rezoie", "dronebis testi","koka kola"));
+                allPosts.add(new Post(BigInteger.valueOf(1004), "refresh title 5", "Rezoie", "kvazi modo","koka kola"));
+
+                postAdapter.notifyDataSetChanged();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
+        queryPosts(6);
     }
 
     /**
