@@ -223,9 +223,7 @@ public class Username {
         Random random = new Random();
         int randomAdjective = random.nextInt(this.adjectivesList.length);
         int randAnimal = random.nextInt(this.animalsList.length);
-        int randNumber = random.nextInt(100);
-
-
+        int randNumber = random.nextInt(101) + 1;
 
         this.adjective = this.adjectivesList[randomAdjective];
         this.animal = this.animalsList[randAnimal];
@@ -233,6 +231,9 @@ public class Username {
     }
 
     public Username generateUsername(boolean firstRun) {
+
+        saveOldUsernameToAccessLater();
+
 
         Log.d("Username", "(regenerating) Current username: " +
                 mContext.getSharedPreferences(USERNAME_PREFS, Context.MODE_PRIVATE).getString(USERNAME_PREFS, ""));
@@ -260,7 +261,7 @@ public class Username {
 
                         //Checking if Adjective & number combination exists
                         if (document.getBoolean(field) == null){
-                            
+
                             Log.d("Username", "We can create it");
 
                             Log.d("Username", "New username: " + animal);
@@ -301,14 +302,15 @@ public class Username {
         return this;
     }
 
-    public void saveOldUsername() {
+    public void saveOldUsernameToAccessLater() {
         this.oldAnimal = this.animal;
         this.oldAdjective = this.adjective;
         this.oldNumber = this.number;
+        Log.d("Username", "Saving old username..." + oldAnimal);
+
     }
 
     public void userNameAbort() {
-
 
         //Start thread
         Thread thread = new Thread(new Runnable() {
@@ -347,13 +349,6 @@ public class Username {
                         }
                     }
                 });
-
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //UPDATE UI ACTION
-                    }
-                });
             }
         });
 
@@ -361,7 +356,10 @@ public class Username {
         //End thread
 
         Log.d("Username", "userNameAbort: Creating aborted");
-        this.saveOldUsername();
+
+        this.animal = this.oldAnimal;
+        this.adjective = this.oldAdjective;
+        this.number = this.oldNumber;
     }
 
     public void userNameConfirm() {
@@ -391,7 +389,7 @@ public class Username {
                                 animalToAdd.put(field, true);
 
                                 //I hope this one is right !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                                firebaseAnimal.set(field, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                firebaseAnimal.update(field, true) .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void unused) {
                                         Log.d("firebase RNG", "animal " + field + " successfully written!");
