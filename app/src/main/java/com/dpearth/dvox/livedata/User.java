@@ -1,5 +1,7 @@
 package com.dpearth.dvox.livedata;
 
+import android.util.Log;
+
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
@@ -33,8 +35,13 @@ public class User  extends BaseObservable {
         } else {
             animal = "Hacker";
         }
+        try {
+            image = map.get(animal.toLowerCase());
+        } catch(Exception error) {
+            Log.d("User.java", error.toString() + "Animal name: " + animal.toLowerCase());
+            image = map.get("hacker");
 
-        image = map.get(animal.toLowerCase());
+        }
 
     }
 

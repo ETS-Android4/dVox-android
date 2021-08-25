@@ -49,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences preferencesUsernames = getSharedPreferences(USERNAME_PREFS, Context.MODE_PRIVATE);
 
+        Username usernameInstance = new Username(this);
+        usernameInstance.retrieveUsername(true);
 
         super.onCreate(savedInstanceState);
 

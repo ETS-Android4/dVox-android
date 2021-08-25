@@ -64,7 +64,7 @@ public class Username {
     /*  Need to pass contexts as Username is non-activity but a helper class    */
     public Username(Context mContext) {
         this.animal = "Retrieving";
-        this.adjective = "The username";
+        this.adjective = "Username";
         this.number = "0";
         this.mContext = mContext;
 
@@ -72,6 +72,7 @@ public class Username {
 
     /*Don't think its necessary*/
     public int getAvatar() {
+
         Map<String, Integer> map = new HashMap<>();
         map.put("boar", R.drawable.boar);
         map.put("koala", R.drawable.koala);
@@ -124,7 +125,12 @@ public class Username {
         map.put("crocodile", R.drawable.crocodile);
         map.put("monkey", R.drawable.monkey);
 
-        return map.get(this.animal.toLowerCase());
+        try {
+            return map.get(this.animal.toLowerCase());
+        } catch (Exception error) {
+           Log.d("Username", "The animal doesn't exist");
+        }
+        return map.get("hacker");
     }
 
     public String getUsernameString() {
@@ -158,12 +164,15 @@ public class Username {
 
     public void retrieveUsername(boolean firstRun) {
 
+        Log.d("Username", "Current username: " +
+                mContext.getSharedPreferences(USERNAME_PREFS, Context.MODE_PRIVATE).getString(USERNAME_PREFS, ""));
 
         SharedPreferences sharedPreferences = mContext.getSharedPreferences(USERNAME_PREFS, Context.MODE_PRIVATE);
 
         if (sharedPreferences.getString(USERNAME_PREFS, "").equals(null) ||
-                sharedPreferences.getString(USERNAME_PREFS, "").equals("")){
-
+                sharedPreferences.getString(USERNAME_PREFS, "").equals("") ||
+                sharedPreferences.getString(USERNAME_PREFS, "").equals("Username_Retrieving_0") ||
+                sharedPreferences.getString(USERNAME_PREFS, "").equals("Again_Try_404")){
 
             //Add threads here
             Thread thread = new Thread(new Runnable() {
@@ -179,6 +188,14 @@ public class Username {
                     SharedPreferences.Editor editor = sharedPreferences.edit().putString(USERNAME_PREFS, usernameString);
                     editor.apply();
 
+                    if (!sharedPreferences.getString(USERNAME_PREFS, "").equals(null) ||
+                            !sharedPreferences.getString(USERNAME_PREFS, "").equals("") ||
+                            !sharedPreferences.getString(USERNAME_PREFS, "").equals("Username_Retrieving_0") ||
+                            !sharedPreferences.getString(USERNAME_PREFS, "").equals("Again_Try_404")) {
+                        Log.d("Username", "The username was generated successfully: " + getUsernameString());
+                    } else {
+                        Log.d("Username", "Error getting username");
+                    }
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -190,13 +207,6 @@ public class Username {
 
             thread.run();
             //Stop thread
-
-            if (!sharedPreferences.getString(USERNAME_PREFS, "").equals(null) ||
-                    !sharedPreferences.getString(USERNAME_PREFS, "").equals("")) {
-                Log.d("Username", "username was generated successfully");
-            } else {
-                Log.d("Username", "Error getting username");
-            }
 
         } else {
 
@@ -230,6 +240,8 @@ public class Username {
 
     public Username generateUsername(boolean firstRun) {
 
+
+        getNewUsername();
 
         //Start new thread
         Thread thread = new Thread(new Runnable() {
@@ -323,16 +335,13 @@ public class Username {
 
                 DocumentReference firebaseAnimal = FirebaseFirestore.getInstance().collection("Nicknames")
                         .document(animal);
-
                 firebaseAnimal.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()){
-
+                        if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
-
-                            //Checking if animal exists
-                            if (document.exists()){
+                            if (document.exists()) {
+                                Log.d("Username", "DocumentSnapshot data: " + document.getData());
                                 String field = adjective + "_" + number;
 
                                 Map<String, Object> animalToDelete = new HashMap<>();
@@ -344,10 +353,13 @@ public class Username {
                                         Log.d("Username", "Successfully deleted generatedName: " + field);
                                     }
                                 });
+
+                                Log.d("Username", "DocumentSnapshot data: " + document.getData());
+                            } else {
+                                Log.d("Username", "No such document");
                             }
-                            else {
-                                Log.d("Username", "The document does not exists");
-                            }
+                        } else {
+                            Log.d("Username", "get failed with ", task.getException());
                         }
                     }
                 });
