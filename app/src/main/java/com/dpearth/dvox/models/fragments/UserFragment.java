@@ -71,6 +71,7 @@ public class UserFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+
                 generateName();
             }
         });
@@ -82,7 +83,7 @@ public class UserFragment extends Fragment {
 
     private void generateName() {
 
-        usernameInstance.retrieveUsername(false);
+        usernameInstance.generateUsername(false);
 
         username = usernameInstance.getUsernameString();
         Log.d("Usernae", "generateName: " + username);
