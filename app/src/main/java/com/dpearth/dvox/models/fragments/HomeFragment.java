@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,8 +18,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.dpearth.dvox.MainActivity;
 import com.dpearth.dvox.R;
+import com.dpearth.dvox.databinding.FragmentHomeBinding;
 import com.dpearth.dvox.smartcontract.Post;
 import com.dpearth.dvox.smartcontract.SmartContract;
 
@@ -37,11 +38,20 @@ public class HomeFragment extends Fragment {
 
     private SwipeRefreshLayout swipeRefreshLayout;
 
+    public static final String POST_TITLE = "postTitle";
+    private FragmentHomeBinding binding;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+
+
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
+        SharedPreferences preferences = getActivity().getSharedPreferences(POST_TITLE, Context.MODE_PRIVATE);
+        String title = preferences.getString(POST_TITLE, "");
+
+        View view = binding.getRoot();
+        return view;
     }
 
     @Override
@@ -54,10 +64,13 @@ public class HomeFragment extends Fragment {
         rvPosts.setAdapter(postAdapter);
         rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
 
+
         swipeRefreshLayout = getActivity().findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+
+                allPosts.clear();
 
                 //On refresh
                 allPosts.add(new Post(BigInteger.valueOf(1000), "refresh title", "Rezoie", "Irmebi moprinaven","koka kola"));
