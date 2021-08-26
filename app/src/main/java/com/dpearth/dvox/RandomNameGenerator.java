@@ -1,8 +1,26 @@
 package com.dpearth.dvox;
 
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
+import com.dpearth.dvox.models.fragments.PostAdapter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
+
 import java.io.File;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class RandomNameGenerator {
@@ -26,7 +44,6 @@ public class RandomNameGenerator {
         "Innocent",
         "Horrible",
         "Puzzled",
-        "Homeless",
         "Happy",
         "Grandiose",
         "Observant",
@@ -51,15 +68,16 @@ public class RandomNameGenerator {
         "Former",
         "Scarce",
         "Tense",
-        "Black-and-white",
+        "Black-and-White",
         "Tangy",
         "Wrong",
         "Sloppy",
         "Regular",
         "Deafening",
         "Savory",
-        "Sturdy",
         "Classy",
+        "First",
+        "Second",
         "Third",
         "Valuable",
         "Outgoing",
@@ -116,14 +134,14 @@ public class RandomNameGenerator {
         "Beetle",
         "Tiger",
         "Pigeon",
-        "Bearded_dragon",
+        "Bearded_Dragon",
         "Bat",
         "Hippo",
         "Crocodile",
         "Monkey",
     };
 
-    private static HashMap<String, String> animalImages = new HashMap<>();
+    private static String[] numbers = new String[100];
 
 
     private String adjective;
@@ -133,79 +151,177 @@ public class RandomNameGenerator {
     public RandomNameGenerator() {
     }
 
-    private static void animalImagesInitializer(){
-        animalImages.put("Boar", "");
-        animalImages.put("Koala", "");
-        animalImages.put("Snake", "");
-        animalImages.put("Frog", "");
-        animalImages.put("Parrot", "");
-        animalImages.put("Lion", "");
-        animalImages.put("Pig", "");
-        animalImages.put("Rhino", "");
-        animalImages.put("Sloth", "");
-        animalImages.put("Horse", "");
-        animalImages.put("Sheep", "");
-        animalImages.put("Chameleon", "");
-        animalImages.put("Giraffe", "");
-        animalImages.put("Yak", "");
-        animalImages.put("Cat", "");
-        animalImages.put("Dog", "");
-        animalImages.put("Penguin", "");
-        animalImages.put("Elephant", "");
-        animalImages.put("Fox", "");
-        animalImages.put("Otter", "");
-        animalImages.put("Gorilla", "");
-        animalImages.put("Rabbit", "");
-        animalImages.put("Raccoon", "");
-        animalImages.put("Wolf", "");
-        animalImages.put("Panda", "");
-        animalImages.put("Goat", "");
-        animalImages.put("Chicken", "");
-        animalImages.put("Duck", "");
-        animalImages.put("Cow", "");
-        animalImages.put("Ray", "");
-        animalImages.put("Catfish", "");
-        animalImages.put("Ladybug", "");
-        animalImages.put("Dragonfly", "");
-        animalImages.put("Owl", "");
-        animalImages.put("Beaver", "");
-        animalImages.put("Alpaca", "");
-        animalImages.put("Mouse", "");
-        animalImages.put("Walrus", "");
-        animalImages.put("Kangaroo", "");
-        animalImages.put("Butterfly", "");
-        animalImages.put("Jellyfish", "");
-        animalImages.put("Deer", "");
-        animalImages.put("Beetle", "");
-        animalImages.put("Tiger", "");
-        animalImages.put("Pigeon", "");
-        animalImages.put("Bearded_dragon", "");
-        animalImages.put("Bat", "");
-        animalImages.put("Hippo", "");
-        animalImages.put("Crocodile", "");
-        animalImages.put("Monkey,", "");
-    }
 
     public static String getRandomlyGeneratedName() {
+
+        for (int i = 0; i < 100; i++){
+            numbers[i] = String.valueOf(i);
+        }
 
         Random random = new Random();
         int randAdj = random.nextInt(adjectives.length);
         int randAnimal = random.nextInt(animals.length);
-
-        String part1 = adjectives[randAdj];
-        String part2 = animals[randAnimal];
-        String generateName = part1 + " " + part2;
+//        int randNumber = random.nextInt(numbers.length);
 
 
-        //Needs to be changed! add numbers (While loop)
-        if (alreadyUsedName.contains(generateName)){
-            return getRandomlyGeneratedName();
-        } else {
-            alreadyUsedName.add(generateName);
-            return generateName;
-        }
+        int randNumber = random.nextInt(10);
+
+//        String adjective = adjectives[randAdj];
+//        String animal = animals[randAnimal];
+//        String number = numbers[randNumber];
+
+        //For Testing Purposes
+        String adjective = "Cynical";//adjectives[randAdj];
+        String animal =  "Bearded_Dragon";//animals[randAnimal];//"Butterfly";
+        String number = numbers[randNumber];//numbers[randNumber];
+
+        String generateName = "@" + adjective + "_" + animal + "_" + number;
+
+
+
+//        checkAndAddGeneratedNameFireStore(firebaseAnimal, generateName, false);
+//        addGeneratedNameFireStore(firebaseAnimal, generateName, true);
+//        deleteNameFromFireStore(firebaseAnimal, generateName);
+
+        return generateName;
 
     }
 
+    /**
+     * Deleting name from FireStore
+     *
+     * @param firebaseAnimal
+     * @param generatedName
+     */
+    public static void deleteNameFromFireStore(DocumentReference firebaseAnimal, String generatedName){
 
+        String nameToSplit = generatedName.substring(1);
+
+        String[] a = nameToSplit.split("_");
+
+        String adjective = a[0];
+        String animal = a[1];
+        String number = a[2];
+
+        if (a.length == 3){
+            animal = a[1];
+            number = a[2];
+        } else if (a.length == 4){
+            animal = a[1] + "_" + a[2];
+            number = a[3];
+        }
+
+        Map<String, Object> animalToDelete = new HashMap<>();
+
+        animalToDelete.put(adjective + "_" + number, FieldValue.delete());
+
+        firebaseAnimal.update(animalToDelete).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                    Log.d("RNG Delete", "Successfully deleted generatedName: " + generatedName);
+            }
+        });
+
+
+    }
+
+    /**     Maybe this one was not necessary
+     * Checking if name exists in firebase and adding afterwards
+     *
+     * Returns true if username does not exist
+     *
+     * @param generatedName
+     * @param isNameUsed
+     */
+    public static boolean checkNameFireStore(String generatedName, boolean isNameUsed){
+
+        final boolean[] nameAdded = {false};
+
+        String nameToSplit = generatedName.substring(1);
+
+        String[] a = nameToSplit.split("_");
+
+        String adjective = a[0];
+        String animal = a[1];
+        String number = a[2];
+
+
+        if (a.length == 3){
+            animal = a[1];
+            number = a[2];
+        } else if (a.length == 4){
+            animal = a[1] + "_" + a[2];
+            number = a[3];
+        }
+
+        DocumentReference firebaseAnimal = FirebaseFirestore.getInstance().collection("Nicknames").document(animal);
+
+
+        String finalNumber = number;
+        firebaseAnimal.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+
+                    DocumentSnapshot document = task.getResult();
+
+                    //Checking if animal exists
+                    if (document.exists()){
+
+                        //Checking if Adjective & number combination exists
+                        if (document.getBoolean(adjective + "_" + finalNumber) != null){
+                        } else {
+                            nameAdded[0] = true;
+                        }
+
+                    }
+                }
+            }
+        });
+        Log.d("firebase RNG", "name Added: " + nameAdded[0]);
+        return nameAdded[0];
+    }
+
+
+    /**
+     *  Adding generated name to Firebase
+     *
+     * @param generatedName
+     * @param isNameUsed
+     */
+    public static void addNameFireStore(String generatedName, boolean isNameUsed) {
+
+        String nameToSplit = generatedName.substring(1);
+
+        String[] a = nameToSplit.split("_");
+
+        String adjective = a[0];
+        String animal = a[1];
+        String number = a[2];
+
+        if (a.length == 3){
+            animal = a[1];
+            number = a[2];
+        } else if (a.length == 4){
+            animal = a[1] + "_" + a[2];
+            number = a[3];
+        }
+
+        DocumentReference firebaseAnimal = FirebaseFirestore.getInstance().collection("Nicknames").document(animal);
+
+        Map<String, Boolean> animalToAdd = new HashMap<>();
+        animalToAdd.put(adjective + "_" + number, isNameUsed);
+
+        firebaseAnimal.set(animalToAdd, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.d("firebase RNG", "animal " + generatedName + " successfully written!");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("firebase RNG", "Error writing " + generatedName, e);
+            }
+        });
+    }
 }

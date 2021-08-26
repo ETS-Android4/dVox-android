@@ -1,68 +1,176 @@
 package com.dpearth.dvox.models.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dpearth.dvox.R;
+import com.dpearth.dvox.databinding.FragmentUserBinding;
+import com.dpearth.dvox.livedata.User;
+import com.dpearth.dvox.username.Username;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link UserFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class UserFragment extends Fragment {
+    private Button generateButton;
+    private Button saveButton;
+    private Button cancelButton;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private TextView generatedNameTextView;
+    public static final String USERNAME_PREFS = "usernamePrefs";
+    private String username;
 
-    public UserFragment() {
-        // Required empty public constructor
-    }
+    private FragmentUserBinding binding;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment UserFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static UserFragment newInstance(String param1, String param2) {
-        UserFragment fragment = new UserFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private Username usernameInstance;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.temp1_activity_user_profile, container, false);
+
+        //return inflater.inflate(R.layout.fragment_user, container, false);
+
+        //for all fragments
+        usernameInstance = new Username(getActivity());
+        usernameInstance.retrieveUsername(true);
+
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_user, container, false);
+        SharedPreferences preferences = getActivity().getSharedPreferences(USERNAME_PREFS, Context.MODE_PRIVATE);
+        String name = preferences.getString(USERNAME_PREFS, "");
+        binding.setUser(new User(name));
+        View view = binding.getRoot();
+        return view;
     }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+//        ActivityMainBinding binding = DataBindingUtil.setContentView(getActivity(), R.layout.activity_main);
+
+
+        /*  Button for Regenerating a new name  */
+        generateButton = getActivity().findViewById(R.id.generate_button);
+        saveButton = getActivity().findViewById(R.id.save_button);
+        cancelButton = getActivity().findViewById(R.id.cancel_button);
+
+        generatedNameTextView = getActivity().findViewById(R.id.profile_username);
+
+
+
+        generateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                regenerateUsername();
+                toggleButtonsVisibility();
+
+            }
+        });
+
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                confirmUsername();
+                toggleButtonsVisibility();
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                abortRegeneration();
+                toggleButtonsVisibility();
+            }
+        });
+
+        loadData();
+        updateViews();
+
+    }
+
+
+    private void confirmUsername(){
+        usernameInstance.userNameConfirm();
+
+        username = usernameInstance.getUsernameString();
+
+        Log.d("Username", "generateName: " + username);
+
+        binding.setUser(new User(username));
+
+        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(USERNAME_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit().putString(USERNAME_PREFS, username);
+
+        editor.apply();
+    }
+
+    private void abortRegeneration(){
+        usernameInstance.userNameAbort();
+
+        username = usernameInstance.getUsernameString();
+        Log.d("Username", "generateName: " + username);
+
+        binding.setUser(new User(username));
+
+        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(USERNAME_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit().putString(USERNAME_PREFS, username);
+
+        editor.apply();
+
+        Toast.makeText(getActivity(), "Data Saved", Toast.LENGTH_SHORT).show();
+    }
+
+    private void regenerateUsername() {
+
+        usernameInstance.generateUsername(false);
+
+        username = usernameInstance.getUsernameString();
+        Log.d("Username", "generateName: " + username);
+
+        binding.setUser(new User(username));
+
+        Toast.makeText(getActivity(), "Data Saved", Toast.LENGTH_SHORT).show();
+    }
+
+    public void loadData(){
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(USERNAME_PREFS, Context.MODE_PRIVATE);
+
+        username = sharedPreferences.getString(USERNAME_PREFS, "Generate Username");
+
+    }
+
+    public void updateViews() {
+
+        generatedNameTextView.setText(username);
+    }
+
+    public void toggleButtonsVisibility(){
+        Log.d("Username", "Changing visibility...");
+        if (generateButton.getVisibility() == View.VISIBLE){
+            generateButton.setVisibility(View.GONE);
+            saveButton.setVisibility(View.VISIBLE);
+            cancelButton.setVisibility(View.VISIBLE);
+        } else {
+            generateButton.setVisibility(View.VISIBLE);
+            saveButton.setVisibility(View.GONE);
+            cancelButton.setVisibility(View.GONE);
+        }
+    }
+
 }
+

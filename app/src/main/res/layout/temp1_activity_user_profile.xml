@@ -40,7 +40,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/_09_sloth" />
+                    app:srcCompat="@drawable/sloth" />
 
                 <TextView
                     android:id="@+id/post_history21"
@@ -107,7 +107,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/_12_chameleon" />
+                    app:srcCompat="@drawable/chameleon" />
 
                 <TextView
                     android:id="@+id/post_history2"
@@ -173,7 +173,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/_02_koala" />
+                    app:srcCompat="@drawable/koala" />
 
                 <TextView
                     android:id="@+id/full_name2"

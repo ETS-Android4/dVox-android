@@ -1,7 +1,6 @@
 package com.dpearth.dvox.smartcontract;
 
 
-
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -25,6 +24,9 @@ public class Post {
     @PrimaryKey(autoGenerate = true)//We might change that into false because we already have ids
     private BigInteger id;
 
+
+public class Post {
+    private BigInteger id;
     private String title;
     private String author;
     private String message;
@@ -59,6 +61,9 @@ public class Post {
 
     }
 
+
+    //////////////////
+    private List<Comment> comments;
 
     //////////////////
     /* Constructors */
