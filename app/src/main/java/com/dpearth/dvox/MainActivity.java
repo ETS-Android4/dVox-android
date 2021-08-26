@@ -2,24 +2,19 @@ package com.dpearth.dvox;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
-import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Binder;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.dpearth.dvox.firebasedata.APIs;
-import com.dpearth.dvox.livedata.User;
 import com.dpearth.dvox.models.fragments.AddFragment;
 import com.dpearth.dvox.models.fragments.HomeFragment;
 import com.dpearth.dvox.models.fragments.UserFragment;
@@ -27,11 +22,10 @@ import com.dpearth.dvox.smartcontract.SmartContract;
 import com.dpearth.dvox.username.Username;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.util.Random;
-
 public class MainActivity extends AppCompatActivity {
 
     private EditText postTitle, postTheme, postContent;
+    private TextView postAuthor;
     private Button buttonSave;
 
     public static final String USERNAME_PREFS = "usernamePrefs";
@@ -123,18 +117,20 @@ public class MainActivity extends AppCompatActivity {
 
             //Fetching String values from ADD page
             postTitle = findViewById(R.id.post_title);
-            postTheme = findViewById(R.id.post_theme);
+            postTheme = findViewById(R.id.hashtag);
             postContent = findViewById(R.id.content_post);
-            buttonSave = findViewById(R.id.publich_post);
+            postAuthor = findViewById(R.id.post_author);
+            buttonSave = findViewById(R.id.verify_button);
 
             String title = postTitle.getText().toString();
             String theme = postTheme.getText().toString();
             String content = postContent.getText().toString();
+            String author = postAuthor.getText().toString();
 
             //<-- Create POST -->\\
             SharedPreferences preferences = getSharedPreferences("pref", Context.MODE_PRIVATE);
             SmartContract smartContract = new SmartContract(preferences);
-            smartContract.createPost(title, "Revaz", content, theme);
+            smartContract.createPost(title, author , content, theme);
 
             //Clearing fields after Posing
 

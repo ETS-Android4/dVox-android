@@ -29,7 +29,7 @@
 
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/avatar_addfragment"
                 android:layout_width="@dimen/_70sdp"
                 android:layout_height="@dimen/_70sdp"
                 android:layout_marginStart="@dimen/_10sdp"
@@ -55,16 +55,15 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/post_theme"
+                android:id="@+id/post_author"
                 android:layout_width="@dimen/_200sdp"
                 android:layout_height="@dimen/_30sdp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:background="@color/white"
                 android:fontFamily="@font/montserrat_bold"
-                android:hint="Theme"
                 android:padding="10dp"
-                android:text="user"
+                android:text=""
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/post_title" />
 
@@ -75,17 +74,18 @@
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="@dimen/_10sdp"
-                android:layout_weight="1"
+                android:layout_weight="1.0"
                 android:background="@color/white"
                 android:fontFamily="@font/montserrat_regular"
                 android:gravity="top"
                 android:hint="Content"
                 android:padding="10dp"
-                app:layout_constraintBottom_toTopOf="@+id/hashtag_text"
+                android:inputType="textMultiLine"
+                app:layout_constraintBottom_toTopOf="@+id/hashtag"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/post_theme"
+                app:layout_constraintTop_toBottomOf="@+id/post_author"
                 app:layout_constraintVertical_bias="0.0" />
 
             <TextView
@@ -101,7 +101,7 @@
                 tools:ignore="MissingConstraints" />
 
             <EditText
-                android:id="@+id/hashtag_text"
+                android:id="@+id/hashtag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -139,7 +139,8 @@
                         android:insetRight="0dp"
                         android:scaleX="1.5"
                         android:scaleY="1.5"
-                        android:text="next"
+                        android:text="post"
+                        android:onClick="startCreatePostThread"
                         android:textColor="@color/BlackColor"
                         app:elevation="0dp"
                         tools:ignore="MissingConstraints" />

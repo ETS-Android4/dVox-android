@@ -43,7 +43,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/post_theme"
+                android:id="@+id/pt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
@@ -58,7 +58,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/post_title" />
 
             <EditText
-                android:id="@+id/content_post"
+                android:id="@+id/cp"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginStart="@dimen/_10sdp"
@@ -75,7 +75,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/post_theme"
+                app:layout_constraintTop_toBottomOf="@+id/pt"
                 app:layout_constraintVertical_bias="0.0" />
 
             <androidx.cardview.widget.CardView

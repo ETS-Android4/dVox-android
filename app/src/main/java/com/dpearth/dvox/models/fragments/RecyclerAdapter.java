@@ -106,7 +106,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             title = (TextView) itemView.findViewById(R.id.post_title);
             author = (TextView) itemView.findViewById(R.id.author_text);
             content = (TextView) itemView.findViewById(R.id.content_post);
-            theme = (TextView) itemView.findViewById(R.id.post_theme);
+            theme = (TextView) itemView.findViewById(R.id.post_author);
             upvote = (ImageView) itemView.findViewById(R.id.upvote_button);
             downvote = (ImageView) itemView.findViewById(R.id.downvote_button);
             comment = (ImageView) itemView.findViewById(R.id.comment_button);
