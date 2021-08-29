@@ -5,7 +5,7 @@ import android.util.Log;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
-import com.dpearth.dvox.BR;
+//import com.dpearth.dvox.BR;
 import com.dpearth.dvox.R;
 
 import java.util.HashMap;
@@ -52,7 +52,7 @@ public class User  extends BaseObservable {
 
     public void setName(String name) {
         this.name = name;
-        notifyPropertyChanged(BR.name);
+//        notifyPropertyChanged(BR.name);
     }
 
     @Bindable
@@ -62,7 +62,7 @@ public class User  extends BaseObservable {
 
     public void setImage(int image) {
         this.image = image;
-        notifyPropertyChanged(BR.image);
+//        notifyPropertyChanged(BR.image);
     }
     
     private void populateMap() {

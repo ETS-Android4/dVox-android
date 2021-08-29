@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -15,11 +17,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.dpearth.dvox.firebasedata.APIs;
 import com.dpearth.dvox.models.fragments.AddFragment;
 import com.dpearth.dvox.models.fragments.HomeFragment;
+import com.dpearth.dvox.models.fragments.PostAdapter;
+import com.dpearth.dvox.models.fragments.PostAdapterVERSION2;
 import com.dpearth.dvox.models.fragments.UserFragment;
 import com.dpearth.dvox.smartcontract.SmartContract;
 import com.dpearth.dvox.username.Username;
@@ -52,69 +57,53 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-    private PostViewModel postViewModel;
-
-
-    @Override
-    protected void onCreate (Bundle savedInstanceState){
-
-
-        //ViewMOdelProviders.of(this) ... is no longer supported >:-(
-        postViewModel = new ViewModelProvider(this).get(PostViewModel.class);
-        postViewModel.getAllPosts().observe(this, new Observer<List<Post>>() {
-
-            //This will get triggered everytime live data changes
-            @Override
-            public void onChanged(List<Post> posts) {
-                //!!!update RecycleView!!!!!!!!!
-                Toast.makeText(MainActivity.this, "onChanged", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
-    @Override
-    protected void onCreate (Bundle savedInstanceState){
-
-        //Get shared preferences and put new APIs there
-        SharedPreferences preferencesKeys = getSharedPreferences("pref", Context.MODE_PRIVATE);
-        getAPIs(preferencesKeys);
-
-        SharedPreferences preferencesUsernames = getSharedPreferences(USERNAME_PREFS, Context.MODE_PRIVATE);
-
-        Username usernameInstance = new Username(this);
-        usernameInstance.retrieveUsername(true);
-
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
-        bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                Fragment fragment;
-                switch (menuItem.getItemId()) {
-                    case R.id.ic_add:
-                        fragment = new AddFragment();
-                        break;
-                    case R.id.ic_home:
-                        fragment = new HomeFragment();
-                        break;
-                    case R.id.ic_user:
-                        fragment = new UserFragment();
-                        break;
-                    default:
-                        fragment = new HomeFragment();
-                        break;
+
+
+
+
+            //Get shared preferences and put new APIs there
+            SharedPreferences preferencesKeys = getSharedPreferences("pref", Context.MODE_PRIVATE);
+            getAPIs(preferencesKeys);
+
+            SharedPreferences preferencesUsernames = getSharedPreferences(USERNAME_PREFS, Context.MODE_PRIVATE);
+
+            Username usernameInstance = new Username(this);
+            usernameInstance.retrieveUsername(true);
+
+
+
+
+            bottomNavigationView = findViewById(R.id.bottom_navigation);
+            bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                    Fragment fragment;
+                    switch (menuItem.getItemId()) {
+                        case R.id.ic_add:
+                            fragment = new AddFragment();
+                            break;
+                        case R.id.ic_home:
+                            fragment = new HomeFragment();
+                            break;
+                        case R.id.ic_user:
+                            fragment = new UserFragment();
+                            break;
+                        default:
+                            fragment = new HomeFragment();
+                            break;
+                    }
+                    //I think this needs to change into Home Fragment
+                    fragmentManager.beginTransaction().replace(R.id.fl_wrapper, fragment).commit();
+                    return true;
                 }
-                //I think this needs to change into Home Fragment
-                fragmentManager.beginTransaction().replace(R.id.fl_wrapper, fragment).commit();
-                return true;
-            }
-        });
-        bottomNavigationView.setSelectedItemId(R.id.ic_home);
+            });
+            bottomNavigationView.setSelectedItemId(R.id.ic_home);
 
 //
 //        setContentView(R.layout.custome_design);
@@ -131,110 +120,105 @@ public class MainActivity extends AppCompatActivity {
 //        rvPosts.setAdapter(adapter);
 ////        Set layout manager to position the items
 //        rvPosts.setLayoutManager(new LinearLayoutManager(this));
-    }
-
-
-
-
-    //Maybe this belongs in AddFragment class
-    public void startCreatePostThread(View view){
-        CreatePostThread createPostThread = new CreatePostThread();
-        createPostThread.start();
-    }
-
-    public void startGetPostThread(View view){
-        GetPostThread getPostThread = new GetPostThread();
-        getPostThread.start();
-    }
-
-
-    class CreatePostThread extends Thread {
-
-        CreatePostThread(){
         }
 
-        @Override
-        public void run() {
 
-            //Fetching String values from ADD page
-            postTitle = findViewById(R.id.post_title);
-            postTheme = findViewById(R.id.hashtag);
-            postContent = findViewById(R.id.content_post);
-            postAuthor = findViewById(R.id.post_author);
-            buttonSave = findViewById(R.id.verify_button);
+        //Maybe this belongs in AddFragment class
+        public void startCreatePostThread (View view){
+            CreatePostThread createPostThread = new CreatePostThread();
+            createPostThread.start();
+        }
 
-            String title = postTitle.getText().toString();
-            String theme = postTheme.getText().toString();
-            String content = postContent.getText().toString();
-            String author = postAuthor.getText().toString();
+        public void startGetPostThread (View view){
+            GetPostThread getPostThread = new GetPostThread();
+            getPostThread.start();
+        }
 
-            //<-- Create POST -->\\
-            SharedPreferences preferences = getSharedPreferences("pref", Context.MODE_PRIVATE);
-            SmartContract smartContract = new SmartContract(preferences);
-            smartContract.createPost(title, author , content, theme);
 
-            //Clearing fields after Posing
+        class CreatePostThread extends Thread {
 
-            //Toast "You have successfully Posted
+            CreatePostThread() {
+            }
+
+            @Override
+            public void run() {
+
+                //Fetching String values from ADD page
+                postTitle = findViewById(R.id.post_title);
+                postTheme = findViewById(R.id.hashtag);
+                postContent = findViewById(R.id.content_post);
+                postAuthor = findViewById(R.id.post_author);
+                buttonSave = findViewById(R.id.verify_button);
+
+                String title = postTitle.getText().toString();
+                String theme = postTheme.getText().toString();
+                String content = postContent.getText().toString();
+                String author = postAuthor.getText().toString();
+
+                //<-- Create POST -->\\
+                SharedPreferences preferences = getSharedPreferences("pref", Context.MODE_PRIVATE);
+                SmartContract smartContract = new SmartContract(preferences);
+                smartContract.createPost(title, author, content, theme);
+
+                //Clearing fields after Posing
+
+                //Toast "You have successfully Posted
 
 
 //          System.out.println("Last POST: " + smartContract.getPost(smartContract.getPostCount() + 1).toString());
-        }
-    }
-
-    class GetPostThread extends Thread {
-
-        public GetPostThread() {
-
+            }
         }
 
-        @Override
-        public void run() {
-            HomeFragment fragment = new HomeFragment();
+        class GetPostThread extends Thread {
+
+            public GetPostThread() {
+
+            }
+
+            @Override
+            public void run() {
+                HomeFragment fragment = new HomeFragment();
+            }
         }
+
+
+        /**
+         * Gets new API keys by resetting them and getting new.
+         *
+         * !!! SHOULD BE USED AT THE BEGINNING OF THE MAIN ACTIVITY
+         *
+         * @param preferences
+         */
+        private void getAPIs (SharedPreferences preferences){
+            //Reset APIs
+            resetAPIs(preferences);
+
+            //Update APIs
+            updateAPIs(preferences);
+        }
+
+        /**
+         * Reset all APIs keys to update them.
+         * @param preferences - Updated
+         */
+        private void resetAPIs (SharedPreferences preferences){
+            //Reset APIs
+            SharedPreferences.Editor prefsEditor = preferences.edit();
+
+            prefsEditor.putString("Credentials", "error");
+            prefsEditor.putString("ContractAddress", "error");
+            prefsEditor.putString("InfuraURL", "error");
+
+            prefsEditor.commit();
+        }
+
+        /**
+         * Gets new API keys.
+         * @param preferences
+         */
+        private void updateAPIs (SharedPreferences preferences){
+            new APIs(preferences);
+        }
+
     }
 
-
-
-
-
-
-    /**
-     * Gets new API keys by resetting them and getting new.
-     *
-     * !!! SHOULD BE USED AT THE BEGINNING OF THE MAIN ACTIVITY
-     *
-     * @param preferences
-     */
-    private void getAPIs(SharedPreferences preferences){
-        //Reset APIs
-        resetAPIs(preferences);
-
-        //Update APIs
-        updateAPIs(preferences);
-    }
-
-    /**
-     * Reset all APIs keys to update them.
-     * @param preferences - Updated
-     */
-    private void resetAPIs(SharedPreferences preferences){
-        //Reset APIs
-        SharedPreferences.Editor prefsEditor = preferences.edit();
-
-        prefsEditor.putString("Credentials", "error");
-        prefsEditor.putString("ContractAddress", "error");
-        prefsEditor.putString("InfuraURL", "error");
-
-        prefsEditor.commit();
-    }
-
-    /**
-     * Gets new API keys.
-     * @param preferences
-     */
-    private void updateAPIs(SharedPreferences preferences){
-        new APIs(preferences);
-    }
-
-}

@@ -4,11 +4,14 @@ package com.dpearth.dvox.smartcontract;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import jnr.ffi.mapper.DataConverter;
 
 /**
  *
@@ -22,23 +25,15 @@ import java.util.Objects;
 public class Post {
 
     @PrimaryKey(autoGenerate = true)//We might change that into false because we already have ids
-    private BigInteger id;
+    private long id;
 
-
-public class Post {
-    private BigInteger id;
     private String title;
     private String author;
     private String message;
     private String hashtag;
 
-    private BigInteger upVotes;
-    private BigInteger downVotes;
-    private BigInteger commentCount;
+    private int commentCount;
     private boolean ban;
-
-    @ColumnInfo(name = "comments_list")//Rename column
-    private List<Comment> comments;
 
     //////////////////
     /* Constructor for @Entity */
@@ -53,27 +48,20 @@ public class Post {
         this.message = message;
         this.hashtag = hashtag;
 
-        this.upVotes = BigInteger.valueOf(0);
-        this.downVotes = BigInteger.valueOf(0);
-        this.commentCount = BigInteger.valueOf(0);
+        this.commentCount = 0;
         this.ban = false;
-        this.comments = new ArrayList<>();
 
     }
-
-
-    //////////////////
-    private List<Comment> comments;
 
     //////////////////
     /* Constructors */
     //////////////////
 
     public Post(){
-        this(null, null, null, null, null);
+        this(0, null, null, null, null);
     }
 
-    public Post(BigInteger id, String title, String author, String message, String hashtag) {
+    public Post(long id, String title, String author, String message, String hashtag) {
 
         this.id = id;
 
@@ -82,19 +70,16 @@ public class Post {
         this.message = message;
         this.hashtag = hashtag;
 
-        this.upVotes = BigInteger.valueOf(0);
-        this.downVotes = BigInteger.valueOf(0);
-        this.commentCount = BigInteger.valueOf(0);
+        this.commentCount = 0;
         this.ban = false;
-        this.comments = new ArrayList<>();
 
     }
 
-    public BigInteger getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(BigInteger id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -130,27 +115,11 @@ public class Post {
         this.hashtag = hashtag;
     }
 
-    public BigInteger getUpVotes() {
-        return upVotes;
-    }
-
-    public void setUpVotes(BigInteger upVotes) {
-        this.upVotes = upVotes;
-    }
-
-    public BigInteger getDownVotes() {
-        return downVotes;
-    }
-
-    public void setDownVotes(BigInteger downVotes) {
-        this.downVotes = downVotes;
-    }
-
-    public BigInteger getCommentCount() {
+    public int getCommentCount() {
         return commentCount;
     }
 
-    public void setCommentCount(BigInteger commentCount) {
+    public void setCommentCount(int commentCount) {
         this.commentCount = commentCount;
     }
 
@@ -162,14 +131,6 @@ public class Post {
         this.ban = ban;
     }
 
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
-
     @Override
     public String toString() {
         return "Post{" +
@@ -178,19 +139,22 @@ public class Post {
                 ", author='" + author + '\'' +
                 ", message='" + message + '\'' +
                 ", hashtag='" + hashtag + '\'' +
-                ", upVotes=" + upVotes +
-                ", downVotes=" + downVotes +
+                ", commentCount=" + commentCount +
                 ", ban=" + ban +
-                ", comments=" + comments +
                 '}';
     }
 
+    //Only Checks if ids match. Not other fields
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Post post = (Post) o;
-        return ban == post.ban && Objects.equals(id, post.id) && Objects.equals(title, post.title) && Objects.equals(author, post.author) && Objects.equals(message, post.message) && Objects.equals(hashtag, post.hashtag) && Objects.equals(upVotes, post.upVotes) && Objects.equals(downVotes, post.downVotes) && Objects.equals(comments, post.comments);
+        return id == post.id;
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
