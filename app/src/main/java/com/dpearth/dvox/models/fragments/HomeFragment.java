@@ -73,12 +73,18 @@ public class HomeFragment extends Fragment {
         rvPosts = view.findViewById(R.id.liveDataRecycleView);
         allPosts = new ArrayList<>();
 
-        RecyclerView recyclerView = getActivity().findViewById(R.id.liveDataRecycleView);//TODO Uncomment rvPosts;
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setHasFixedSize(true);
+        adapter = new PostAdapterVERSION2(getContext(), allPosts);//TODO Uncomment rvPosts;
+        rvPosts.setAdapter(adapter);
+        rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
+//        rvPosts.setHasFixedSize(true);
 
-        adapter = new PostAdapterVERSION2(getContext(), allPosts);
-        recyclerView.setAdapter(adapter);
+
+
+//        RecyclerView recyclerView = getActivity().findViewById(R.id.liveDataRecycleView);//TODO Uncomment rvPosts;
+//        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+//        recyclerView.setHasFixedSize(true);
+
+
 
 
         //ViewMOdelProviders.of(this) ... is no longer supported >:-(
@@ -104,28 +110,28 @@ public class HomeFragment extends Fragment {
 //        rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
 //
 //
-//        swipeRefreshLayout = getActivity().findViewById(R.id
-//                .swipeRefreshLayout);
-//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//
-//                allPosts.clear();
-//
-//                //On refresh
-//                allPosts.add(new Post(1000, "refresh title", "Rezoie", "Irmebi moprinaven","koka kola"));
-//                allPosts.add(new Post(1001, "refresh title 2", "Rezoie", "gilocav axal wels","koka kola"));
-//                allPosts.add(new Post(1002, "refresh title 3", "Rezoie", "Irmebi xtian","koka kola"));
-//                allPosts.add(new Post(1003, "refresh title 4", "Rezoie", "dronebis testi","koka kola"));
-//                allPosts.add(new Post(1004, "refresh title 5", "Rezoie", "kvazi modo","koka kola"));
-//
-//                postAdapter.notifyDataSetChanged();
-//                swipeRefreshLayout.setRefreshing(false);
-//            }
-//        });
+        swipeRefreshLayout = getActivity().findViewById(R.id
+                .swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                allPosts.clear();
+
+                //On refresh
+                allPosts.add(new Post(1000, "refresh title", "Rezoie", "Irmebi moprinaven","koka kola"));
+                allPosts.add(new Post(1001, "refresh title 2", "Rezoie", "gilocav axal wels","koka kola"));
+                allPosts.add(new Post(1002, "refresh title 3", "Rezoie", "Irmebi xtian","koka kola"));
+                allPosts.add(new Post(1003, "refresh title 4", "Rezoie", "dronebis testi","koka kola"));
+                allPosts.add(new Post(1004, "refresh title 5", "Rezoie", "kvazi modo","koka kola"));
+
+                adapter.notifyDataSetChanged();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
 //
 
-//        queryPostsVERSION2(6);
+        queryPostsVERSION2(6);
     }
 
     /**
@@ -245,6 +251,7 @@ public class HomeFragment extends Fragment {
                             Post post = contract.getPost(i);
                             Log.i("Post loader", "Post:" + post.toString());
                             allPosts.add(post);
+                            //TODO Maybe add to databse here?
                         }
                     }
                 };

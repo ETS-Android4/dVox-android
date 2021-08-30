@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences preferencesKeys = getSharedPreferences("pref", Context.MODE_PRIVATE);
         getAPIs(preferencesKeys);
 
-        SharedPreferences preferencesUsernames = getSharedPreferences(USERNAME_PREFS, Context.MODE_PRIVATE);
+//        SharedPreferences preferencesUsernames = getSharedPreferences(USERNAME_PREFS, Context.MODE_PRIVATE);
 
         Username usernameInstance = new Username(this);
         usernameInstance.retrieveUsername(true);
@@ -112,102 +112,102 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        //Maybe this belongs in AddFragment class
-        public void startCreatePostThread (View view){
-            CreatePostThread createPostThread = new CreatePostThread();
-            createPostThread.start();
+    //Maybe this belongs in AddFragment class
+    public void startCreatePostThread (View view){
+        CreatePostThread createPostThread = new CreatePostThread();
+        createPostThread.start();
+    }
+
+//        public void startGetPostThread (View view){
+//            GetPostThread getPostThread = new GetPostThread();
+//            getPostThread.start();
+//        }
+
+
+    class CreatePostThread extends Thread {
+
+        CreatePostThread() {
         }
 
-        public void startGetPostThread (View view){
-            GetPostThread getPostThread = new GetPostThread();
-            getPostThread.start();
-        }
+        @Override
+        public void run() {
 
+            //Fetching String values from ADD page
+            postTitle = findViewById(R.id.post_title);
+            postTheme = findViewById(R.id.hashtag);
+            postContent = findViewById(R.id.content_post);
+            postAuthor = findViewById(R.id.post_author);
+            buttonSave = findViewById(R.id.verify_button);
 
-        class CreatePostThread extends Thread {
+            String title = postTitle.getText().toString();
+            String theme = postTheme.getText().toString();
+            String content = postContent.getText().toString();
+            String author = postAuthor.getText().toString();
 
-            CreatePostThread() {
-            }
+            //<-- Create POST -->\\
+            SharedPreferences preferences = getSharedPreferences("pref", Context.MODE_PRIVATE);
+            SmartContract smartContract = new SmartContract(preferences);
+            smartContract.createPost(title, author, content, theme);
 
-            @Override
-            public void run() {
+            //Clearing fields after Posing
 
-                //Fetching String values from ADD page
-                postTitle = findViewById(R.id.post_title);
-                postTheme = findViewById(R.id.hashtag);
-                postContent = findViewById(R.id.content_post);
-                postAuthor = findViewById(R.id.post_author);
-                buttonSave = findViewById(R.id.verify_button);
-
-                String title = postTitle.getText().toString();
-                String theme = postTheme.getText().toString();
-                String content = postContent.getText().toString();
-                String author = postAuthor.getText().toString();
-
-                //<-- Create POST -->\\
-                SharedPreferences preferences = getSharedPreferences("pref", Context.MODE_PRIVATE);
-                SmartContract smartContract = new SmartContract(preferences);
-                smartContract.createPost(title, author, content, theme);
-
-                //Clearing fields after Posing
-
-                //Toast "You have successfully Posted
+            //Toast "You have successfully Posted
 
 
 //          System.out.println("Last POST: " + smartContract.getPost(smartContract.getPostCount() + 1).toString());
-            }
         }
-
-        class GetPostThread extends Thread {
-
-            public GetPostThread() {
-
-            }
-
-            @Override
-            public void run() {
-                HomeFragment fragment = new HomeFragment();
-            }
-        }
-
-
-        /**
-         * Gets new API keys by resetting them and getting new.
-         *
-         * !!! SHOULD BE USED AT THE BEGINNING OF THE MAIN ACTIVITY
-         *
-         * @param preferences
-         */
-        private void getAPIs (SharedPreferences preferences){
-            //Reset APIs
-            resetAPIs(preferences);
-
-            //Update APIs
-            updateAPIs(preferences);
-        }
-
-        /**
-         * Reset all APIs keys to update them.
-         * @param preferences - Updated
-         */
-        private void resetAPIs (SharedPreferences preferences){
-            //Reset APIs
-            SharedPreferences.Editor prefsEditor = preferences.edit();
-
-            prefsEditor.putString("Credentials", "error");
-            prefsEditor.putString("ContractAddress", "error");
-            prefsEditor.putString("InfuraURL", "error");
-
-            prefsEditor.commit();
-        }
-
-        /**
-         * Gets new API keys.
-         * @param preferences
-         */
-        private void updateAPIs (SharedPreferences preferences){
-            new APIs(preferences);
-        }
-
     }
+
+//        class GetPostThread extends Thread {
+//
+//            public GetPostThread() {
+//
+//            }
+//
+//            @Override
+//            public void run() {
+//                HomeFragment fragment = new HomeFragment();
+//            }
+//        }
+
+
+    /**
+     * Gets new API keys by resetting them and getting new.
+     *
+     * !!! SHOULD BE USED AT THE BEGINNING OF THE MAIN ACTIVITY
+     *
+     * @param preferences
+     */
+    private void getAPIs (SharedPreferences preferences){
+        //Reset APIs
+        resetAPIs(preferences);
+
+        //Update APIs
+        updateAPIs(preferences);
+    }
+
+    /**
+     * Reset all APIs keys to update them.
+     * @param preferences - Updated
+     */
+    private void resetAPIs (SharedPreferences preferences){
+        //Reset APIs
+        SharedPreferences.Editor prefsEditor = preferences.edit();
+
+        prefsEditor.putString("Credentials", "error");
+        prefsEditor.putString("ContractAddress", "error");
+        prefsEditor.putString("InfuraURL", "error");
+
+        prefsEditor.commit();
+    }
+
+    /**
+     * Gets new API keys.
+     * @param preferences
+     */
+    private void updateAPIs (SharedPreferences preferences){
+        new APIs(preferences);
+    }
+
+}
 

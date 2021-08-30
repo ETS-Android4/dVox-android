@@ -52,6 +52,7 @@ public class SmartContract {
             String InfuraURL = preferences.getString("infuraURL", "error");
             String ContractAddress = preferences.getString("contractAddress", "error");
 
+            //todo are we sure we want to print credentials???
             Log.i("Post loader", "C: " + Credentials + " URL: " + InfuraURL +" CA: " + ContractAddress);
 
         /** Instantiating SmartContract **/
