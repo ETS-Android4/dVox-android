@@ -55,10 +55,6 @@ public abstract class PostDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            //Maybe get posts from smart contract, eh?
-            postDao.insert(new Post("Title 1", "Author 1", "Message 1", "#1"));
-            postDao.insert(new Post("Title 2", "Author 2", "Message 2", "#2"));
-            postDao.insert(new Post("Title 3", "Author 3", "Message 3", "#3"));
             return null;
         }
     }

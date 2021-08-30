@@ -28,11 +28,9 @@ import java.util.concurrent.ExecutionException;
     3 - string author;
     4 - string message;
     5 - string hashtag;
-    6 - int upVotes;
-    7 - int downVotes;
-    8 - int commentCount;
-    9 - bool ban;
-    10 - ArrayList comments;
+    6 - int commentCount;
+    7 - bool ban;
+    8 - ArrayList comments;
 *
 * */
 public class SmartContract {

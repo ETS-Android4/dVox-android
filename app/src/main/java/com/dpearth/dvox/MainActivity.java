@@ -64,10 +64,11 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences preferencesKeys = getSharedPreferences("pref", Context.MODE_PRIVATE);
         getAPIs(preferencesKeys);
 
-//        SharedPreferences preferencesUsernames = getSharedPreferences(USERNAME_PREFS, Context.MODE_PRIVATE);
-
         Username usernameInstance = new Username(this);
         usernameInstance.retrieveUsername(true);
+
+
+
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);

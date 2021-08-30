@@ -38,8 +38,6 @@ public class HomeFragment extends Fragment {
 
     public static final String TAG = "HomeFragment";
 
-    private RecyclerView rvPosts;
-    private PostAdapter postAdapter;
     private List<Post> allPosts;
 
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -60,7 +58,6 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
 
         View view = binding.getRoot();
@@ -70,15 +67,6 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-//        // This one displays smart contract
-//        rvPosts = view.findViewById(R.id.liveDataRecycleView);
-//        allPosts = new ArrayList<>();
-//        adapter = new PostAdapterVERSION2(getContext(), allPosts);//TODO Uncomment rvPosts;
-//        rvPosts.setAdapter(adapter);
-//        rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
-
-
 
         allPosts = new ArrayList<>();
 
@@ -92,50 +80,15 @@ public class HomeFragment extends Fragment {
 
 //        ViewMOdelProviders.of(this) ... is no longer supported >:-(
         postViewModel = new ViewModelProvider(requireActivity()).get(PostViewModel.class);
+//        adapterVERSION2.setPosts(allPosts);
+
 //        postViewModel.getAllPosts().observe(getViewLifecycleOwner(), new Observer<List<Post>>() {
-//
 //
 //            //This will get triggered everytime live data changes
 //            @Override
 //            public void onChanged(@Nullable List<Post> posts) {
 //                adapterVERSION2.setPosts(posts);
 ////                Toast.makeText(getActivity(), "data displayed", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
-
-//        ArrayList<Post> a = new ArrayList<Post>();
-//        a.add(new Post("213ew", "213asd", "12eda", "12edas"));
-//
-//        //worx
-//        adapterVERSION2.setPosts(a);
-
-
-//        rvPosts = view.findViewById(R.id.rvPosts);
-//        allPosts = new ArrayList<>();
-//
-//        postAdapter = new PostAdapter(getContext(), allPosts);
-//        rvPosts.setAdapter(postAdapter);
-//        rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
-//
-//
-//        swipeRefreshLayout = getActivity().findViewById(R.id
-//                .swipeRefreshLayout);
-//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//
-//                allPosts.clear();
-//
-//                //On refresh
-//                allPosts.add(new Post(1000, "refresh title", "Rezoie", "Irmebi moprinaven","koka kola"));
-//                allPosts.add(new Post(1001, "refresh title 2", "Rezoie", "gilocav axal wels","koka kola"));
-//                allPosts.add(new Post(1002, "refresh title 3", "Rezoie", "Irmebi xtian","koka kola"));
-//                allPosts.add(new Post(1003, "refresh title 4", "Rezoie", "dronebis testi","koka kola"));
-//                allPosts.add(new Post(1004, "refresh title 5", "Rezoie", "kvazi modo","koka kola"));
-//
-//                adapter.notifyDataSetChanged();
-//                swipeRefreshLayout.setRefreshing(false);
 //            }
 //        });
 
@@ -177,8 +130,7 @@ public class HomeFragment extends Fragment {
                             Post post = contract.getPost(i);
                             Log.i("Post loader", "Post:" + post.toString());
                             allPosts.add(post);
-                            //TODO Maybe add to databse here?
-
+                            //TODO Maybe add to database here?
                             adapterVERSION2.setPosts(allPosts);
                         }
                     }
