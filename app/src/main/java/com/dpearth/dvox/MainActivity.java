@@ -60,25 +60,17 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //Get shared preferences and put new APIs there
+        SharedPreferences preferencesKeys = getSharedPreferences("pref", Context.MODE_PRIVATE);
+        getAPIs(preferencesKeys);
+
+        SharedPreferences preferencesUsernames = getSharedPreferences(USERNAME_PREFS, Context.MODE_PRIVATE);
+
+        Username usernameInstance = new Username(this);
+        usernameInstance.retrieveUsername(true);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-
-
-            //Get shared preferences and put new APIs there
-            SharedPreferences preferencesKeys = getSharedPreferences("pref", Context.MODE_PRIVATE);
-            getAPIs(preferencesKeys);
-
-            SharedPreferences preferencesUsernames = getSharedPreferences(USERNAME_PREFS, Context.MODE_PRIVATE);
-
-            Username usernameInstance = new Username(this);
-            usernameInstance.retrieveUsername(true);
-
-
-
-
             bottomNavigationView = findViewById(R.id.bottom_navigation);
             bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
@@ -87,9 +79,6 @@ public class MainActivity extends AppCompatActivity {
                     switch (menuItem.getItemId()) {
                         case R.id.ic_add:
                             fragment = new AddFragment();
-                            break;
-                        case R.id.ic_home:
-                            fragment = new HomeFragment();
                             break;
                         case R.id.ic_user:
                             fragment = new UserFragment();

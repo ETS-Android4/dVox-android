@@ -70,6 +70,7 @@ dependencies {
     implementation 'org.web3j:core:5.0.0'
     implementation 'com.google.firebase:firebase-firestore:23.0.3'
     implementation 'androidx.databinding:databinding-runtime:7.0.1'
+    implementation 'androidx.room:room-common:2.3.0'
 
     testImplementation 'junit:junit:4.13.2'
 
