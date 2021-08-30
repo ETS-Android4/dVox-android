@@ -88,16 +88,16 @@ public class HomeFragment extends Fragment {
 
 
         //ViewMOdelProviders.of(this) ... is no longer supported >:-(
-        postViewModel = new ViewModelProvider(this).get(PostViewModel.class);
-        postViewModel.getAllPosts().observe(getViewLifecycleOwner(), new Observer<List<Post>>() {
-
-            //This will get triggered everytime live data changes
-            @Override
-            public void onChanged(@Nullable List<Post> posts) {
-                adapter.setPosts(posts);
-//                Toast.makeText(getActivity(), "data displayed", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        postViewModel = new ViewModelProvider(this).get(PostViewModel.class);
+//        postViewModel.getAllPosts().observe(getViewLifecycleOwner(), new Observer<List<Post>>() {
+//
+//            //This will get triggered everytime live data changes
+//            @Override
+//            public void onChanged(@Nullable List<Post> posts) {
+//                adapter.setPosts(posts);
+////                Toast.makeText(getActivity(), "data displayed", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
 
 
