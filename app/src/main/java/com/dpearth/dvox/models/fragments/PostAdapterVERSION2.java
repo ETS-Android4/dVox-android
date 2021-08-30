@@ -1,5 +1,6 @@
 package com.dpearth.dvox.models.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,23 +20,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PostAdapterVERSION2 extends RecyclerView.Adapter<PostAdapterVERSION2.PostHolder> {
-    private Context context;
-    private List<Post> posts;
 
-    public PostAdapterVERSION2() {
+    private List<Post> posts = new ArrayList<>();
+    private ViewGroup mainActivity;
 
-    }
-
-    public PostAdapterVERSION2(Context context, List<Post> posts){
-        this.context = context;
-        this.posts = posts;
-    }
 
     @NonNull
     @Override
     public PostHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context)
+        View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_post_version2, parent, false);
+        this.mainActivity = parent;
         return new PostHolder(itemView);
     }
 
@@ -52,7 +47,7 @@ public class PostAdapterVERSION2 extends RecyclerView.Adapter<PostAdapterVERSION
 
     public void setPosts(List<Post> posts) {
         this.posts = posts;
-        notifyDataSetChanged();//We will change the method later
+//        notifyDataSetChanged();//We will change the method later
     }
 
     class PostHolder extends RecyclerView.ViewHolder {
@@ -84,12 +79,12 @@ public class PostAdapterVERSION2 extends RecyclerView.Adapter<PostAdapterVERSION
 
 
             String uri = "drawable/" + stringToAvatar(post.getAuthor()).toLowerCase();
-            int imageResource = context.getResources().getIdentifier(uri, null, context.getPackageName());
+            int imageResource = mainActivity.getContext().getResources().getIdentifier(uri, null, mainActivity.getContext().getPackageName());
 
             avatar.setImageResource(imageResource);
         }
 
-        public String stringToAvatar(String username){
+        private String stringToAvatar(String username){
             String[] array = username.split("_");
 
             if (array.length == 3){

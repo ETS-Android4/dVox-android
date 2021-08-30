@@ -54,7 +54,7 @@ public class HomeFragment extends Fragment {
     public static final String EXTRA_MESSAGE = "com.dpearth.dvox.models.fragments.EXTRA_MESSAGE";
     public static final String EXTRA_HASHTAG = "com.dpearth.dvox.models.fragments.EXTRA_HASHTAG";
 
-    private PostAdapterVERSION2 adapter;
+    private PostAdapterVERSION2 adapterVERSION2;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,36 +70,45 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        rvPosts = view.findViewById(R.id.liveDataRecycleView);
+
+//        // This one displays smart contract
+//        rvPosts = view.findViewById(R.id.liveDataRecycleView);
+//        allPosts = new ArrayList<>();
+//        adapter = new PostAdapterVERSION2(getContext(), allPosts);//TODO Uncomment rvPosts;
+//        rvPosts.setAdapter(adapter);
+//        rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
+
+
+
         allPosts = new ArrayList<>();
 
-        adapter = new PostAdapterVERSION2(getContext(), allPosts);//TODO Uncomment rvPosts;
-        rvPosts.setAdapter(adapter);
-        rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
-//        rvPosts.setHasFixedSize(true);
+        RecyclerView recyclerView = getActivity().findViewById(R.id.liveDataRecycleView);//TODO Uncomment rvPosts;
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setHasFixedSize(true);
+
+        adapterVERSION2 = new PostAdapterVERSION2();//getContext(), allPosts -> as pars
+        recyclerView.setAdapter(adapterVERSION2);
 
 
-
-//        RecyclerView recyclerView = getActivity().findViewById(R.id.liveDataRecycleView);//TODO Uncomment rvPosts;
-//        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-//        recyclerView.setHasFixedSize(true);
-
-
-
-
-        //ViewMOdelProviders.of(this) ... is no longer supported >:-(
-//        postViewModel = new ViewModelProvider(this).get(PostViewModel.class);
+//        ViewMOdelProviders.of(this) ... is no longer supported >:-(
+        postViewModel = new ViewModelProvider(requireActivity()).get(PostViewModel.class);
 //        postViewModel.getAllPosts().observe(getViewLifecycleOwner(), new Observer<List<Post>>() {
+//
 //
 //            //This will get triggered everytime live data changes
 //            @Override
 //            public void onChanged(@Nullable List<Post> posts) {
-//                adapter.setPosts(posts);
+//                adapterVERSION2.setPosts(posts);
 ////                Toast.makeText(getActivity(), "data displayed", Toast.LENGTH_SHORT).show();
 //            }
 //        });
 
 
+//        ArrayList<Post> a = new ArrayList<Post>();
+//        a.add(new Post("213ew", "213asd", "12eda", "12edas"));
+//
+//        //worx
+//        adapterVERSION2.setPosts(a);
 
 
 //        rvPosts = view.findViewById(R.id.rvPosts);
@@ -110,111 +119,28 @@ public class HomeFragment extends Fragment {
 //        rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
 //
 //
-        swipeRefreshLayout = getActivity().findViewById(R.id
-                .swipeRefreshLayout);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-
-                allPosts.clear();
-
-                //On refresh
-                allPosts.add(new Post(1000, "refresh title", "Rezoie", "Irmebi moprinaven","koka kola"));
-                allPosts.add(new Post(1001, "refresh title 2", "Rezoie", "gilocav axal wels","koka kola"));
-                allPosts.add(new Post(1002, "refresh title 3", "Rezoie", "Irmebi xtian","koka kola"));
-                allPosts.add(new Post(1003, "refresh title 4", "Rezoie", "dronebis testi","koka kola"));
-                allPosts.add(new Post(1004, "refresh title 5", "Rezoie", "kvazi modo","koka kola"));
-
-                adapter.notifyDataSetChanged();
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
+//        swipeRefreshLayout = getActivity().findViewById(R.id
+//                .swipeRefreshLayout);
+//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
 //
+//                allPosts.clear();
+//
+//                //On refresh
+//                allPosts.add(new Post(1000, "refresh title", "Rezoie", "Irmebi moprinaven","koka kola"));
+//                allPosts.add(new Post(1001, "refresh title 2", "Rezoie", "gilocav axal wels","koka kola"));
+//                allPosts.add(new Post(1002, "refresh title 3", "Rezoie", "Irmebi xtian","koka kola"));
+//                allPosts.add(new Post(1003, "refresh title 4", "Rezoie", "dronebis testi","koka kola"));
+//                allPosts.add(new Post(1004, "refresh title 5", "Rezoie", "kvazi modo","koka kola"));
+//
+//                adapter.notifyDataSetChanged();
+//                swipeRefreshLayout.setRefreshing(false);
+//            }
+//        });
 
         queryPostsVERSION2(6);
     }
-
-    /**
-     * Retrieves the certain number of last posts from the smart contract.
-     *
-     * @param numberOfPosts - the number of posts to get
-     */
-    private void queryPosts(int numberOfPosts) {
-
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                // ################# GET ALL POSTS #################//
-
-                SharedPreferences preferences = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
-
-
-                while (preferences.getString("credentials", "error").equals("error") ||
-                        preferences.getString("contractAddress", "error").equals("error") ||
-                        preferences.getString("credentials", "error").equals("error")) {
-
-                    try {
-                        Thread.sleep(250);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-
-                SmartContract contract = new SmartContract(preferences);
-
-                int postCount = contract.getPostCount();
-
-                Log.i("Post loader", "Trying to print... in total:" + postCount);
-
-                if ( postCount > 0){
-                    for (int i = postCount; i > postCount - numberOfPosts; i--){
-                        if (i > 0) {
-                            Post post = contract.getPost(i);
-                            Log.i("Post loader", "Post:" + post.toString());
-                            allPosts.add(post);
-                        }
-                    }
-                };
-                // ################# GET ALL POSTS #################//
-
-                if (getActivity() != null) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            //UPDATE UI
-                            postAdapter.notifyDataSetChanged();
-                        }
-                    });
-                }
-            }
-        });
-        thread.start();
-    }
-
-
-//################# EXAMPLE OF BACKGROUND THREAD #################//
-//
-//    Thread thread = new Thread(new Runnable() {
-//        @Override
-//        public void run() {
-//            //PERFORM BACKGROUND ACTION
-//
-//            getActivity().runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    //UPDATE UI ACTION
-//                }
-//            });
-//        }
-//    });
-//
-//    thread.start();
-//
-//################# EXAMPLE OF BACKGROUND THREAD #################//
-
-
-
 
 
     /**
@@ -252,6 +178,8 @@ public class HomeFragment extends Fragment {
                             Log.i("Post loader", "Post:" + post.toString());
                             allPosts.add(post);
                             //TODO Maybe add to databse here?
+
+                            adapterVERSION2.setPosts(allPosts);
                         }
                     }
                 };
@@ -262,7 +190,7 @@ public class HomeFragment extends Fragment {
                         @Override
                         public void run() {
                             //UPDATE UI
-                            adapter.notifyDataSetChanged();
+                            adapterVERSION2.notifyDataSetChanged();
                         }
                     });
                 }
