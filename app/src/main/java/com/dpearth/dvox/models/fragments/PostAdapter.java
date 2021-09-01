@@ -48,14 +48,17 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>  {
         return posts.size();
     }
 
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+        notifyDataSetChanged();//We will change the method later
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView tvTitle;
         private TextView tvAuthor;
         private TextView tvMessage;
         private TextView tvHashtag;
-        private TextView tvUpVoteNumber;
-        private TextView tvDownVoteNumber;
         private TextView tvCommentNumber;
         private ImageView tvAvatar;
 
@@ -66,8 +69,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>  {
             tvAuthor = itemView.findViewById(R.id.author_text);
             tvMessage = itemView.findViewById(R.id.message_text);
             tvHashtag = itemView.findViewById(R.id.hashtag_text);
-            tvUpVoteNumber = itemView.findViewById(R.id.upvote_number);
-            tvDownVoteNumber = itemView.findViewById(R.id.downvote_number);
             tvCommentNumber = itemView.findViewById(R.id.comment_number);
             tvAvatar = itemView.findViewById(R.id.avatar_image);
         }
@@ -78,9 +79,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>  {
             tvAuthor.setText(post.getAuthor());
             tvMessage.setText(post.getMessage());
             tvHashtag.setText(post.getHashtag());
-            tvUpVoteNumber.setText(post.getUpVotes().toString());
-            tvDownVoteNumber.setText(post.getDownVotes().toString());
-            tvCommentNumber.setText(post.getCommentCount().toString());
+            tvCommentNumber.setText(String.valueOf(post.getCommentCount()));
 
 
             String uri = "drawable/" + stringToAvatar(post.getAuthor()).toLowerCase();

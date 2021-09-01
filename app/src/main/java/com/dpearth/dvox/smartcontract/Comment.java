@@ -3,6 +3,7 @@ package com.dpearth.dvox.smartcontract;
 import java.math.BigInteger;
 import java.util.Objects;
 
+//!!! I need to annotate this class later
 public class Comment {
 
     private BigInteger id;

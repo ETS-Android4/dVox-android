@@ -28,11 +28,9 @@ import java.util.concurrent.ExecutionException;
     3 - string author;
     4 - string message;
     5 - string hashtag;
-    6 - int upVotes;
-    7 - int downVotes;
-    8 - int commentCount;
-    9 - bool ban;
-    10 - ArrayList comments;
+    6 - int commentCount;
+    7 - bool ban;
+    8 - ArrayList comments;
 *
 * */
 public class SmartContract {
@@ -52,6 +50,7 @@ public class SmartContract {
             String InfuraURL = preferences.getString("infuraURL", "error");
             String ContractAddress = preferences.getString("contractAddress", "error");
 
+            //todo are we sure we want to print credentials???
             Log.i("Post loader", "C: " + Credentials + " URL: " + InfuraURL +" CA: " + ContractAddress);
 
         /** Instantiating SmartContract **/
@@ -95,14 +94,12 @@ public class SmartContract {
         try {
             Tuple7<BigInteger, String, String, String, String, BigInteger, Boolean> contractPost = postContract.posts((BigInteger.valueOf(id))).sendAsync().get();
 
-            post.setId(BigInteger.valueOf(id));
+            post.setId(id);
             post.setTitle(contractPost.component2());
             post.setAuthor(contractPost.component3());
             post.setMessage(contractPost.component4());
             post.setHashtag(contractPost.component5());
-            post.setUpVotes(BigInteger.valueOf(0));
-            post.setDownVotes(BigInteger.valueOf(0));
-            post.setCommentCount(contractPost.component6());
+//            post.setCommentCount(contractPost.component6());TODO figure setting contract
             post.setBan(contractPost.component7());
 
 
@@ -141,9 +138,9 @@ public class SmartContract {
 
         List<Comment> commentList = new ArrayList<>();
 
-        for (int i = 0; i < getPost(postId).getCommentCount().longValue(); i++) {
-//            RemoteFunctionCall<PostContract> postContractComment = postContract.getComment(BigInteger.valueOf(postId), BigInteger.valueOf(i));
-        }
+//        for (int i = 0; i < getPost(postId).getCommentCount(); i++) {
+////            RemoteFunctionCall<PostContract> postContractComment = postContract.getComment(BigInteger.valueOf(postId), BigInteger.valueOf(i));
+//        }
 
         return commentList;
     }
