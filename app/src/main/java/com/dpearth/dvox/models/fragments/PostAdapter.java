@@ -48,6 +48,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>  {
         return posts.size();
     }
 
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+        notifyDataSetChanged();//We will change the method later
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView tvTitle;

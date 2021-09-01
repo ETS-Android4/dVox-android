@@ -95,21 +95,6 @@ public class MainActivity extends AppCompatActivity {
             });
             bottomNavigationView.setSelectedItemId(R.id.ic_home);
 
-//
-//        setContentView(R.layout.custome_design);
-//
-//        posts.add(new Post("hi", "Revaz", "asda", "#dsa"));
-//
-////      Lookup the recyclerview in activity layout
-//        rvPosts = findViewById(R.id.rvPosts);
-////        Initialize post
-//        posts = Post.createPostList(5);
-////        Create adapter passing in the sample user data
-//        RecyclerAdapter adapter = new RecyclerAdapter(MainActivity.this, posts);
-////        Attach the adapter to the recyclerview to populate items
-//        rvPosts.setAdapter(adapter);
-////        Set layout manager to position the items
-//        rvPosts.setLayoutManager(new LinearLayoutManager(this));
         }
 
 
@@ -118,12 +103,6 @@ public class MainActivity extends AppCompatActivity {
         CreatePostThread createPostThread = new CreatePostThread();
         createPostThread.start();
     }
-
-//        public void startGetPostThread (View view){
-//            GetPostThread getPostThread = new GetPostThread();
-//            getPostThread.start();
-//        }
-
 
     class CreatePostThread extends Thread {
 
@@ -150,26 +129,11 @@ public class MainActivity extends AppCompatActivity {
             SmartContract smartContract = new SmartContract(preferences);
             smartContract.createPost(title, author, content, theme);
 
-            //Clearing fields after Posing
+            //ToDo Clearing fields after Posting
 
-            //Toast "You have successfully Posted
-
-
-//          System.out.println("Last POST: " + smartContract.getPost(smartContract.getPostCount() + 1).toString());
+            //Todo Toast "You have successfully Posted" or "R U sure about that post?"
         }
     }
-
-//        class GetPostThread extends Thread {
-//
-//            public GetPostThread() {
-//
-//            }
-//
-//            @Override
-//            public void run() {
-//                HomeFragment fragment = new HomeFragment();
-//            }
-//        }
 
 
     /**

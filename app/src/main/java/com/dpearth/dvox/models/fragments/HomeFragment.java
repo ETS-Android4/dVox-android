@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,28 +32,20 @@ import com.dpearth.dvox.smartcontract.SmartContract;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 
 public class HomeFragment extends Fragment {
 
     public static final String TAG = "HomeFragment";
-
     private List<Post> allPosts;
-
     private SwipeRefreshLayout swipeRefreshLayout;
-
     private FragmentHomeBinding binding;
-
-
     private PostViewModel postViewModel;
+    private PostAdapter adapter;
 
-    public static final String EXTRA_TITLE = "com.dpearth.dvox.models.fragments.EXTRA_TITLE";
-    public static final String EXTRA_AUTHOR = "com.dpearth.dvox.models.fragments.EXTRA_AUTHOR";
-    public static final String EXTRA_MESSAGE = "com.dpearth.dvox.models.fragments.EXTRA_MESSAGE";
-    public static final String EXTRA_HASHTAG = "com.dpearth.dvox.models.fragments.EXTRA_HASHTAG";
-
-    private PostAdapterVERSION2 adapterVERSION2;
+//    private EndlessRecyclerViewScrollListener scrollListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,25 +67,36 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
 
-        adapterVERSION2 = new PostAdapterVERSION2();//getContext(), allPosts -> as pars
-        recyclerView.setAdapter(adapterVERSION2);
+        postViewModel = new ViewModelProvider(getActivity()).get(PostViewModel.class);
+
+        adapter = new PostAdapter(getContext(), allPosts);//getContext(), allPosts -> as pars
+        recyclerView.setAdapter(adapter);
 
 
-//        ViewMOdelProviders.of(this) ... is no longer supported >:-(
-        postViewModel = new ViewModelProvider(requireActivity()).get(PostViewModel.class);
-//        adapterVERSION2.setPosts(allPosts);
 
-//        postViewModel.getAllPosts().observe(getViewLifecycleOwner(), new Observer<List<Post>>() {
-//
-//            //This will get triggered everytime live data changes
-//            @Override
-//            public void onChanged(@Nullable List<Post> posts) {
-//                adapterVERSION2.setPosts(posts);
-////                Toast.makeText(getActivity(), "data displayed", Toast.LENGTH_SHORT).show();
-//            }
-//        });
+        //todo when refresh apply change
+        //        ViewMOdelProviders.of(this) ... is no longer supported >:-(
+        postViewModel.getAllPosts().observe(getViewLifecycleOwner(), new Observer<List<Post>>() {
+            //This will get triggered everytime live data changes
+            @Override
+            public void onChanged(@Nullable List<Post> posts) {
+                adapter.setPosts(posts);
+            }
+        });
 
         queryPostsVERSION2(6);
+
+
+        swipeRefreshLayout = getActivity().findViewById(R.id
+                .swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                postViewModel.deleteAllPosts();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
 
@@ -130,8 +134,9 @@ public class HomeFragment extends Fragment {
                             Post post = contract.getPost(i);
                             Log.i("Post loader", "Post:" + post.toString());
                             allPosts.add(post);
+
                             //TODO Maybe add to database here?
-                            adapterVERSION2.setPosts(allPosts);
+//                            adapterVERSION2.setPosts(allPosts);
                         }
                     }
                 };
@@ -142,21 +147,17 @@ public class HomeFragment extends Fragment {
                         @Override
                         public void run() {
                             //UPDATE UI
-                            adapterVERSION2.notifyDataSetChanged();
+                            for (Post j: allPosts) {
+                                postViewModel.insert(j);
+                            }
+
                         }
                     });
                 }
             }
         });
+        allPosts.clear();
         thread.start();
     }
 
-    public void saveLiveData(Post post) {
-        Intent data = new Intent();
-        data.putExtra(EXTRA_TITLE, post.getTitle());
-        data.putExtra(EXTRA_AUTHOR, post.getAuthor());
-        data.putExtra(EXTRA_MESSAGE, post.getMessage());
-        data.putExtra(EXTRA_HASHTAG, post.getHashtag());
-
-    }
 }
