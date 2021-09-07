@@ -4,10 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -17,32 +13,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.dpearth.dvox.firebasedata.APIs;
 import com.dpearth.dvox.models.fragments.AddFragment;
 import com.dpearth.dvox.models.fragments.HomeFragment;
-import com.dpearth.dvox.models.fragments.PostAdapter;
-import com.dpearth.dvox.models.fragments.PostAdapterVERSION2;
 import com.dpearth.dvox.models.fragments.UserFragment;
 import com.dpearth.dvox.smartcontract.SmartContract;
 import com.dpearth.dvox.username.Username;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import com.dpearth.dvox.firebasedata.APIs;
-import com.dpearth.dvox.livedata.PostViewModel;
-import com.dpearth.dvox.livedata.User;
-import com.dpearth.dvox.models.fragments.AddFragment;
-import com.dpearth.dvox.models.fragments.HomeFragment;
-import com.dpearth.dvox.models.fragments.UserFragment;
-import com.dpearth.dvox.smartcontract.Post;
-import com.dpearth.dvox.smartcontract.SmartContract;
-import com.dpearth.dvox.username.Username;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import java.util.List;
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 

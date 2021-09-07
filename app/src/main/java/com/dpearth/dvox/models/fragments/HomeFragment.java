@@ -8,10 +8,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,17 +20,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.ImageView;
 
+import com.dpearth.dvox.CommentActivity;
 import com.dpearth.dvox.R;
 import com.dpearth.dvox.databinding.FragmentHomeBinding;
 import com.dpearth.dvox.livedata.PostViewModel;
+import com.dpearth.dvox.models.recycleviews.PostAdapter;
 import com.dpearth.dvox.smartcontract.Post;
 import com.dpearth.dvox.smartcontract.SmartContract;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 
@@ -44,6 +42,8 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     private PostViewModel postViewModel;
     private PostAdapter adapter;
+
+    private ImageView commentIcon;
 
 //    private EndlessRecyclerViewScrollListener scrollListener;
 
@@ -75,6 +75,7 @@ public class HomeFragment extends Fragment {
 
 
         //todo when refresh apply change
+
         //        ViewMOdelProviders.of(this) ... is no longer supported >:-(
         postViewModel.getAllPosts().observe(getViewLifecycleOwner(), new Observer<List<Post>>() {
             //This will get triggered everytime live data changes
@@ -97,6 +98,8 @@ public class HomeFragment extends Fragment {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
+
+
     }
 
 
@@ -160,4 +163,28 @@ public class HomeFragment extends Fragment {
         thread.start();
     }
 
+//    private void goToCommentSection(){
+//
+//        commentIcon = getView().findViewById(R.id.version2_comment_button);
+////        commentIcon = getActivity().findViewById(R.id.comment_button);
+//
+//        commentIcon.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                openCommentActivity();
+//            }
+//        });
+//    }
+
+    private void openCommentActivity(){
+        Intent intent = new Intent(getActivity(), CommentActivity.class);
+        startActivity(intent);
+    }
+
+//    @Override
+//    public void onClick(View v) {
+//        if (v.getId() == R.id.comment_button){
+//            openCommentActivity();
+//        }
+//    }
 }

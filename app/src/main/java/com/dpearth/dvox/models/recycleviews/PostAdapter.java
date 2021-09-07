@@ -1,7 +1,6 @@
-package com.dpearth.dvox.models.fragments;
+package com.dpearth.dvox.models.recycleviews;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dpearth.dvox.R;
 import com.dpearth.dvox.smartcontract.Post;
 
-import org.web3j.abi.datatypes.Array;
-import org.web3j.abi.datatypes.primitive.Char;
-
 import java.util.List;
-import java.util.Locale;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>  {
 

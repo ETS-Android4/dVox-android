@@ -54,7 +54,7 @@
                         android:layout_width="@dimen/_35sdp"
                         android:layout_height="@dimen/_35sdp"
                         android:scrollbarTrackVertical="@drawable/alpaca"
-                        android:src="@drawable/koala" />
+                        android:src="@drawable/catfish" />
                 </androidx.cardview.widget.CardView>
 
                 <TextView

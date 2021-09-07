@@ -1,7 +1,5 @@
-package com.dpearth.dvox.models.fragments;
+package com.dpearth.dvox.models.recycleviews;
 
-import android.app.Activity;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dpearth.dvox.R;
 import com.dpearth.dvox.smartcontract.Post;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
