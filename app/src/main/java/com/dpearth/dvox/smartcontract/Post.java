@@ -3,6 +3,7 @@ package com.dpearth.dvox.smartcontract;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
@@ -38,7 +39,7 @@ public class Post {
     //////////////////
     /* Constructor for @Entity */
     //////////////////
-
+    @Ignore
     public Post(String title, String author, String message, String hashtag) {
 
         this.id = id;
@@ -61,6 +62,7 @@ public class Post {
         this(0, null, null, null, null);
     }
 
+    @Ignore
     public Post(long id, String title, String author, String message, String hashtag) {
 
         this.id = id;
