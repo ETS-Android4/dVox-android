@@ -132,10 +132,10 @@ public class HomeFragment extends Fragment {
                 Log.d("Post loader", "Trying to print... in total:" + postCount);
 
                 if ( postCount > 0){
-                    for (int i = postCount; i > postCount - numberOfPosts; i--){
+                    for (int i = postCount; i > postCount - numberOfPosts - 1; i--){
                         if (i > 0) {
                             Post post = contract.getPost(i);
-                            Log.i("Post loader", "Post:" + post.toString());
+                            Log.i("Post loader", "Post:" + post.getId());
                             allPosts.add(post);
 
                             //TODO Maybe add to database here?

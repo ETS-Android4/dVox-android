@@ -39,7 +39,6 @@ public class Post {
     //////////////////
     /* Constructor for @Entity */
     //////////////////
-    @Ignore
     public Post(String title, String author, String message, String hashtag) {
 
         this.id = id;
@@ -62,7 +61,6 @@ public class Post {
         this(0, null, null, null, null);
     }
 
-    @Ignore
     public Post(long id, String title, String author, String message, String hashtag) {
 
         this.id = id;
