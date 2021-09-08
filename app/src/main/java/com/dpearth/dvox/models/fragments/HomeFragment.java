@@ -85,8 +85,13 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        queryPostsVERSION2(6);
-
+        postViewModel.getAllPosts().observe(getViewLifecycleOwner(), new Observer<List<Post>>() {
+            @Override
+            public void onChanged(List<Post> posts) {
+                if (posts.size() == 0)
+                    queryPostsVERSION2(6);
+            }
+        });
 
         swipeRefreshLayout = getActivity().findViewById(R.id
                 .swipeRefreshLayout);
@@ -137,7 +142,6 @@ public class HomeFragment extends Fragment {
                             Post post = contract.getPost(i);
                             Log.i("Post loader", "Post:" + post.getId());
                             allPosts.add(post);
-
                             //TODO Maybe add to database here?
 //                            adapterVERSION2.setPosts(allPosts);
                         }
