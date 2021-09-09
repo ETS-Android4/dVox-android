@@ -21,14 +21,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.dpearth.dvox.CommentActivity;
+import com.dpearth.dvox.LoginActivity;
 import com.dpearth.dvox.R;
 import com.dpearth.dvox.databinding.FragmentHomeBinding;
 import com.dpearth.dvox.livedata.PostViewModel;
 import com.dpearth.dvox.models.recycleviews.PostAdapter;
 import com.dpearth.dvox.smartcontract.Post;
 import com.dpearth.dvox.smartcontract.SmartContract;
+import com.muddzdev.styleabletoast.StyleableToast;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,15 +47,17 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     private PostViewModel postViewModel;
     private PostAdapter adapter;
-
     private ImageView commentIcon;
+
+    private int currentPost;
+    private int currentEnd = 6;
+    private boolean loadMore = false;
 
 //    private EndlessRecyclerViewScrollListener scrollListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
 
         View view = binding.getRoot();
@@ -89,7 +96,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onChanged(List<Post> posts) {
                 if (posts.size() == 0)
-                    queryPostsVERSION2(6);
+                    queryPosts(6, -1);
             }
         });
 
@@ -100,11 +107,35 @@ public class HomeFragment extends Fragment {
             public void onRefresh() {
 
                 postViewModel.deleteAllPosts();
+                currentEnd = 6;
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
 
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int lastCompletelyVisibleItemPosition = 0;
 
+                lastCompletelyVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+
+                Log.d("loading", String.valueOf(lastCompletelyVisibleItemPosition));
+
+                try {
+                    if (lastCompletelyVisibleItemPosition == currentEnd - 1) {
+                        Log.d("loading", "Loading more " + lastCompletelyVisibleItemPosition + " " + loadMore );
+                        if (loadMore == true)
+                            currentEnd = currentEnd + 6;
+                        queryPosts(6, currentPost);
+
+                    }
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+
+            }
+        });
     }
 
 
@@ -113,7 +144,7 @@ public class HomeFragment extends Fragment {
      *
      * @param numberOfPosts - the number of posts to get
      */
-    private void queryPostsVERSION2(int numberOfPosts) {
+    private void queryPosts(int numberOfPosts, int currentId) {
 
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -132,16 +163,25 @@ public class HomeFragment extends Fragment {
                 }
 
                 SmartContract contract = new SmartContract(preferences);
-                int postCount = contract.getPostCount();
+
+                int postCount = 0;
+
+                if (currentId == -1)
+                    postCount = contract.getPostCount();
+                else
+                    postCount = currentId - 1;
 
                 Log.d("Post loader", "Trying to print... in total:" + postCount);
 
                 if ( postCount > 0){
-                    for (int i = postCount; i > postCount - numberOfPosts - 1; i--){
+                    for (int i = postCount; i > postCount - numberOfPosts; i--){
                         if (i > 0) {
                             Post post = contract.getPost(i);
                             Log.i("Post loader", "Post:" + post.getId());
                             allPosts.add(post);
+
+
+                            loadMore = true;
                             //TODO Maybe add to database here?
 //                            adapterVERSION2.setPosts(allPosts);
                         }
@@ -156,13 +196,15 @@ public class HomeFragment extends Fragment {
                             //UPDATE UI
                             for (Post j: allPosts) {
                                 postViewModel.insert(j);
+                                currentPost = (int) j.getId();
                             }
-
                         }
                     });
                 }
             }
         });
+
+        loadMore = false;
         allPosts.clear();
         thread.start();
     }
