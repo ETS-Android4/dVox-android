@@ -19,6 +19,7 @@
         <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/dVox-android/app/src/main/res/layout/fragment_user.xml" value="0.23822463768115942" />
         <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/dVox-android/app/src/main/res/layout/item_comment.xml" value="0.5" />
         <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/dVox-android/app/src/main/res/layout/item_post.xml" value="0.4306122448979592" />
+        <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/dVox-android/app/src/main/res/layout/item_post_shimmer.xml" value="0.26773049645390073" />
         <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/dVox-android/app/src/main/res/layout/item_post_version2.xml" value="0.17831813576494426" />
         <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/dVox-android/app/src/main/res/layout/phone_is_rooted.xml" value="0.2296195652173913" />
         <entry key="..\:/Users/revaz/OneDrive/Desktop/DIES App/dVox-android/app/src/main/res/layout/temp1_activity_user_profile.xml" value="0.23822463768115942" />
@@ -83,7 +84,7 @@
         <entry key="app/src/main/res/layout/fragment_user.xml" value="0.375" />
         <entry key="app/src/main/res/layout/item_comment.xml" value="0.34479166666666666" />
         <entry key="app/src/main/res/layout/item_post.xml" value="0.5548827363320381" />
-        <entry key="app/src/main/res/layout/item_post_shimmer.xml" value="0.18201425166581942" />
+        <entry key="app/src/main/res/layout/item_post_shimmer.xml" value="0.46998392740885425" />
         <entry key="app/src/main/res/layout/item_post_version2.xml" value="0.15104166666666666" />
         <entry key="app/src/main/res/layout/temp1_activity_user_profile.xml" value="0.2852446660909537" />
         <entry key="app/src/main/res/menu/navigation_menu.xml" value="0.2520833333333333" />

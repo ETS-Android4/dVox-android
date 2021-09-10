@@ -1,6 +1,7 @@
 package com.dpearth.dvox.models.recycleviews;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +11,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.dpearth.dvox.CommentActivity;
+import com.dpearth.dvox.LoginActivity;
+import com.dpearth.dvox.MainActivity;
 import com.dpearth.dvox.R;
 import com.dpearth.dvox.smartcontract.Post;
 
 import java.util.Collections;
 import java.util.List;
 
+//Todo: Go to comment view when post card is pressed
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>   {
 
     private Context context;
@@ -78,6 +83,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>   
         private TextView tvHashtag;
         private TextView tvCommentNumber;
         private ImageView tvAvatar;
+        private ImageView commentButton;
+        private ImageView upvoteButton;
+        private ImageView downvoteButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -88,6 +96,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>   
             tvHashtag = itemView.findViewById(R.id.hashtag_text);
             tvCommentNumber = itemView.findViewById(R.id.comment_number);
             tvAvatar = itemView.findViewById(R.id.avatar_image);
+            commentButton = itemView.findViewById(R.id.comment_button);
+            upvoteButton = itemView.findViewById(R.id.upvote_button);
+            downvoteButton = itemView.findViewById(R.id.downvote_button);
         }
 
         public void bind(Post post) {
@@ -97,6 +108,31 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>   
             tvMessage.setText(post.getMessage());
             tvHashtag.setText(post.getHashtag());
             tvCommentNumber.setText(String.valueOf(post.getCommentCount()));
+
+            commentButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //todo: figure out openeing xml file onClick
+                    Intent intent = new Intent(String.valueOf(CommentActivity.class));
+                    context.startActivity(intent);
+                }
+            });
+
+//            upvoteButton.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent intent = new Intent(String.valueOf(CommentActivity.class));
+//                    context.startActivity(intent);
+//                }
+//            });
+//
+//            downvoteButton.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent intent = new Intent(String.valueOf(CommentActivity.class));
+//                    context.startActivity(intent);
+//                }
+//            });
 
             String uri = "drawable/" + stringToAvatar(post.getAuthor()).toLowerCase();
 
