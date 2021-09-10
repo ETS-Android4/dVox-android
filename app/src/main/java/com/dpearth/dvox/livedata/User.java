@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class User  extends BaseObservable {
+public class User extends BaseObservable {
 
     private String name;
     private int image;

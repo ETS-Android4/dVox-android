@@ -13,22 +13,40 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dpearth.dvox.R;
 import com.dpearth.dvox.smartcontract.Post;
 
+import java.util.Collections;
 import java.util.List;
 
-public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>  {
+public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>   {
 
     private Context context;
     private List<Post> posts;
 
+    public boolean shimmer = true;
+
     public PostAdapter(Context context, List<Post> posts){
         this.context = context;
-        this.posts = posts;
+        this.posts = Collections.unmodifiableList(posts);
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (posts.get(position).getAuthor().equals("███████"))
+            return 1;
+        return 0;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_post, parent, false);
+        View shimmerView = LayoutInflater.from(context).inflate(R.layout.item_post_shimmer, parent, false);
+
+        switch(viewType){
+            case 0:
+                return new ViewHolder(view);
+            case 1:
+                return new ViewHolder(shimmerView);
+        }
         return new ViewHolder(view);
     }
 
@@ -46,6 +64,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>  {
     public void setPosts(List<Post> posts) {
         this.posts = posts;
         notifyDataSetChanged();//We will change the method later
+    }
+
+    public void shimmerToggle() {
+        this.shimmer = !this.shimmer;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -78,6 +100,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>  {
 
 
             String uri = "drawable/" + stringToAvatar(post.getAuthor()).toLowerCase();
+
+            if (uri.equals("drawable/hacker"))
+                uri = "drawable/black_square";
+
             int imageResource = context.getResources().getIdentifier(uri, null, context.getPackageName());
 
             tvAvatar.setImageResource(imageResource);

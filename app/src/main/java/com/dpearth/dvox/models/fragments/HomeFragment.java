@@ -48,8 +48,15 @@ public class HomeFragment extends Fragment {
     private PostViewModel postViewModel;
     private PostAdapter adapter;
     private ImageView commentIcon;
+    private Post shimmerPost = new Post();
+    {
+        shimmerPost.setTitle("██████████████");
+        shimmerPost.setAuthor("███████");
+        shimmerPost.setMessage("██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████");
+        shimmerPost.setHashtag("█████████");
+    }
 
-    private int currentPost;
+    private int currentPost = 0;
     private int currentEnd = 6;
     private boolean loadMore = false;
 
@@ -95,8 +102,10 @@ public class HomeFragment extends Fragment {
         postViewModel.getAllPosts().observe(getViewLifecycleOwner(), new Observer<List<Post>>() {
             @Override
             public void onChanged(List<Post> posts) {
-                if (posts.size() == 0)
+                if (posts.size() == 0) {
+                    addShimmer();
                     queryPosts(6, -1);
+                }
             }
         });
 
@@ -194,6 +203,7 @@ public class HomeFragment extends Fragment {
                         @Override
                         public void run() {
                             //UPDATE UI
+                            postViewModel.delete(shimmerPost);
                             for (Post j: allPosts) {
                                 postViewModel.insert(j);
                                 currentPost = (int) j.getId();
@@ -207,6 +217,12 @@ public class HomeFragment extends Fragment {
         loadMore = false;
         allPosts.clear();
         thread.start();
+    }
+
+
+    private void addShimmer(){
+        Log.d("HelloShimmer", "Shimmer " + String.valueOf(adapter.shimmer));
+        postViewModel.insert(shimmerPost);
     }
 
 //    private void goToCommentSection(){
