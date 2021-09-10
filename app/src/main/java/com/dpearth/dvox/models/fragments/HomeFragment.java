@@ -203,7 +203,10 @@ public class HomeFragment extends Fragment {
                         @Override
                         public void run() {
                             //UPDATE UI
-                            postViewModel.delete(shimmerPost);
+
+                            if (isShimmer(adapter.getPostAt(0)))
+                                postViewModel.delete(adapter.getPostAt(0));
+//                            postViewModel.deleteAllPosts();
                             for (Post j: allPosts) {
                                 postViewModel.insert(j);
                                 currentPost = (int) j.getId();
@@ -219,6 +222,12 @@ public class HomeFragment extends Fragment {
         thread.start();
     }
 
+    //TODO: Revaz, please convert those shimmer strings into static strings.
+    private boolean isShimmer(Post post){
+        if (post.getAuthor().equals("███████"))
+            return true;
+        return false;
+    }
 
     private void addShimmer(){
         Log.d("HelloShimmer", "Shimmer " + String.valueOf(adapter.shimmer));

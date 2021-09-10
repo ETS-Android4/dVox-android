@@ -66,8 +66,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>   
         notifyDataSetChanged();//We will change the method later
     }
 
-    public void shimmerToggle() {
-        this.shimmer = !this.shimmer;
+    public Post getPostAt(int position){
+        return posts.get(position);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -98,10 +98,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>   
             tvHashtag.setText(post.getHashtag());
             tvCommentNumber.setText(String.valueOf(post.getCommentCount()));
 
-
             String uri = "drawable/" + stringToAvatar(post.getAuthor()).toLowerCase();
 
-            if (uri.equals("drawable/hacker"))
+            if (uri.equals("drawable/hacker") && post.getAuthor().equals("███████"))
                 uri = "drawable/black_square";
 
             int imageResource = context.getResources().getIdentifier(uri, null, context.getPackageName());
