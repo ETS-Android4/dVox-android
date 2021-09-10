@@ -26,8 +26,8 @@
 
     <TextView
         android:id="@+id/comment_author"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="224dp"
+        android:layout_height="21dp"
         android:fontFamily="@font/montserrat_bold"
         android:maxLines="1"
         android:text="Author of the comment"

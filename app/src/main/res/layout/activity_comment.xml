@@ -58,7 +58,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <TextView
-                    android:id="@+id/cs_post_author"
+                    android:id="@+id/acPostAuthor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat_regular"
@@ -69,7 +69,7 @@
                     app:layout_constraintStart_toEndOf="@+id/avatar_cardview" />
 
                 <TextView
-                    android:id="@+id/cs_post_title"
+                    android:id="@+id/acPostTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat_bold"
@@ -85,7 +85,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
-                    android:id="@+id/cs_post_message"
+                    android:id="@+id/acPostMessage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_10sdp"
@@ -130,7 +130,7 @@
                         tools:ignore="MissingConstraints" />
 
                     <TextView
-                        android:id="@+id/upvote_number2"
+                        android:id="@+id/acPostUpvotes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_bold"
@@ -148,13 +148,13 @@
                         android:layout_height="wrap_content"
                         android:rotationY="0"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/upvote_number2"
+                        app:layout_constraintStart_toEndOf="@+id/acPostUpvotes"
                         app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/fi_rr_thumbs_down"
                         tools:ignore="MissingConstraints" />
 
                     <TextView
-                        android:id="@+id/downvote_number2"
+                        android:id="@+id/acPostDownvotes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_bold"
@@ -166,7 +166,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/hashtag_text2"
+                        android:id="@+id/acPostHashtag"
                         android:layout_width="@dimen/_100sdp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/_10sdp"
@@ -189,7 +189,9 @@
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
+                        android:layout_height="match_parent"
+                        tools:layout_editor_absoluteX="0dp"
+                        tools:layout_editor_absoluteY="0dp" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
