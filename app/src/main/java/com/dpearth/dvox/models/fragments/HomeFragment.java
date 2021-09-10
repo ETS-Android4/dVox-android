@@ -83,7 +83,7 @@ public class HomeFragment extends Fragment {
 
         postViewModel = new ViewModelProvider(getActivity()).get(PostViewModel.class);
 
-        adapter = new PostAdapter(getContext(), allPosts);//getContext(), allPosts -> as pars
+        adapter = new PostAdapter(this, allPosts);//getContext(), allPosts -> as pars
         recyclerView.setAdapter(adapter);
 
 

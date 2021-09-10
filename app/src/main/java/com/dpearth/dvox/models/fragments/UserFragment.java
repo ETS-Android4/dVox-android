@@ -1,6 +1,7 @@
 package com.dpearth.dvox.models.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -18,6 +19,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dpearth.dvox.LoginActivity;
 import com.dpearth.dvox.R;
 import com.dpearth.dvox.databinding.FragmentUserBinding;
 import com.dpearth.dvox.livedata.User;
@@ -62,7 +64,6 @@ public class UserFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 //        ActivityMainBinding binding = DataBindingUtil.setContentView(getActivity(), R.layout.activity_main);
-
 
         /*  Button for Regenerating a new name  */
         generateButton = getActivity().findViewById(R.id.generate_button);

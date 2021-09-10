@@ -9,12 +9,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dpearth.dvox.CommentActivity;
 import com.dpearth.dvox.LoginActivity;
 import com.dpearth.dvox.MainActivity;
 import com.dpearth.dvox.R;
+import com.dpearth.dvox.smartcontract.Comment;
 import com.dpearth.dvox.smartcontract.Post;
 
 import java.util.Collections;
@@ -23,13 +25,15 @@ import java.util.List;
 //Todo: Go to comment view when post card is pressed
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>   {
 
+    private Fragment fragment;
     private Context context;
     private List<Post> posts;
 
     public boolean shimmer = true;
 
-    public PostAdapter(Context context, List<Post> posts){
-        this.context = context;
+    public PostAdapter(Fragment fragment, List<Post> posts){
+        this.fragment = fragment;
+        this.context = fragment.getContext();
         this.posts = Collections.unmodifiableList(posts);
     }
 
@@ -113,24 +117,22 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>   
                 @Override
                 public void onClick(View v) {
                     //todo: figure out openeing xml file onClick
-                    Intent intent = new Intent(String.valueOf(CommentActivity.class));
-                    context.startActivity(intent);
+                    Intent intent = new Intent(fragment.getActivity(), CommentActivity.class);
+                    fragment.startActivity(intent);
                 }
             });
 
 //            upvoteButton.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
-//                    Intent intent = new Intent(String.valueOf(CommentActivity.class));
-//                    context.startActivity(intent);
+
 //                }
 //            });
 //
 //            downvoteButton.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
-//                    Intent intent = new Intent(String.valueOf(CommentActivity.class));
-//                    context.startActivity(intent);
+
 //                }
 //            });
 

@@ -66,18 +66,10 @@ public class AddFragment extends Fragment {
             post_author = getActivity().findViewById(R.id.post_author);
             imageView2 = getActivity().findViewById(R.id.avatar_addfragment);
 
-
-
-
             int imageResource =getActivity().getResources().getIdentifier(Avatar_string, null, getActivity().getPackageName());
             imageView2.setImageResource(imageResource);
 
-
             post_author.setText(usernameInstance.getUsernameString());
-
-
-
-
 
             // !!! Hashtag
 //            String input = hashtag.getText().toString();
