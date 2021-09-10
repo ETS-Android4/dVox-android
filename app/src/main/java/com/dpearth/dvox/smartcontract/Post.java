@@ -7,6 +7,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ import jnr.ffi.mapper.DataConverter;
  */
 
 @Entity(tableName = "post_table")
-public class Post {
+public class Post implements Serializable {
 
     @PrimaryKey(autoGenerate = true)//We might change that into false because we already have ids
     private long id;
@@ -40,7 +41,6 @@ public class Post {
     /* Constructor for @Entity */
     //////////////////
     public Post(String title, String author, String message, String hashtag) {
-
         this.id = id;
 
         this.title = title;
@@ -50,7 +50,6 @@ public class Post {
 
         this.commentCount = 0;
         this.ban = false;
-
     }
 
     //////////////////

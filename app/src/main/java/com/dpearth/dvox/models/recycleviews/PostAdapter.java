@@ -2,6 +2,7 @@ package com.dpearth.dvox.models.recycleviews;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import com.dpearth.dvox.R;
 import com.dpearth.dvox.smartcontract.Comment;
 import com.dpearth.dvox.smartcontract.Post;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
@@ -116,8 +118,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>   
             commentButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //todo: figure out openeing xml file onClick
+                    //Get new activity
                     Intent intent = new Intent(fragment.getActivity(), CommentActivity.class);
+
+                    //Create bundle to pass the object to the activity
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("Post", (Serializable) post);
+                    intent.putExtras(bundle);
+
+                    //Start activity
                     fragment.startActivity(intent);
                 }
             });
