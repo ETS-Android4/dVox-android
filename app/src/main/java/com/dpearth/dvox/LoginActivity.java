@@ -61,12 +61,14 @@ public class LoginActivity extends AppCompatActivity {
         //Checking to see if phone is rooted
         if (isRootGiven()){
             super.onCreate(savedInstanceState);
+            setTheme(R.style.LoginTheme_ProjectDIES);
             setContentView(R.layout.phone_is_rooted);
             Log.d("Rooted Phone", "onCreate: Phone is rooted. Can't access the app");
         } else {
 
             //Create login activity
             super.onCreate(savedInstanceState);
+            setTheme(R.style.LoginTheme_ProjectDIES);
             setContentView(R.layout.activity_login);
 
             //Assign buttons

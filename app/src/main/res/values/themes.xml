@@ -65,4 +65,10 @@
         <item name="stLength">SHORT</item> LONG or SHORT
         <item name="stRadius">20dp</item>
     </style>
+
+    <style name="splashScreenTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_image</item>
+        <item name="android:statusBarColor">@color/BlackColor</item>
+    </style>
+
 </resources>

@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         //Get shared preferences and put new APIs there
         SharedPreferences preferencesKeys = getSharedPreferences("pref", Context.MODE_PRIVATE);
         getAPIs(preferencesKeys);
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         super.onCreate(savedInstanceState);
+        setTheme(R.style.LoginTheme_ProjectDIES);
         setContentView(R.layout.activity_main);
             bottomNavigationView = findViewById(R.id.bottom_navigation);
             bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
