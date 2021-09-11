@@ -15,6 +15,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.dpearth.dvox.firebasedata.APIs;
 import com.dpearth.dvox.models.fragments.AddFragment;
 import com.dpearth.dvox.models.fragments.HomeFragment;
@@ -27,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText postTitle, postTheme, postContent;
     private TextView postAuthor;
-    private Button buttonSave;
+    private Button createButton;
 
     public static final String USERNAME_PREFS = "usernamePrefs";
 
@@ -92,28 +94,57 @@ public class MainActivity extends AppCompatActivity {
         public void run() {
 
             //Fetching String values from ADD page
+            createButton = findViewById(R.id.createButton);
             postTitle = findViewById(R.id.post_title);
             postTheme = findViewById(R.id.hashtag);
             postContent = findViewById(R.id.content_post);
             postAuthor = findViewById(R.id.post_author);
-            buttonSave = findViewById(R.id.verify_button);
+            createButton = findViewById(R.id.createButton);
 
             String title = postTitle.getText().toString();
-            String theme = postTheme.getText().toString();
+            String hashtag = postTheme.getText().toString();
             String content = postContent.getText().toString();
-            String author = postAuthor.getText().toString();
 
-            //<-- Create POST -->\\
-            SharedPreferences preferences = getSharedPreferences("pref", Context.MODE_PRIVATE);
-            SmartContract smartContract = new SmartContract(preferences);
-            smartContract.createPost(title, author, content, theme);
+            if (title.equals(""))
+                shakeTitle();
+            if (hashtag.equals(""))
+                shakeHashtag();
+            if (content.equals("")){
+                shakeMessage();
+            }
 
-            //ToDo Clearing fields after Posting
+            if (!title.equals("") && !hashtag.equals("") && !content.equals("")) {
+                createButton.setEnabled(false);
+
+                String author = postAuthor.getText().toString();
+
+                //<-- Create POST -->\\
+                SharedPreferences preferences = getSharedPreferences("pref", Context.MODE_PRIVATE);
+                SmartContract smartContract = new SmartContract(preferences);
+                smartContract.createPost(title, author, content, hashtag);
+
+                postTheme.setText("");
+                postTitle.setText("");
+                postContent.setText("");
+
+                createButton.setEnabled(true);
+            }
 
             //Todo Toast "You have successfully Posted" or "R U sure about that post?"
         }
     }
 
+    private void shakeMessage(){
+        YoYo.with(Techniques.Shake).playOn(findViewById(R.id.content_post));
+
+    }
+    private void shakeTitle(){
+        YoYo.with(Techniques.Shake).playOn(findViewById(R.id.post_title));
+
+    }
+    private void shakeHashtag(){
+        YoYo.with(Techniques.Shake).playOn(findViewById(R.id.hashtag));
+    }
 
     /**
      * Gets new API keys by resetting them and getting new.

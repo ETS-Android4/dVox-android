@@ -35,11 +35,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.muddzdev.styleabletoast.StyleableToast;
-
-import org.web3j.crypto.Credentials;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -74,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
 
             //Assign buttons
             emailInput = findViewById(R.id.email_input);
-            verifyButton = findViewById(R.id.verify_button);
+            verifyButton = findViewById(R.id.createButton);
 
             //Need to instantiate fStore
             fstore = FirebaseFirestore.getInstance();

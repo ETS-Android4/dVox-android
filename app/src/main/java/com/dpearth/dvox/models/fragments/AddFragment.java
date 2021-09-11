@@ -17,6 +17,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Scroller;
 import android.widget.TextView;
+
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.dpearth.dvox.R;
 import android.R.layout;
 
@@ -112,14 +115,14 @@ public class AddFragment extends Fragment {
 
                     }
 
-                    word_counter.setText("Words: " + wordCounter);
+                    word_counter.setText(wordCounter + " words");
                 }
 
                 @Override
                 public void afterTextChanged(Editable s) {
 
                 }
-                
+
 
             });
 
@@ -155,6 +158,7 @@ public class AddFragment extends Fragment {
 
 
         }
+
         public String stringToAvatar(String username){
             String[] array = username.split("_");
 
