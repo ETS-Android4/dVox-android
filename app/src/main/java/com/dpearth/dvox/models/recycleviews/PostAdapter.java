@@ -14,10 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dpearth.dvox.CommentActivity;
-import com.dpearth.dvox.LoginActivity;
-import com.dpearth.dvox.MainActivity;
 import com.dpearth.dvox.R;
-import com.dpearth.dvox.smartcontract.Comment;
 import com.dpearth.dvox.smartcontract.Post;
 
 import java.io.Serializable;
@@ -96,13 +93,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>   
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             // Get all UI (view) elements
-            tvTitle = itemView.findViewById(R.id.title_text);
-            tvAuthor = itemView.findViewById(R.id.author_text);
-            tvMessage = itemView.findViewById(R.id.message_text);
-            tvHashtag = itemView.findViewById(R.id.hashtag_text);
-            tvCommentNumber = itemView.findViewById(R.id.comment_number);
+            tvTitle = itemView.findViewById(R.id.acPostTitle);
+            tvAuthor = itemView.findViewById(R.id.acPostAuthor);
+            tvMessage = itemView.findViewById(R.id.acPostMessage);
+            tvHashtag = itemView.findViewById(R.id.acPostHashtag);
+            tvCommentNumber = itemView.findViewById(R.id.acPostComments);
             tvAvatar = itemView.findViewById(R.id.avatar_image);
-            commentButton = itemView.findViewById(R.id.comment_button);
+            commentButton = itemView.findViewById(R.id.acCommentButton);
             upvoteButton = itemView.findViewById(R.id.upvote_button);
             downvoteButton = itemView.findViewById(R.id.downvote_button);
         }
