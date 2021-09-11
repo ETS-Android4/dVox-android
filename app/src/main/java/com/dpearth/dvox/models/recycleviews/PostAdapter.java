@@ -3,6 +3,7 @@ package com.dpearth.dvox.models.recycleviews;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dpearth.dvox.CommentActivity;
 import com.dpearth.dvox.R;
+import com.dpearth.dvox.livedata.Votes;
 import com.dpearth.dvox.smartcontract.Post;
 
 import java.io.Serializable;
@@ -89,6 +91,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>   
         private ImageView commentButton;
         private ImageView upvoteButton;
         private ImageView downvoteButton;
+        private TextView upvotes;
+        private TextView downvotes;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -102,6 +106,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>   
             commentButton = itemView.findViewById(R.id.acCommentButton);
             upvoteButton = itemView.findViewById(R.id.upvote_button);
             downvoteButton = itemView.findViewById(R.id.downvote_button);
+            upvotes = itemView.findViewById(R.id.acPostUpvotes);
+            downvotes = itemView.findViewById(R.id.acPostDownvotes);
         }
 
         public void bind(Post post) {
@@ -128,19 +134,25 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>   
                 }
             });
 
+
+            Votes votes = new Votes(3);
+            votes.getVotesFireStore(true);
+            upvotes.setText(String.valueOf(votes.getUpvotes()));
+
 //            upvoteButton.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
-
+//
 //                }
 //            });
 //
 //            downvoteButton.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
-
+//
 //                }
 //            });
+
 
             String uri = "drawable/" + stringToAvatar(post.getAuthor()).toLowerCase();
 
