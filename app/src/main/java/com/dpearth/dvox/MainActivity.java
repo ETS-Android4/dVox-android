@@ -31,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView postAuthor;
     private Button createButton;
 
+    private String currentFragment = "";
+    
     public static final String USERNAME_PREFS = "usernamePrefs";
 
 
@@ -48,10 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
         Username usernameInstance = new Username(this);
         usernameInstance.retrieveUsername(true);
-
-
-
-
+        
         super.onCreate(savedInstanceState);
         setTheme(R.style.LoginTheme_ProjectDIES);
         setContentView(R.layout.activity_main);
@@ -62,22 +61,32 @@ public class MainActivity extends AppCompatActivity {
                     Fragment fragment;
                     switch (menuItem.getItemId()) {
                         case R.id.ic_add:
-                            fragment = new ComposeFragment();
+                            if (currentFragment != "compose") {
+                                fragment = new ComposeFragment();
+                                fragmentManager.beginTransaction().replace(R.id.fl_wrapper, fragment).commit();
+                            }
+                            currentFragment = "compose";
                             break;
                         case R.id.ic_user:
-                            fragment = new UserFragment();
+                            if (currentFragment != "user") {
+                                fragment = new UserFragment();
+                                fragmentManager.beginTransaction().replace(R.id.fl_wrapper, fragment).commit();
+                            }
+                            currentFragment = "user";
                             break;
                         default:
-                            fragment = new HomeFragment();
+                            if (currentFragment != "home") {
+                                fragment = new HomeFragment();
+                                fragmentManager.beginTransaction().replace(R.id.fl_wrapper, fragment).commit();
+                            }
+                            currentFragment = "home";
                             break;
                     }
                     //I think this needs to change into Home Fragment
-                    fragmentManager.beginTransaction().replace(R.id.fl_wrapper, fragment).commit();
                     return true;
                 }
             });
             bottomNavigationView.setSelectedItemId(R.id.ic_home);
-
         }
 
 
