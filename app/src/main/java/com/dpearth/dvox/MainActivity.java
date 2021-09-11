@@ -18,7 +18,7 @@ import android.widget.TextView;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.dpearth.dvox.firebasedata.APIs;
-import com.dpearth.dvox.models.fragments.AddFragment;
+import com.dpearth.dvox.models.fragments.ComposeFragment;
 import com.dpearth.dvox.models.fragments.HomeFragment;
 import com.dpearth.dvox.models.fragments.UserFragment;
 import com.dpearth.dvox.smartcontract.SmartContract;
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                     Fragment fragment;
                     switch (menuItem.getItemId()) {
                         case R.id.ic_add:
-                            fragment = new AddFragment();
+                            fragment = new ComposeFragment();
                             break;
                         case R.id.ic_user:
                             fragment = new UserFragment();

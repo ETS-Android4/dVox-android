@@ -149,7 +149,6 @@
                         android:layout_height="@dimen/_40sdp"
                         android:fontFamily="@font/montserrat_bold"
                         android:insetRight="0dp"
-                        android:onClick="startCreatePostThread"
                         android:scaleX="1.5"
                         android:scaleY="1.5"
                         android:text="Create Post"

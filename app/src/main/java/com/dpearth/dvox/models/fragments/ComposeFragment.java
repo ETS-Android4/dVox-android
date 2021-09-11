@@ -1,0 +1,230 @@
+package com.dpearth.dvox.models.fragments;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Scroller;
+import android.widget.TextView;
+
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+import com.dpearth.dvox.LoginActivity;
+import com.dpearth.dvox.R;
+import android.R.layout;
+import android.widget.Toast;
+
+import com.dpearth.dvox.smartcontract.Post;
+import com.dpearth.dvox.smartcontract.SmartContract;
+import com.dpearth.dvox.username.Username;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.muddzdev.styleabletoast.StyleableToast;
+
+
+public class ComposeFragment extends Fragment {
+
+     private TextView word_counter, authorView;
+     private EditText titleView, messageView, hashtagView;
+     private ImageView imageView2;
+     private Username usernameInstance;
+     private String Avatar_string;
+     private Button create_button;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        super.onCreateView(inflater,container,savedInstanceState);
+        usernameInstance = new Username(getActivity());
+        usernameInstance.retrieveUsername(true);
+
+        Avatar_string = "drawable/" + stringToAvatar(usernameInstance.getUsernameString()).toLowerCase();
+
+
+        View rootView = inflater.inflate(R.layout.compose_fragment, container, false);
+        return rootView;
+
+
+    }
+
+
+        public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+            word_counter = getActivity().findViewById(R.id.word_counter);
+            titleView = getActivity().findViewById(R.id.post_title);
+            messageView = getActivity().findViewById(R.id.content_post);
+            hashtagView = getActivity().findViewById(R.id.hashtag);
+            authorView = getActivity().findViewById(R.id.post_author);
+            imageView2 = getActivity().findViewById(R.id.avatar_addfragment);
+            create_button = getActivity().findViewById(R.id.createButton);
+
+            int imageResource =getActivity().getResources().getIdentifier(Avatar_string, null, getActivity().getPackageName());
+            imageView2.setImageResource(imageResource);
+
+            authorView.setText(usernameInstance.getUsernameString());
+
+            messageView.addTextChangedListener(new TextWatcher() {
+
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    String text = messageView.getText().toString();
+
+                    int wordCounter = 0;
+
+                    char ch[]= new char[text.length()];
+                    for(int i=0;i<text.length();i++) {
+                        ch[i]= text.charAt(i);
+                        if( ((i>0)&&(ch[i]!=' ')&&(ch[i-1]==' ')) || ((ch[0]!=' ')&&(i==0)) )
+                            wordCounter++;
+
+                    }
+
+                    word_counter.setText(wordCounter + " words");
+                }
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+
+            hashtagView.addTextChangedListener(new TextWatcher() {
+
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+
+                }
+            });
+
+            create_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    createPost(titleView.getText().toString(), authorView.getText().toString(), messageView.getText().toString(), hashtagView.getText().toString());
+                }
+            });
+
+
+        }
+
+        public String stringToAvatar(String username){
+            String[] array = username.split("_");
+
+            if (array.length == 3){
+             return array[1];
+            } else if (array.length == 4){
+             return array[1] + "_" + array[2];
+            } else {
+             return "Hacker";
+            }
+    }
+
+    /**
+     * Creates a new post.
+     *
+     * @param title - string title of the post
+     * @param author - string author of the post
+     * @param message - string message of the post
+     * @param hashtag - string hashtag of the post
+     */
+    private void createPost(String title, String author, String message, String hashtag) {
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // ################# GET ALL POSTS #################//
+                SharedPreferences preferences = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
+
+                while (preferences.getString("credentials", "error").equals("error") ||
+                        preferences.getString("contractAddress", "error").equals("error") ||
+                        preferences.getString("credentials", "error").equals("error")) {
+                    try {
+                        Thread.sleep(250);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                SmartContract contract = new SmartContract(preferences);
+
+                contract.createPost(title, author, message, hashtag);
+
+                // ################# GET ALL POSTS #################//
+
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            titleView.setText("");
+                            messageView.setText("");
+                            hashtagView.setText("");
+                            StyleableToast.makeText(getActivity(), "Your post is sent! It will appear in our decentralized storage soon.", Toast.LENGTH_LONG, R.style.LoginToast).show();
+                            create_button.setEnabled(true);
+                            create_button.setTextColor(ContextCompat.getColor(getContext(), R.color.BlackColor));
+                        }
+                    });
+                }
+            }
+        });
+
+        if (title.equals(""))
+            shakeTitle();
+        if (hashtag.equals(""))
+            shakeHashtag();
+        if (message.equals("")){
+            shakeMessage();
+        }
+
+        if (!title.equals("") && !hashtag.equals("") && !message.equals("")) {
+            create_button.setEnabled(false);
+            create_button.setTextColor(ContextCompat.getColor(getContext(), R.color.GreyColor));
+            thread.start();
+        }
+    }
+
+    private void shakeMessage(){
+        YoYo.with(Techniques.Shake).playOn(getActivity().findViewById(R.id.content_post));
+
+    }
+    private void shakeTitle(){
+        YoYo.with(Techniques.Shake).playOn(getActivity().findViewById(R.id.post_title));
+
+    }
+    private void shakeHashtag(){
+        YoYo.with(Techniques.Shake).playOn(getActivity().findViewById(R.id.hashtag));
+    }
+
+}
+
+
+

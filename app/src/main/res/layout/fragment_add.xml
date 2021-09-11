@@ -7,7 +7,7 @@
     android:background="@color/BlackColor"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context="com.dpearth.dvox.models.fragments.AddFragment">
+    tools:context="com.dpearth.dvox.models.fragments.ComposeFragment">
 
 
     <androidx.cardview.widget.CardView
