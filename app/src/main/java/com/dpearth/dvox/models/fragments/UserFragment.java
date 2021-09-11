@@ -24,6 +24,7 @@ import com.dpearth.dvox.R;
 import com.dpearth.dvox.databinding.FragmentUserBinding;
 import com.dpearth.dvox.livedata.User;
 import com.dpearth.dvox.username.Username;
+import com.muddzdev.styleabletoast.StyleableToast;
 
 
 public class UserFragment extends Fragment {
@@ -118,6 +119,9 @@ public class UserFragment extends Fragment {
         SharedPreferences.Editor editor = sharedPreferences.edit().putString(USERNAME_PREFS, username);
 
         editor.apply();
+
+        StyleableToast.makeText(getActivity(), "Profile saved!", Toast.LENGTH_SHORT, R.style.LoginToast).show();
+
     }
 
     private void abortRegeneration(){
@@ -133,7 +137,6 @@ public class UserFragment extends Fragment {
 
         editor.apply();
 
-        Toast.makeText(getActivity(), "Data Saved", Toast.LENGTH_SHORT).show();
     }
 
     private void regenerateUsername() {
@@ -145,7 +148,6 @@ public class UserFragment extends Fragment {
 
         binding.setUser(new User(username));
 
-        Toast.makeText(getActivity(), "Data Saved", Toast.LENGTH_SHORT).show();
     }
 
     public void loadData(){

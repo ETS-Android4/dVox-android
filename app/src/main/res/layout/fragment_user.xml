@@ -19,10 +19,10 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/_20sdp"
-            android:layout_marginRight="@dimen/_10sdp"
             android:layout_marginLeft="@dimen/_10sdp"
-            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_15sdp"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="@dimen/_12sdp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -44,48 +44,53 @@
                     android:text="Your Profile"
                     android:textAlignment="viewStart"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_20sdp"
+                    android:textSize="@dimen/_16sdp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
                     android:id="@+id/imageView2"
-                    android:layout_width="@dimen/_50sdp"
-                    android:layout_height="@dimen/_50sdp"
+                    android:layout_width="@dimen/_45sdp"
+                    android:layout_height="@dimen/_45sdp"
                     android:layout_marginStart="@dimen/_20sdp"
+                    android:src="@{user.image, default=@drawable/hacker}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView2"
-                    android:src="@{user.image, default=@drawable/hacker}" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
                 <TextView
                     android:id="@+id/profile_username"
-                    android:layout_width="@dimen/_180sdp"
-                    android:layout_height="@dimen/_50sdp"
-                    android:layout_marginStart="@dimen/_3sdp"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginLeft="@dimen/_10sdp"
                     android:layout_marginRight="@dimen/_20sdp"
                     android:fontFamily="@font/montserrat_bold"
-                    android:gravity="center"
+                    android:gravity="center_vertical"
                     android:maxLines="1"
                     android:text="@{user.name}"
-                    android:textAlignment="center"
+                    android:textAlignment="textStart"
                     android:textColor="@color/black"
+                    android:textSize="@dimen/_16ssp"
                     app:autoSizeTextType="uniform"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toEndOf="@+id/imageView2"
                     app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
+                <View
+                    android:id="@+id/divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:background="?android:attr/listDivider"
+                    app:layout_constraintBottom_toBottomOf="@+id/profile_username"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/profile_username" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="@dimen/_12sdp"
-                android:layout_marginTop="@dimen/_125sdp"
-                android:layout_marginRight="@dimen/_12sdp"
-                android:background="@color/GreyColor" />
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -105,7 +110,7 @@
                     android:gravity="center"
                     android:text="Statistics"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_20sdp"
+                    android:textSize="@dimen/_16sdp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -118,8 +123,9 @@
                     android:height="@dimen/_30sdp"
                     android:fontFamily="@font/montserrat_regular"
                     android:gravity="center"
-                    android:text="Posts Created: 0"
-                    android:textSize="@dimen/_12sdp"
+                    android:text="Posts created: 0"
+                    android:textColor="@color/BlackColor"
+                    android:textSize="@dimen/_11ssp"
                     app:layout_constraintStart_toEndOf="@+id/imageView3"
                     app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
@@ -132,8 +138,9 @@
                     android:height="@dimen/_30sdp"
                     android:fontFamily="@font/montserrat_regular"
                     android:gravity="center"
-                    android:text="Posts Upvoted: 0"
-                    android:textSize="@dimen/_12sdp"
+                    android:text="Posts upvoted: 0"
+                    android:textColor="@color/BlackColor"
+                    android:textSize="@dimen/_11ssp"
                     app:layout_constraintStart_toEndOf="@+id/imageView5"
                     app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
@@ -146,8 +153,9 @@
                     android:height="@dimen/_30sdp"
                     android:fontFamily="@font/montserrat_regular"
                     android:gravity="center"
-                    android:text="Posts Downvoted: 0"
-                    android:textSize="@dimen/_12sdp"
+                    android:text="Posts downvoted: 0"
+                    android:textColor="@color/BlackColor"
+                    android:textSize="@dimen/_11ssp"
                     app:layout_constraintStart_toEndOf="@+id/imageView4"
                     app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
@@ -161,16 +169,17 @@
                     android:height="@dimen/_30sdp"
                     android:fontFamily="@font/montserrat_regular"
                     android:gravity="center"
-                    android:text="Comments Added: 0"
-                    android:textSize="@dimen/_12sdp"
+                    android:text="Comments added: 0"
+                    android:textColor="@color/BlackColor"
+                    android:textSize="@dimen/_11ssp"
                     app:layout_constraintStart_toEndOf="@+id/imageView7"
                     app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
 
                 <ImageView
                     android:id="@+id/imageView3"
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_15sdp"
                     android:layout_marginStart="@dimen/_20sdp"
                     app:layout_constraintBottom_toBottomOf="@+id/textView4"
                     app:layout_constraintStart_toStartOf="parent"
@@ -179,18 +188,18 @@
 
                 <ImageView
                     android:id="@+id/imageView4"
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_15sdp"
                     android:layout_marginStart="@dimen/_20sdp"
                     app:layout_constraintBottom_toBottomOf="@+id/textView6"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/textView6"
-                    app:srcCompat="@drawable/fi_rr_thumbs_up" />
+                    app:srcCompat="@drawable/fi_rr_thumbs_down" />
 
                 <ImageView
                     android:id="@+id/imageView5"
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_15sdp"
                     android:layout_marginStart="@dimen/_20sdp"
                     app:layout_constraintBottom_toBottomOf="@+id/textView5"
                     app:layout_constraintStart_toStartOf="parent"
@@ -199,8 +208,8 @@
 
                 <ImageView
                     android:id="@+id/imageView7"
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_15sdp"
                     android:layout_marginStart="@dimen/_20sdp"
                     app:layout_constraintBottom_toBottomOf="@+id/textView7"
                     app:layout_constraintStart_toStartOf="parent"
@@ -212,9 +221,9 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_50sdp"
+                android:layout_gravity="bottom"
                 app:layout_constraintBottom_toBottomOf="parent"
-                tools:layout_editor_absoluteX="-16dp"
-                android:layout_gravity="bottom">
+                tools:layout_editor_absoluteX="-16dp">
 
                 <Button
                     android:id="@+id/generate_button"
@@ -225,50 +234,81 @@
                     android:insetRight="0dp"
                     android:scaleX="1.5"
                     android:scaleY="1.5"
-                    android:text="Generate New Name"
+                    android:text="Regenerate Profile"
                     android:textColor="@color/BlackColor"
+                    android:visibility="visible"
                     app:elevation="0dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    tools:ignore="MissingConstraints,DuplicateClickableBoundsCheck"
-                    android:visibility="visible"/>
+                    tools:ignore="MissingConstraints,DuplicateClickableBoundsCheck" />
 
-                <Button
-                    android:id="@+id/cancel_button"
-                    style="@style/Widget.AppCompat.Button.Borderless"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cancelCard"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:fontFamily="@font/montserrat_bold"
-                    android:insetRight="0dp"
-                    android:scaleX="1.5"
-                    android:scaleY="1.5"
-                    android:text="Cancel"
-                    android:textColor="@color/BlackColor"
-                    android:visibility="gone"
-                    app:elevation="0dp"
-                    app:layout_constraintEnd_toStartOf="@+id/save_button"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    tools:ignore="MissingConstraints" />
-
-                <Button
-                    android:id="@+id/save_button"
-                    style="@style/Widget.AppCompat.Button.Borderless"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:fontFamily="@font/montserrat_bold"
-                    android:insetRight="0dp"
-                    android:scaleX="1.5"
-                    android:scaleY="1.5"
-                    android:text="Save"
-                    android:textColor="@color/BlackColor"
-                    android:visibility="gone"
-                    app:elevation="0dp"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="@dimen/_12sdp"
+                    app:cardElevation="0dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/cancel_button"
-                    tools:ignore="MissingConstraints" />
+                    app:layout_constraintHorizontal_bias="0.75"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <Button
+                        android:id="@+id/cancel_button"
+                        style="@style/Widget.AppCompat.Button.Borderless"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:scaleX="1.5"
+                        android:scaleY="1.5"
+                        android:text="Cancel"
+                        android:textAlignment="center"
+                        android:textColor="@color/BlackColor"
+                        android:visibility="gone"
+                        app:elevation="0dp"
+                        app:layout_constraintEnd_toStartOf="@+id/save_button"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        tools:ignore="MissingConstraints" />
+
+                </androidx.cardview.widget.CardView>
+
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/saveCard"
+                    android:layout_width="@dimen/_70sdp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_20sdp"
+                    app:cardCornerRadius="@dimen/_12sdp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/cancelCard"
+                    app:layout_constraintHorizontal_bias="0.25"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+
+                    <Button
+                        android:id="@+id/save_button"
+                        style="@style/Widget.AppCompat.Button.Borderless"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:scaleX="1.5"
+                        android:scaleY="1.5"
+                        android:text="Save"
+                        android:textColor="@color/BlackColor"
+                        android:visibility="gone"
+                        app:elevation="0dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/cancel_button"
+                        tools:ignore="MissingConstraints" />
+
+                </androidx.cardview.widget.CardView>
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
