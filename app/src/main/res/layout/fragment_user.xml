@@ -229,7 +229,7 @@
                     android:id="@+id/generate_button"
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="@dimen/_50sdp"
                     android:fontFamily="@font/montserrat_bold"
                     android:insetRight="0dp"
                     android:scaleX="1.5"
