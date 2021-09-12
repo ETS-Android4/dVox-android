@@ -7,11 +7,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +26,7 @@ import com.dpearth.dvox.models.recycleviews.PostAdapter;
 import com.dpearth.dvox.smartcontract.Comment;
 import com.dpearth.dvox.smartcontract.Post;
 import com.dpearth.dvox.smartcontract.SmartContract;
+import com.muddzdev.styleabletoast.StyleableToast;
 
 import org.w3c.dom.Text;
 
@@ -46,6 +50,7 @@ public class CommentActivity extends Activity {
     private TextView newMessage;
 
     private ImageView backButton;
+    private Button postButton;
 
     private List<Comment> allComments = new ArrayList<>();
 
@@ -104,6 +109,8 @@ public class CommentActivity extends Activity {
 
         backButton = findViewById(R.id.acBackButton);
 
+        postButton = findViewById(R.id.acPostButton);
+
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,11 +118,20 @@ public class CommentActivity extends Activity {
             }
         });
 
+
         //Assign their values
         postTitle.setText(post.getTitle());
         postAuthor.setText(post.getAuthor());
         postMessage.setText(post.getMessage());
         postHashtag.setText(post.getHashtag());
+
+        postButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createComment(currentUsername, newMessage.getText().toString(), (int) post.getId());
+            }
+        });
+
         //TODO: add upvotes once Revaz is done with Votes class
         //TODO: add downvotes once Revaz is done with Votes class
         String uri = "drawable/" + stringToAvatar(post.getAuthor()).toLowerCase();
@@ -138,7 +154,10 @@ public class CommentActivity extends Activity {
         allComments = new ArrayList<>();
 
         RecyclerView recyclerView = this.findViewById(R.id.acCommentsRecycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
 
         adapter = new CommentAdapter(allComments);//getContext(), allPosts -> as pars
 
@@ -223,7 +242,7 @@ public class CommentActivity extends Activity {
                 SmartContract contract = new SmartContract(preferences);
 
                 int commentCount;
-                int contractPosts = post.getCommentCount();
+                int contractPosts = contract.getPost(post.getId()).getCommentCount();
 
                 if (currentId == -1)
                     commentCount = contractPosts;
@@ -286,13 +305,6 @@ public class CommentActivity extends Activity {
         thread.start();
     }
 
-    //TODO: Revaz, please convert those shimmer strings into static strings.
-    private boolean isShimmer(Comment comment){
-        if (comment.getCommentAuthor().equals("███████"))
-            return true;
-        return false;
-    }
-
     private void addShimmer(){
         shimmerComment.setId(BigInteger.valueOf(0));
         allComments.add(shimmerComment);
@@ -310,6 +322,58 @@ public class CommentActivity extends Activity {
             return array[1] + "_" + array[2];
         } else {
             return "Hacker";
+        }
+    }
+
+    private void createComment(String author, String message, int id) {
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // ################# GET ALL POSTS #################//
+                SharedPreferences preferences = getSharedPreferences("pref", Context.MODE_PRIVATE);
+
+                while (preferences.getString("credentials", "error").equals("error") ||
+                        preferences.getString("contractAddress", "error").equals("error") ||
+                        preferences.getString("credentials", "error").equals("error")) {
+                    try {
+                        Thread.sleep(250);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                SmartContract contract = new SmartContract(preferences);
+
+                realEndID++;
+
+                contract.createComment(author, message, id);
+
+//                postButton.setEnabled(true);
+//                postButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.BlackColor));
+
+                // ################# GET ALL POSTS #################//
+
+                if (this != null) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                        }
+                    });
+                }
+            }
+        });
+
+        if (!message.equals("") && !author.equals("")) {
+//            postButton.setEnabled(false);
+//            postButton.setTextColor(ContextCompat.getColor(this, R.color.TransparentWhiteColor));
+            Comment tempComment = new Comment();
+            tempComment.setId(BigInteger.valueOf(id));
+            tempComment.setCommentAuthor(author);
+            tempComment.setCommentMessage(message);
+            allComments.add(tempComment);
+            adapter.notifyItemInserted(0);
+            thread.start();
         }
     }
 }

@@ -117,10 +117,10 @@ public class PostContract extends Contract {
 
     public RemoteFunctionCall<TransactionReceipt> addComment(BigInteger _postID, String _comment_author, String _comment_message) {
         final Function function = new Function(
-                FUNC_ADDCOMMENT, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Uint256(_postID), 
-                new org.web3j.abi.datatypes.Utf8String(_comment_author), 
-                new org.web3j.abi.datatypes.Utf8String(_comment_message)), 
+                FUNC_ADDCOMMENT,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Uint256(_postID),
+                        new org.web3j.abi.datatypes.Utf8String(_comment_author),
+                        new org.web3j.abi.datatypes.Utf8String(_comment_message)),
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }

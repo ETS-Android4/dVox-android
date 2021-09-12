@@ -137,17 +137,6 @@ public class SmartContract {
         return comment;
     }
 
-    //DOES NOT WORK YET
-    public List<Comment> getAllComments (long postId){
-
-        List<Comment> commentList = new ArrayList<>();
-
-//        for (int i = 0; i < getPost(postId).getCommentCount(); i++) {
-////            RemoteFunctionCall<PostContract> postContractComment = postContract.getComment(BigInteger.valueOf(postId), BigInteger.valueOf(i));
-//        }
-
-        return commentList;
-    }
 
 
 
@@ -195,7 +184,24 @@ public class SmartContract {
         try {
             postContract.createPost(_title, _author, _message, _hashtag).sendAsync().get();
         } catch (Exception error) {
-            Log.d("SMART_CONTRACT_DEBUG", "Add Vote Error: ", error);
+            Log.d("SMART_CONTRACT_DEBUG", "Add Post Error: ", error);
+            return false;
+        }
+        return true;
+    }
+
+    /** Creates a new comment
+     *
+     * @param _author - author of the comment
+     * @param _message - message of the comment
+     * @param id - id of the post
+     *
+     */
+    public boolean createComment(String _author, String _message, int id){
+        try {
+            postContract.addComment(BigInteger.valueOf(id), _author, _message).sendAsync().get();
+        } catch (Exception error) {
+            Log.d("SMART_CONTRACT_DEBUG", "Add Comment Error: ", error);
             return false;
         }
         return true;
