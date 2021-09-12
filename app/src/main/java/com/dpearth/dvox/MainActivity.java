@@ -23,6 +23,7 @@ import com.dpearth.dvox.livedata.PostViewModel;
 import com.dpearth.dvox.models.fragments.ComposeFragment;
 import com.dpearth.dvox.models.fragments.HomeFragment;
 import com.dpearth.dvox.models.fragments.UserFragment;
+import com.dpearth.dvox.smartcontract.Post;
 import com.dpearth.dvox.smartcontract.SmartContract;
 import com.dpearth.dvox.username.Username;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -45,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        //Delete all posts when the app is restarted
+        new PostViewModel(getApplication()).deleteAllPosts();
 
         //Get shared preferences and put new APIs there
         SharedPreferences preferencesKeys = getSharedPreferences("pref", Context.MODE_PRIVATE);

@@ -56,15 +56,12 @@ public class HomeFragment extends Fragment {
         shimmerPost.setHashtag("█████████");
     }
 
-    private int currentPost = 0;
-    private int currentEnd = 6;
     private boolean loadMore = false;
     private  boolean lastPost = false;
 
     private SharedPreferences preferences;
     private int realEndID = 0;
 
-//    private EndlessRecyclerViewScrollListener scrollListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,6 +72,13 @@ public class HomeFragment extends Fragment {
         realEndID = (int) preferences.getLong("postCount", Long.valueOf(0));
 
         Log.d("realEndID", "Real end id: " + realEndID);
+
+        //Get the latest id
+        preferences = getActivity().getSharedPreferences("postCount", Context.MODE_PRIVATE);
+        realEndID = (int) preferences.getLong("postCount", Long.valueOf(0));
+
+        //Check if we can load more posts
+        loadMore();
 
         View view = binding.getRoot();
         return view;
@@ -90,16 +94,13 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
 
+
         postViewModel = new ViewModelProvider(getActivity()).get(PostViewModel.class);
 
         adapter = new PostAdapter(this, allPosts);//getContext(), allPosts -> as pars
         recyclerView.setAdapter(adapter);
 
 
-
-        //todo when refresh apply change
-
-        //        ViewMOdelProviders.of(this) ... is no longer supported >:-(
         postViewModel.getAllPosts().observe(getViewLifecycleOwner(), new Observer<List<Post>>() {
             //This will get triggered everytime live data changes
             @Override
@@ -125,10 +126,10 @@ public class HomeFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
+                setPostCount(0);
                 postViewModel.deleteAllPosts();
+                lastPost = false;
                 swipeRefreshLayout.setRefreshing(false);
-
             }
         });
 
@@ -200,10 +201,10 @@ public class HomeFragment extends Fragment {
                         if (i > 0) {
                             Post post = contract.getPost(i);
                             Log.i("Post loader", "Post:" + post.toString());
-                            allPosts.add(post);
+                            if (!post.isBan())
+                                allPosts.add(post);
 
-
-                            loadMore = true;
+                            loadMore = true; 
                             //TODO Maybe add to database here?
 //                            adapterVERSION2.setPosts(allPosts);
                         }
@@ -224,7 +225,6 @@ public class HomeFragment extends Fragment {
 
                             for (Post j: allPosts) {
                                 postViewModel.insert(j);
-                                currentPost = (int) j.getId();
                                 tempCounter++;
                                 if (j.getId() == 1)
                                     lastPost = true;
@@ -259,14 +259,19 @@ public class HomeFragment extends Fragment {
     }
 
     private int getPostCount(){
-        preferences = getActivity().getSharedPreferences("postCount", Context.MODE_PRIVATE);
-        int count = (int) preferences.getLong("postCount", Long.valueOf(0));
-        return count;
+        //Get the latest id
+        return realEndID;
     }
 
     private void setPostCount(int i){
         SharedPreferences.Editor editor = preferences.edit().putLong("postCount", Long.valueOf(i));
         editor.apply();
+        realEndID = i;
+    }
+
+    private void loadMore(){
+        if (getPostCount() > 0)
+            loadMore = true;
     }
 
 
