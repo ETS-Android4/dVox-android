@@ -59,6 +59,10 @@ public class HomeFragment extends Fragment {
     private int currentPost = 0;
     private int currentEnd = 6;
     private boolean loadMore = false;
+    private  boolean lastPost = false;
+
+    private SharedPreferences preferences;
+    private int realEndID = 0;
 
 //    private EndlessRecyclerViewScrollListener scrollListener;
 
@@ -66,6 +70,11 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
+
+        preferences = getActivity().getSharedPreferences("postCount", Context.MODE_PRIVATE);
+        realEndID = (int) preferences.getLong("postCount", Long.valueOf(0));
+
+        Log.d("realEndID", "Real end id: " + realEndID);
 
         View view = binding.getRoot();
         return view;
@@ -115,9 +124,11 @@ public class HomeFragment extends Fragment {
             @Override
             public void onRefresh() {
 
+                setPostCount(0);
                 postViewModel.deleteAllPosts();
-                currentEnd = 6;
+                lastPost = false;
                 swipeRefreshLayout.setRefreshing(false);
+
             }
         });
 
@@ -132,11 +143,12 @@ public class HomeFragment extends Fragment {
                 Log.d("loading", String.valueOf(lastCompletelyVisibleItemPosition));
 
                 try {
-                    if (lastCompletelyVisibleItemPosition == currentEnd - 1) {
+                    if (lastCompletelyVisibleItemPosition == getPostCount() - 1) {
                         Log.d("loading", "Loading more " + lastCompletelyVisibleItemPosition + " " + loadMore );
-                        if (loadMore == true)
-                            currentEnd = currentEnd + 6;
-                        queryPosts(6, currentPost);
+                        if (loadMore == true && lastPost == false) {
+                            //addShimmer();
+                            queryPosts(6, getPostCount());
+                        }
 
                     }
                 } catch (Exception e){
@@ -173,12 +185,13 @@ public class HomeFragment extends Fragment {
 
                 SmartContract contract = new SmartContract(preferences);
 
-                int postCount = 0;
+                int postCount;
+                int contractPosts = contract.getPostCount();
 
                 if (currentId == -1)
-                    postCount = contract.getPostCount();
+                    postCount = contractPosts;
                 else
-                    postCount = currentId - 1;
+                    postCount = contractPosts - currentId;
 
                 Log.d("Post loader", "Trying to print... in total:" + postCount);
 
@@ -186,7 +199,7 @@ public class HomeFragment extends Fragment {
                     for (int i = postCount; i > postCount - numberOfPosts; i--){
                         if (i > 0) {
                             Post post = contract.getPost(i);
-                            Log.i("Post loader", "Post:" + post.getId());
+                            Log.i("Post loader", "Post:" + post.toString());
                             allPosts.add(post);
 
 
@@ -204,13 +217,23 @@ public class HomeFragment extends Fragment {
                         public void run() {
                             //UPDATE UI
 
+                            int tempCounter = 0;
+
                             if (isShimmer(adapter.getPostAt(0)))
                                 postViewModel.delete(adapter.getPostAt(0));
-//                            postViewModel.deleteAllPosts();
+
                             for (Post j: allPosts) {
                                 postViewModel.insert(j);
                                 currentPost = (int) j.getId();
+                                tempCounter++;
+                                if (j.getId() == 1)
+                                    lastPost = true;
                             }
+                            setPostCount(getPostCount() + tempCounter);
+                            SharedPreferences.Editor editor = preferences.edit().putLong("postCount", Long.valueOf(realEndID));
+                            editor.apply();
+                            Log.d("realEndID", "Real end id: " + realEndID);
+
                         }
                     });
                 }
@@ -231,8 +254,21 @@ public class HomeFragment extends Fragment {
 
     private void addShimmer(){
         Log.d("HelloShimmer", "Shimmer " + String.valueOf(adapter.shimmer));
+        shimmerPost.setId(getPostCount() + 1);
         postViewModel.insert(shimmerPost);
     }
+
+    private int getPostCount(){
+        preferences = getActivity().getSharedPreferences("postCount", Context.MODE_PRIVATE);
+        int count = (int) preferences.getLong("postCount", Long.valueOf(0));
+        return count;
+    }
+
+    private void setPostCount(int i){
+        SharedPreferences.Editor editor = preferences.edit().putLong("postCount", Long.valueOf(i));
+        editor.apply();
+    }
+
 
 //    private void goToCommentSection(){
 //

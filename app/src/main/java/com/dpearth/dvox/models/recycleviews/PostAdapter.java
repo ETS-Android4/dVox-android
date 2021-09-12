@@ -3,6 +3,8 @@ package com.dpearth.dvox.models.recycleviews;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -134,7 +136,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>   
                 }
             });
 
-
             Votes votes = new Votes(3);
             votes.getVotesFireStore(true);
             upvotes.setText(String.valueOf(votes.getUpvotes()));
@@ -152,7 +153,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>   
 //
 //                }
 //            });
-
 
             String uri = "drawable/" + stringToAvatar(post.getAuthor()).toLowerCase();
 

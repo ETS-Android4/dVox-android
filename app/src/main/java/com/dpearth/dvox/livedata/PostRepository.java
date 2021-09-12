@@ -43,6 +43,10 @@ public class PostRepository {
         new DeleteAllPostsPostAsyncTask(postDao).execute();
     }
 
+    public int getPostCount(){
+        return  postDao.getCount();
+    }
+
     public LiveData<List<Post>> getAllPosts() {
         return allPosts;
     }

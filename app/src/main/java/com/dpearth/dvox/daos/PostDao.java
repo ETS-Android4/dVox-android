@@ -14,6 +14,7 @@ import java.util.List;
 @Dao
 public interface PostDao {  //Dao - Data access object
 
+
     @Insert
     void insert(Post post);//Adding to database. I guess
 
@@ -31,4 +32,7 @@ public interface PostDao {  //Dao - Data access object
     @Query("SELECT * FROM post_table ORDER BY id DESC")
     LiveData<List<Post>> getAllPosts();   //Compilter checks if post_table content is compatable with List<Post>
     //List of posts are livedata
+
+    @Query("SELECT COUNT(id) FROM post_table")
+    int getCount();
 }

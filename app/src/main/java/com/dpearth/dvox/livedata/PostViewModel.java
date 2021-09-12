@@ -40,6 +40,10 @@ public class PostViewModel extends AndroidViewModel {
         repository.deleteAllPosts();
     }
 
+    public int getCount(){
+        return repository.getPostCount();
+    }
+
     public LiveData<List<Post>> getAllPosts() {
         return allPosts;
     }
