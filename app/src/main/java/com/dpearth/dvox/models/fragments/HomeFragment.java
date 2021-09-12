@@ -91,15 +91,24 @@ public class HomeFragment extends Fragment {
         RecyclerView recyclerView = getActivity().findViewById(R.id.liveDataRecycleView);//TODO Uncomment rvPosts;
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+
         postViewModel = new ViewModelProvider(getActivity()).get(PostViewModel.class);
 
-        realEndID = allPosts.size();
-
         adapter = new PostAdapter(this, allPosts);//getContext(), allPosts -> as pars
+
         recyclerView.setAdapter(adapter);
 
-        addShimmer();
-        queryPosts(numberOfPostsToLoad, -1);
+        if (postViewModel.getAllPosts().getValue() != null) {
+            allPosts = postViewModel.getAllPosts().getValue();
+
+        } else {
+            realEndID = allPosts.size();
+
+            if (realEndID == 0) {
+                addShimmer();
+                queryPosts(numberOfPostsToLoad, -1);
+            }
+        }
 
 
 
@@ -136,6 +145,7 @@ public class HomeFragment extends Fragment {
 //                lastPost = false;
                     int count = allPosts.size();
                     allPosts.clear();
+                    postViewModel.deleteAllPosts();
                     adapter.notifyItemRangeRemoved(0, count);
                     realEndID = 0;
                     lastPost = false;
@@ -216,6 +226,7 @@ public class HomeFragment extends Fragment {
                             if (!post.isBan()) {
                                 if (thereIsShimmer) {
                                     allPosts.remove(0);
+                                    postViewModel.insert(post);
                                     thereIsShimmer = false;
                                 }
                                 allPosts.add(post);

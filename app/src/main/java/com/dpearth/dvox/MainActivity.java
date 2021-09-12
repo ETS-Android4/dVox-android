@@ -34,6 +34,15 @@ public class MainActivity extends AppCompatActivity {
     private TextView postAuthor;
     private Button createButton;
 
+    private Fragment activeFragment;
+
+    private Fragment homeFragment = new HomeFragment();
+    private Fragment composeFragment = new ComposeFragment();
+    private Fragment userFragment = new UserFragment();
+
+
+
+
     private String currentFragment = "";
     
     public static final String USERNAME_PREFS = "usernamePrefs";
@@ -56,11 +65,24 @@ public class MainActivity extends AppCompatActivity {
 
         Username usernameInstance = new Username(this);
         usernameInstance.retrieveUsername(true);
-        
+
+//        fragmentManager.beginTransaction().add(R.id.fl_wrapper, homeFragment).hide(userFragment).commit();
+//        fragmentManager.beginTransaction().add(R.id.fl_wrapper, composeFragment).hide(userFragment).commit();
+//        fragmentManager.beginTransaction().add(R.id.fl_wrapper, userFragment).hide(userFragment).commit();
+
+
+
         super.onCreate(savedInstanceState);
         setTheme(R.style.LoginTheme_ProjectDIES);
         setContentView(R.layout.activity_main);
-            bottomNavigationView = findViewById(R.id.bottom_navigation);
+
+        fragmentManager.beginTransaction().add(R.id.fl_wrapper, homeFragment).hide(homeFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.fl_wrapper, userFragment).hide(userFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.fl_wrapper, composeFragment).hide(composeFragment).commit();
+
+        activeFragment = homeFragment;
+
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
             bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -69,21 +91,30 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.ic_add:
                             if (currentFragment != "compose") {
                                 fragment = new ComposeFragment();
-                                fragmentManager.beginTransaction().replace(R.id.fl_wrapper, fragment).commit();
+                                //fragmentManager.beginTransaction().hide(activeFragment).show(composeFragment).commit();
+                                fragmentManager.beginTransaction().hide(activeFragment).show(composeFragment).commit();
+                                activeFragment = composeFragment;
+                                //fragmentManager.beginTransaction().add(R.id.fl_wrapper, activeFragment).commit();
                             }
                             currentFragment = "compose";
                             break;
                         case R.id.ic_user:
                             if (currentFragment != "user") {
                                 fragment = new UserFragment();
-                                fragmentManager.beginTransaction().replace(R.id.fl_wrapper, fragment).commit();
+                                //fragmentManager.beginTransaction().hide(activeFragment).show(userFragment).commit();
+                                fragmentManager.beginTransaction().hide(activeFragment).show(userFragment).commit();
+                                activeFragment = userFragment;
+                                //fragmentManager.beginTransaction().add(R.id.fl_wrapper, activeFragment).commit();
                             }
                             currentFragment = "user";
                             break;
                         default:
                             if (currentFragment != "home") {
                                 fragment = new HomeFragment();
-                                fragmentManager.beginTransaction().replace(R.id.fl_wrapper, fragment).commit();
+                                //fragmentManager.beginTransaction().hide(activeFragment).show(homeFragment).commit();
+                                fragmentManager.beginTransaction().hide(activeFragment).show(homeFragment).commit();
+                                activeFragment = homeFragment;
+                                //fragmentManager.beginTransaction().add(R.id.fl_wrapper, activeFragment).commit();
                             }
                             currentFragment = "home";
                             break;
