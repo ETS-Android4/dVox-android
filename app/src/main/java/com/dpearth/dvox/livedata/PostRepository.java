@@ -3,6 +3,7 @@ package com.dpearth.dvox.livedata;
 
 import android.app.Application;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Query;
@@ -61,7 +62,11 @@ public class PostRepository {
 
         @Override
         protected Void doInBackground(Post... posts) {
-            postDao.insert(posts[0]);
+            try {
+                postDao.insert(posts[0]);
+            } catch (Exception error){
+                Log.d("PostDaoException", error.getLocalizedMessage());
+            }
             return null;
         }
     }

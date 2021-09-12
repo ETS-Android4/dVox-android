@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -42,7 +43,10 @@ public class CommentActivity extends Activity {
     private TextView postDownvotes;
     private ImageView postAvatar;
 
+
     private TextView newMessage;
+
+    private ImageView backButton;
 
     private List<Comment> allComments = new ArrayList<>();
     private List<Comment> allFinalComments = new ArrayList<>();
@@ -90,6 +94,15 @@ public class CommentActivity extends Activity {
         postAvatar = findViewById(R.id.acPostAvatar);
         newMessage = findViewById(R.id.acNewCommentMessage);
 
+        backButton = findViewById(R.id.acBackButton);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         //Assign their values
         postTitle.setText(post.getTitle());
         postAuthor.setText(post.getAuthor());
@@ -101,6 +114,14 @@ public class CommentActivity extends Activity {
         int imageResource = getResources().getIdentifier(uri, null, getPackageName());
         postAvatar.setImageResource(imageResource);
 
+        allFinalComments.add(new Comment(BigInteger.valueOf(1), "I am the author", "Hello!!", false));
+        allFinalComments.add(new Comment(BigInteger.valueOf(1), "I am the author", "Ullamco nulla reprehenderit fugiat pariatur. Aliqua in laboris commodo nisi aute tempor dolor nulla. Laboris deserunt deserunt occaecat cupidatat. Deserunt velit ullamco nisi deserunt sint reprehenderit ea. Proident deserunt irure culpa ea ad dolor magna aute aliquip ullamco. Laboris deserunt nisi amet elit velit dolor laboris aute. Adipisicing do velit cillum fugiat nostrud et veniam laboris laboris velit ut dolor ad.", false));
+        allFinalComments.add(new Comment(BigInteger.valueOf(1), "I am the author", "Hello!!", false));
+        allFinalComments.add(new Comment(BigInteger.valueOf(1), "I am the author", "Hello!!", false));
+        allFinalComments.add(new Comment(BigInteger.valueOf(1), "I am the author", "Hello!!", false));
+        allFinalComments.add(new Comment(BigInteger.valueOf(1), "I am the author", "Hello!!", false));
+        allFinalComments.add(new Comment(BigInteger.valueOf(1), "I am the author", "Hello!!", false));
+        allFinalComments.add(new Comment(BigInteger.valueOf(1), "I am the author", "Hello!!", false));
         allFinalComments.add(new Comment(BigInteger.valueOf(1), "I am the author", "Hello!!", false));
 
 

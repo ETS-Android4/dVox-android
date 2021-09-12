@@ -9,45 +9,57 @@
         android:id="@+id/comment_avatar_cardview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
         app:cardBackgroundColor="@color/WhiteColor"
-        app:cardCornerRadius="15dp"
         app:cardElevation="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/comment_author"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
         tools:ignore="MissingConstraints">
 
         <ImageView
             android:id="@+id/comment_post_avatar"
-            android:layout_width="@dimen/_35sdp"
-            android:layout_height="@dimen/_35sdp"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
             android:scrollbarTrackVertical="@drawable/alpaca"
             android:src="@drawable/bat" />
     </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/comment_author"
-        android:layout_width="224dp"
-        android:layout_height="21dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
         android:fontFamily="@font/montserrat_bold"
         android:maxLines="1"
         android:text="Author of the comment"
         android:textColor="@color/black"
-        android:textSize="@dimen/_14ssp"
+        android:textSize="@dimen/_10ssp"
         app:autoSizeTextType="uniform"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/comment_avatar_cardview"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/comment_message"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/_35sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
         android:fontFamily="@font/montserrat_medium"
         android:text="usdoa  aub dsuab douab odu baosdb aoubs douab sdoubaoud baosudb oau bdoaus bdouabsodub aeh 0b a98ned ja-e9 dmp mi4w0ni0eandun a0 end0a "
         android:textColor="@color/black"
+        android:textSize="@dimen/_10ssp"
         app:autoSizeTextType="uniform"
-        app:layout_constraintStart_toStartOf="@+id/comment_author"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/comment_avatar_cardview"
         app:layout_constraintTop_toBottomOf="@+id/comment_author"
         tools:ignore="MissingConstraints" />
 

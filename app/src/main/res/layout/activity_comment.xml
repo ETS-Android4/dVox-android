@@ -20,12 +20,12 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="@dimen/_12sdp"
             android:layout_marginLeft="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_5sdp"
             android:layout_marginRight="@dimen/_10sdp"
             android:layout_marginBottom="@dimen/_5sdp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="@dimen/_12sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -39,6 +39,7 @@
                     android:id="@+id/bottomCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:cardElevation="0dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent">
@@ -55,6 +56,17 @@
                         app:layout_constraintTop_toBottomOf="@+id/topCard"
                         app:layout_constraintVertical_bias="0.0">
 
+
+                        <View
+                            android:id="@+id/divider3"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginStart="@dimen/_10sdp"
+                            android:layout_marginEnd="@dimen/_10ssp"
+                            android:background="?android:attr/listDivider"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <Button
                             android:id="@+id/acPostButton"
@@ -85,6 +97,8 @@
                             android:hint="Comment as /*username*/"
                             android:inputType="textPersonName"
                             android:textColor="@color/BlackColor"
+                            android:textColorHighlight="@color/GreyColor"
+                            android:textColorLink="@color/BlackColor"
                             android:textSize="@dimen/_11ssp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@+id/acPostButton"
@@ -99,15 +113,17 @@
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/middleCard"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="0dp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    app:cardElevation="0dp"
                     app:layout_constraintBottom_toTopOf="@+id/bottomCard"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/topCard">
 
-                    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
+                    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
                         android:id="@+id/swipeRefreshLayoutComment"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
@@ -127,6 +143,7 @@
                     android:id="@+id/topCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:cardElevation="0dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -267,11 +284,12 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/_10sdp"
                             android:layout_marginTop="@dimen/_10sdp"
+                            android:layout_marginEnd="@dimen/_10sdp"
                             android:fontFamily="@font/montserrat_bold"
                             android:text="Title of the post "
                             android:textColor="@color/black"
                             android:textSize="@dimen/_14ssp"
-                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/acBackButton"
                             app:layout_constraintHorizontal_bias="0.0"
                             app:layout_constraintStart_toEndOf="@+id/avatar_cardview"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -315,6 +333,27 @@
                                 android:scrollbarTrackVertical="@drawable/alpaca"
                                 android:src="@drawable/koala" />
                         </androidx.cardview.widget.CardView>
+
+                        <View
+                            android:id="@+id/divider2"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginStart="@dimen/_10sdp"
+                            android:layout_marginEnd="@dimen/_10sdp"
+                            android:background="?android:attr/listDivider"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/acBackButton"
+                            android:layout_width="@dimen/_15sdp"
+                            android:layout_height="@dimen/_15sdp"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:layout_marginEnd="@dimen/_10sdp"
+                            android:src="@drawable/fi_rr_cross_small"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
 
                     </androidx.constraintlayout.widget.ConstraintLayout>

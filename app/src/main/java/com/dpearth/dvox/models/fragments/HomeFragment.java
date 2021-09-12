@@ -59,27 +59,25 @@ public class HomeFragment extends Fragment {
     private boolean loadMore = false;
     private  boolean lastPost = false;
 
+    private int positionStart = 0;
+    private int itemCount = 0;
+
+
     private SharedPreferences preferences;
     private int realEndID = 0;
+
+    private int numberOfPostsToLoad = 8;
+
+    private boolean refreshEnabled = false;
+
+    private boolean thereIsShimmer = false;
+    private boolean shimmerNeedstoBeDeleted = false;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
-
-        preferences = getActivity().getSharedPreferences("postCount", Context.MODE_PRIVATE);
-        realEndID = (int) preferences.getLong("postCount", Long.valueOf(0));
-
-        Log.d("realEndID", "Real end id: " + realEndID);
-
-        //Get the latest id
-        preferences = getActivity().getSharedPreferences("postCount", Context.MODE_PRIVATE);
-        realEndID = (int) preferences.getLong("postCount", Long.valueOf(0));
-
-        //Check if we can load more posts
-        loadMore();
-
         View view = binding.getRoot();
         return view;
     }
@@ -92,43 +90,58 @@ public class HomeFragment extends Fragment {
 
         RecyclerView recyclerView = getActivity().findViewById(R.id.liveDataRecycleView);//TODO Uncomment rvPosts;
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setHasFixedSize(true);
-
 
         postViewModel = new ViewModelProvider(getActivity()).get(PostViewModel.class);
+
+        realEndID = allPosts.size();
 
         adapter = new PostAdapter(this, allPosts);//getContext(), allPosts -> as pars
         recyclerView.setAdapter(adapter);
 
+        addShimmer();
+        queryPosts(numberOfPostsToLoad, -1);
 
-        postViewModel.getAllPosts().observe(getViewLifecycleOwner(), new Observer<List<Post>>() {
-            //This will get triggered everytime live data changes
-            @Override
-            public void onChanged(@Nullable List<Post> posts) {
-                adapter.setPosts(posts);
-            }
-        });
 
-        postViewModel.getAllPosts().observe(getViewLifecycleOwner(), new Observer<List<Post>>() {
-            @Override
-            public void onChanged(List<Post> posts) {
-                if (posts.size() == 0) {
-                    setPostCount(0);
-                    lastPost = false;
-                    addShimmer();
-                    queryPosts(6, -1);
-                }
-            }
-        });
+
+
+//        postViewModel.getAllPosts().observe(getViewLifecycleOwner(), new Observer<List<Post>>() {
+//            //This will get triggered everytime live data changes
+//            @Override
+//            public void onChanged(@Nullable List<Post> posts) {
+//            //    adapter.notifyDataSetChanged();
+//            }
+//        });
+
+//        postViewModel.getAllPosts().observe(getViewLifecycleOwner(), new Observer<List<Post>>() {
+//            @Override
+//            public void onChanged(List<Post> posts) {
+//                if (posts.size() == 0) {
+//                    setPostCount(0);
+//                    lastPost = false;
+//                 //   addShimmer();
+//                    queryPosts(6, -1);
+//                }
+//            }
+//        });
+
 
         swipeRefreshLayout = getActivity().findViewById(R.id
                 .swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                setPostCount(0);
-                postViewModel.deleteAllPosts();
-                lastPost = false;
+                if (refreshEnabled) {
+//                realEndID = 0;
+//                postViewModel.deleteAllPosts();
+//                lastPost = false;
+                    int count = allPosts.size();
+                    allPosts.clear();
+                    adapter.notifyItemRangeRemoved(0, count);
+                    realEndID = 0;
+                    lastPost = false;
+                    addShimmer();
+                    queryPosts(numberOfPostsToLoad, -1);
+                }
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -141,14 +154,13 @@ public class HomeFragment extends Fragment {
 
                 lastCompletelyVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
 
-                Log.d("loading", String.valueOf(lastCompletelyVisibleItemPosition));
-
+                Log.d("DebuggerNumber", String.valueOf(realEndID));
                 try {
-                    if (lastCompletelyVisibleItemPosition == getPostCount() - 1) {
+                    if (lastCompletelyVisibleItemPosition == realEndID - 1) {
                         Log.d("loading", "Loading more " + lastCompletelyVisibleItemPosition + " " + loadMore );
-                        if (loadMore == true && lastPost == false) {
+                        if (realEndID != 0 && loadMore == true && lastPost == false) {
                             //addShimmer();
-                            queryPosts(6, getPostCount());
+                            queryPosts(numberOfPostsToLoad, allPosts.size());
                         }
 
                     }
@@ -200,16 +212,28 @@ public class HomeFragment extends Fragment {
                     for (int i = postCount; i > postCount - numberOfPosts; i--){
                         if (i > 0) {
                             Post post = contract.getPost(i);
-                            Log.i("Post loader", "Post:" + post.toString());
-                            if (!post.isBan())
-                                allPosts.add(post);
 
-                            loadMore = true; 
-                            //TODO Maybe add to database here?
-//                            adapterVERSION2.setPosts(allPosts);
+                            if (!post.isBan()) {
+                                if (thereIsShimmer) {
+                                    allPosts.remove(0);
+                                    thereIsShimmer = false;
+                                }
+                                allPosts.add(post);
+                                itemCount++;
+                                //postViewModel.insert(post);
+                            }
+
+                            if (post.getId() == 1)
+                                    lastPost = true;
+
                         }
+
+                        realEndID = allPosts.size();
+                        loadMore = true;
                     }
                 };
+
+
                 // ################# GET ALL POSTS #################//
 
                 if (getActivity() != null) {
@@ -218,21 +242,33 @@ public class HomeFragment extends Fragment {
                         public void run() {
                             //UPDATE UI
 
+
                             int tempCounter = 0;
 
-                            if (isShimmer(adapter.getPostAt(0)))
-                                postViewModel.delete(adapter.getPostAt(0));
+//                            if (isShimmer(adapter.getPostAt(0)))
+//                                postViewModel.delete(adapter.getPostAt(0));
 
-                            for (Post j: allPosts) {
-                                postViewModel.insert(j);
-                                tempCounter++;
-                                if (j.getId() == 1)
-                                    lastPost = true;
+//                            for (Post j: allPosts) {
+//                                try {
+//                                    postViewModel.insert(j);
+//                                } catch (Exception error){
+//                                    Log.d("PostInserERROR", error.getLocalizedMessage());
+//                                }
+//                                tempCounter++;
+//                                if (j.getId() == 1)
+//                                    lastPost = true;
+//                            }
+
+                            //allPosts = postViewModel.getAllPosts().getValue();
+                            if (shimmerNeedstoBeDeleted) {
+                                adapter.notifyItemRemoved(0);
+                                adapter.notifyItemRangeInserted(positionStart-1, itemCount);
+                                shimmerNeedstoBeDeleted = false;
                             }
-                            setPostCount(getPostCount() + tempCounter);
-                            SharedPreferences.Editor editor = preferences.edit().putLong("postCount", Long.valueOf(realEndID));
-                            editor.apply();
-                            Log.d("realEndID", "Real end id: " + realEndID);
+                            else
+                                adapter.notifyItemRangeInserted(positionStart, itemCount);
+                            refreshEnabled = true;
+                            //adapter.notifyDataSetChanged();
 
                         }
                     });
@@ -240,8 +276,11 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        refreshEnabled = false;
         loadMore = false;
-        allPosts.clear();
+        itemCount = 0;
+        positionStart = allPosts.size();
+        //allPosts.clear();
         thread.start();
     }
 
@@ -253,19 +292,19 @@ public class HomeFragment extends Fragment {
     }
 
     private void addShimmer(){
-        Log.d("HelloShimmer", "Shimmer " + String.valueOf(adapter.shimmer));
-        shimmerPost.setId(getPostCount() + 1);
-        postViewModel.insert(shimmerPost);
+//        Log.d("HelloShimmer", "Shimmer " + String.valueOf(adapter.shimmer));
+        shimmerPost.setId(0);
+        allPosts.add(shimmerPost);
+        thereIsShimmer = true;
+        shimmerNeedstoBeDeleted = true;
+        adapter.notifyItemInserted(0);
     }
 
     private int getPostCount(){
-        //Get the latest id
         return realEndID;
     }
 
     private void setPostCount(int i){
-        SharedPreferences.Editor editor = preferences.edit().putLong("postCount", Long.valueOf(i));
-        editor.apply();
         realEndID = i;
     }
 
