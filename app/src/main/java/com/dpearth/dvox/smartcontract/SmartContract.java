@@ -9,6 +9,7 @@ import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.RemoteFunctionCall;
 import org.web3j.protocol.http.HttpService;
+import org.web3j.tuples.generated.Tuple4;
 import org.web3j.tuples.generated.Tuple7;
 import org.web3j.tuples.generated.Tuple9;
 import org.web3j.tx.gas.DefaultGasProvider;
@@ -122,13 +123,16 @@ public class SmartContract {
         Comment comment = new Comment();
 
         try {
-            postContract.getComment(BigInteger.valueOf(postId), BigInteger.valueOf(commentID)).sendAsync().get();
+            Tuple4<BigInteger, String, String, Boolean> contractPost = postContract.getComment(BigInteger.valueOf(postId), BigInteger.valueOf(commentID)).sendAsync().get();
+            comment.setId(contractPost.component1());
+            comment.setCommentAuthor(contractPost.component2());
+            comment.setCommentMessage(contractPost.component3());
+            comment.setCommentBan(contractPost.component4());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-
 
         return comment;
     }

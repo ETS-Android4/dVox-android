@@ -10,14 +10,18 @@ public class Comment {
     private String commentAuthor;
     private String commentMessage;
 
+
+    private Boolean commentBan;
+
     public Comment() {
-        this(null, null, null);
+        this(null, null, null, null);
     }
 
-    public Comment(BigInteger id, String commentAuthor, String commentMessage) {
+    public Comment(BigInteger id, String commentAuthor, String commentMessage, Boolean commentBan) {
         this.id = id;
         this.commentAuthor = commentAuthor;
         this.commentMessage = commentMessage;
+        this.commentBan = commentBan;
     }
 
     public BigInteger getId() {
@@ -42,6 +46,14 @@ public class Comment {
 
     public void setCommentMessage(String commentMessage) {
         this.commentMessage = commentMessage;
+    }
+
+    public Boolean getCommentBan() {
+        return commentBan;
+    }
+
+    public void setCommentBan(Boolean commentBan) {
+        this.commentBan = commentBan;
     }
 
     @Override
