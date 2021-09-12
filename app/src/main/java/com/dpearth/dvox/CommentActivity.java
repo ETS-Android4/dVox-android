@@ -20,6 +20,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.dpearth.dvox.livedata.PostViewModel;
 import com.dpearth.dvox.models.recycleviews.CommentAdapter;
 import com.dpearth.dvox.models.recycleviews.PostAdapter;
@@ -80,6 +82,8 @@ public class CommentActivity extends Activity {
     private SwipeRefreshLayout swipeRefreshLayoutComment;
 
     private CommentAdapter adapter;
+
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -153,7 +157,7 @@ public class CommentActivity extends Activity {
 
         allComments = new ArrayList<>();
 
-        RecyclerView recyclerView = this.findViewById(R.id.acCommentsRecycler);
+        recyclerView = this.findViewById(R.id.acCommentsRecycler);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
@@ -348,32 +352,41 @@ public class CommentActivity extends Activity {
 
                 contract.createComment(author, message, id);
 
-//                postButton.setEnabled(true);
-//                postButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.BlackColor));
+
 
                 // ################# GET ALL POSTS #################//
 
-                if (this != null) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
 
-                        }
-                    });
-                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        postButton.setEnabled(true);
+                        postButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.BlackColor));
+                    }
+                });
             }
+
         });
 
         if (!message.equals("") && !author.equals("")) {
-//            postButton.setEnabled(false);
-//            postButton.setTextColor(ContextCompat.getColor(this, R.color.TransparentWhiteColor));
+            postButton.setEnabled(false);
+            postButton.setTextColor(ContextCompat.getColor(this, R.color.TransparentWhiteColor));
             Comment tempComment = new Comment();
             tempComment.setId(BigInteger.valueOf(id));
             tempComment.setCommentAuthor(author);
             tempComment.setCommentMessage(message);
-            allComments.add(tempComment);
+            allComments.add(0, tempComment);
             adapter.notifyItemInserted(0);
+            recyclerView.scrollToPosition(0);
+            newMessage.setText("");
             thread.start();
+        } else{
+            shakeMessage();
         }
+    }
+
+    private void shakeMessage(){
+        YoYo.with(Techniques.Shake).playOn(this.findViewById(R.id.acNewCommentMessage));
+
     }
 }
