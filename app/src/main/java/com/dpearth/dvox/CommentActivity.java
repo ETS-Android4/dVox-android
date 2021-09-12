@@ -43,13 +43,11 @@ public class CommentActivity extends Activity {
     private TextView postDownvotes;
     private ImageView postAvatar;
 
-
     private TextView newMessage;
 
     private ImageView backButton;
 
     private List<Comment> allComments = new ArrayList<>();
-    private List<Comment> allFinalComments = new ArrayList<>();
 
     private Comment shimmerComment = new Comment();
     {
@@ -62,7 +60,17 @@ public class CommentActivity extends Activity {
     private boolean loadMore = false;
     private  boolean lastComment = false;
 
+    private int positionStart = 0;
+    private int itemCount = 0;
+
     private int realEndID = 0;
+
+    private int numberOfCommentsToLoad = 8;
+
+    private boolean refreshEnabled = false;
+
+    private boolean thereIsShimmer = false;
+    private boolean shimmerNeedstoBeDeleted = false;
 
     private SwipeRefreshLayout swipeRefreshLayoutComment;
 
@@ -114,17 +122,6 @@ public class CommentActivity extends Activity {
         int imageResource = getResources().getIdentifier(uri, null, getPackageName());
         postAvatar.setImageResource(imageResource);
 
-        allFinalComments.add(new Comment(BigInteger.valueOf(1), "I am the author", "Hello!!", false));
-        allFinalComments.add(new Comment(BigInteger.valueOf(1), "I am the author", "Ullamco nulla reprehenderit fugiat pariatur. Aliqua in laboris commodo nisi aute tempor dolor nulla. Laboris deserunt deserunt occaecat cupidatat. Deserunt velit ullamco nisi deserunt sint reprehenderit ea. Proident deserunt irure culpa ea ad dolor magna aute aliquip ullamco. Laboris deserunt nisi amet elit velit dolor laboris aute. Adipisicing do velit cillum fugiat nostrud et veniam laboris laboris velit ut dolor ad.", false));
-        allFinalComments.add(new Comment(BigInteger.valueOf(1), "I am the author", "Hello!!", false));
-        allFinalComments.add(new Comment(BigInteger.valueOf(1), "I am the author", "Hello!!", false));
-        allFinalComments.add(new Comment(BigInteger.valueOf(1), "I am the author", "Hello!!", false));
-        allFinalComments.add(new Comment(BigInteger.valueOf(1), "I am the author", "Hello!!", false));
-        allFinalComments.add(new Comment(BigInteger.valueOf(1), "I am the author", "Hello!!", false));
-        allFinalComments.add(new Comment(BigInteger.valueOf(1), "I am the author", "Hello!!", false));
-        allFinalComments.add(new Comment(BigInteger.valueOf(1), "I am the author", "Hello!!", false));
-
-
         //Assign hint based on the current username
         newMessage.setHint("Comment as " + currentUsername);
 
@@ -132,19 +129,45 @@ public class CommentActivity extends Activity {
         swipeRefreshLayoutComment.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                setCommentCount(0);
-                allFinalComments.clear();
+                realEndID = 0;
                 lastComment = false;
                 swipeRefreshLayoutComment.setRefreshing(false);
             }
         });
 
-        RecyclerView recyclerView = this.findViewById(R.id.acCommentsRecycler);
+        allComments = new ArrayList<>();
 
+        RecyclerView recyclerView = this.findViewById(R.id.acCommentsRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setHasFixedSize(true);
-        adapter = new CommentAdapter(allFinalComments);
+
+        adapter = new CommentAdapter(allComments);//getContext(), allPosts -> as pars
+
         recyclerView.setAdapter(adapter);
+
+        realEndID = allComments.size();
+
+        if (realEndID == 0) {
+            //addShimmer();
+            queryComments(numberOfCommentsToLoad, -1);
+        }
+
+
+        swipeRefreshLayoutComment.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (refreshEnabled) {
+
+                    int count = allComments.size();
+                    allComments.clear();
+                    adapter.notifyItemRangeRemoved(0, count);
+                    realEndID = 0;
+                    lastComment = false;
+                    //addShimmer();
+                    queryComments(numberOfCommentsToLoad, -1);
+                }
+                swipeRefreshLayoutComment.setRefreshing(false);
+            }
+        });
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -157,18 +180,17 @@ public class CommentActivity extends Activity {
                 Log.d("loading", String.valueOf(lastCompletelyVisibleItemPosition));
 
                 try {
-                    if (lastCompletelyVisibleItemPosition == getCommentCount() - 1) {
+                    if (lastCompletelyVisibleItemPosition == realEndID - 1) {
                         Log.d("loading", "Loading more " + lastCompletelyVisibleItemPosition + " " + loadMore );
                         if (loadMore == true && lastComment == false) {
                             //addShimmer();
-                            queryComments(6, getCommentCount(), (int) post.getId());
+                            queryComments(6, realEndID);
                         }
 
                     }
                 } catch (Exception e){
                     e.printStackTrace();
                 }
-
             }
         });
 
@@ -178,10 +200,9 @@ public class CommentActivity extends Activity {
      * Retrieves the certain number of last comments from the smart contract.
      *
      * @param numberOfComments - the number of comments to get
-     * @param currentId - the current comment id
-     * @param postId - the postId
+     * @param currentId - the latest comment id
      */
-    private void queryComments(int numberOfComments, int currentId, int postId) {
+    private void queryComments(int numberOfComments, int currentId) {
 
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -201,53 +222,56 @@ public class CommentActivity extends Activity {
 
                 SmartContract contract = new SmartContract(preferences);
 
-                int postCount;
-                int contractPosts = contract.getPostCount();
+                int commentCount;
+                int contractPosts = post.getCommentCount();
 
                 if (currentId == -1)
-                    postCount = contractPosts;
+                    commentCount = contractPosts;
                 else
-                    postCount = contractPosts - currentId;
+                    commentCount = contractPosts - currentId;
 
-                Log.d("Post loader", "Trying to print... in total:" + postCount);
+                Log.d("Post loader", "Trying to print... in total:" + commentCount);
 
-                if ( postCount > 0){
-                    for (int i = postCount; i > postCount - numberOfComments; i--){
+                if ( commentCount > 0){
+                    for (int i = commentCount; i > commentCount - numberOfComments; i--){
                         if (i > 0) {
-                            Comment comment = contract.getComment(postId, i);
-                            Log.i("Comment loader", "Comment:" + comment.toString());
-                                allComments.add(comment);
+                            Comment comment = contract.getComment(post.getId(), i);
 
-                            loadMore = true;
-                            //TODO Maybe add to database here?
-//                            adapterVERSION2.setPosts(allPosts);
+                            if (!comment.getCommentBan()) {
+                                if (thereIsShimmer) {
+                                    allComments.remove(0);
+                                    thereIsShimmer = false;
+                                }
+                                allComments.add(comment);
+                                itemCount++;
+                            }
+
+                            if (post.getId() == 1)
+                                lastComment = true;
+
                         }
+
+                        realEndID = allComments.size();
+                        loadMore = true;
                     }
                 };
+
+
                 // ################# GET ALL POSTS #################//
 
                 if (this != null) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            //UPDATE UI
 
-                            int tempCounter = 0;
-
-                            if (isShimmer(allFinalComments.get(0)))
-                                allFinalComments.remove(0);
-
-                            for (Comment j: allComments) {
-                                allFinalComments.add(j);
-                                tempCounter++;
-                                if (j.getId() == BigInteger.valueOf(1)){
-                                    lastComment = true;
-                                }
+                            if (shimmerNeedstoBeDeleted) {
+                                adapter.notifyItemRemoved(0);
+                                adapter.notifyItemRangeInserted(positionStart-1, itemCount);
+                                shimmerNeedstoBeDeleted = false;
                             }
-                            setCommentCount(getCommentCount() + tempCounter);
-                            SharedPreferences.Editor editor = preferences.edit().putLong("postCount", Long.valueOf(realEndID));
-                            editor.apply();
-                            Log.d("realEndID", "Real end id: " + realEndID);
+                            else
+                                adapter.notifyItemRangeInserted(positionStart, itemCount);
+                            refreshEnabled = true;
 
                         }
                     });
@@ -255,8 +279,10 @@ public class CommentActivity extends Activity {
             }
         });
 
+        refreshEnabled = false;
         loadMore = false;
-        allComments.clear();
+        itemCount = 0;
+        positionStart = allComments.size();
         thread.start();
     }
 
@@ -268,23 +294,11 @@ public class CommentActivity extends Activity {
     }
 
     private void addShimmer(){
-       // Log.d("HelloShimmer", "Shimmer " + String.valueOf(adapter.shimmer));
-       // shimmerComment.setId(getCommentCount() + 1);
-        allFinalComments.add(shimmerComment);
-    }
-
-    private int getCommentCount(){
-        //Get the latest id
-        return realEndID;
-    }
-
-    private void setCommentCount(int i){
-        realEndID = i;
-    }
-
-    private void loadMore(){
-        if (getCommentCount() > 0)
-            loadMore = true;
+        shimmerComment.setId(BigInteger.valueOf(0));
+        allComments.add(shimmerComment);
+        thereIsShimmer = true;
+        shimmerNeedstoBeDeleted = true;
+        adapter.notifyItemInserted(0);
     }
 
     public String stringToAvatar(String username){

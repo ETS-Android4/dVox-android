@@ -62,8 +62,6 @@ public class HomeFragment extends Fragment {
     private int positionStart = 0;
     private int itemCount = 0;
 
-
-    private SharedPreferences preferences;
     private int realEndID = 0;
 
     private int numberOfPostsToLoad = 8;
@@ -110,39 +108,13 @@ public class HomeFragment extends Fragment {
             }
         }
 
-
-
-
-//        postViewModel.getAllPosts().observe(getViewLifecycleOwner(), new Observer<List<Post>>() {
-//            //This will get triggered everytime live data changes
-//            @Override
-//            public void onChanged(@Nullable List<Post> posts) {
-//            //    adapter.notifyDataSetChanged();
-//            }
-//        });
-
-//        postViewModel.getAllPosts().observe(getViewLifecycleOwner(), new Observer<List<Post>>() {
-//            @Override
-//            public void onChanged(List<Post> posts) {
-//                if (posts.size() == 0) {
-//                    setPostCount(0);
-//                    lastPost = false;
-//                 //   addShimmer();
-//                    queryPosts(6, -1);
-//                }
-//            }
-//        });
-
-
         swipeRefreshLayout = getActivity().findViewById(R.id
                 .swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 if (refreshEnabled) {
-//                realEndID = 0;
-//                postViewModel.deleteAllPosts();
-//                lastPost = false;
+
                     int count = allPosts.size();
                     allPosts.clear();
                     postViewModel.deleteAllPosts();
@@ -251,26 +223,7 @@ public class HomeFragment extends Fragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            //UPDATE UI
 
-
-                            int tempCounter = 0;
-
-//                            if (isShimmer(adapter.getPostAt(0)))
-//                                postViewModel.delete(adapter.getPostAt(0));
-
-//                            for (Post j: allPosts) {
-//                                try {
-//                                    postViewModel.insert(j);
-//                                } catch (Exception error){
-//                                    Log.d("PostInserERROR", error.getLocalizedMessage());
-//                                }
-//                                tempCounter++;
-//                                if (j.getId() == 1)
-//                                    lastPost = true;
-//                            }
-
-                            //allPosts = postViewModel.getAllPosts().getValue();
                             if (shimmerNeedstoBeDeleted) {
                                 adapter.notifyItemRemoved(0);
                                 adapter.notifyItemRangeInserted(positionStart-1, itemCount);
@@ -279,7 +232,6 @@ public class HomeFragment extends Fragment {
                             else
                                 adapter.notifyItemRangeInserted(positionStart, itemCount);
                             refreshEnabled = true;
-                            //adapter.notifyDataSetChanged();
 
                         }
                     });
@@ -291,19 +243,10 @@ public class HomeFragment extends Fragment {
         loadMore = false;
         itemCount = 0;
         positionStart = allPosts.size();
-        //allPosts.clear();
         thread.start();
     }
 
-    //TODO: Revaz, please convert those shimmer strings into static strings.
-    private boolean isShimmer(Post post){
-        if (post.getAuthor().equals("███████"))
-            return true;
-        return false;
-    }
-
     private void addShimmer(){
-//        Log.d("HelloShimmer", "Shimmer " + String.valueOf(adapter.shimmer));
         shimmerPost.setId(0);
         allPosts.add(shimmerPost);
         thereIsShimmer = true;
@@ -311,42 +254,4 @@ public class HomeFragment extends Fragment {
         adapter.notifyItemInserted(0);
     }
 
-    private int getPostCount(){
-        return realEndID;
-    }
-
-    private void setPostCount(int i){
-        realEndID = i;
-    }
-
-    private void loadMore(){
-        if (getPostCount() > 0)
-            loadMore = true;
-    }
-
-
-//    private void goToCommentSection(){
-//
-//        commentIcon = getView().findViewById(R.id.version2_comment_button);
-////        commentIcon = getActivity().findViewById(R.id.comment_button);
-//
-//        commentIcon.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                openCommentActivity();
-//            }
-//        });
-//    }
-
-    private void openCommentActivity(){
-        Intent intent = new Intent(getActivity(), CommentActivity.class);
-        startActivity(intent);
-    }
-
-//    @Override
-//    public void onClick(View v) {
-//        if (v.getId() == R.id.comment_button){
-//            openCommentActivity();
-//        }
-//    }
 }

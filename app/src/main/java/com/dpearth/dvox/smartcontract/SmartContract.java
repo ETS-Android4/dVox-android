@@ -100,7 +100,7 @@ public class SmartContract {
             post.setAuthor(contractPost.component3());
             post.setMessage(contractPost.component4());
             post.setHashtag(contractPost.component5());
-//            post.setCommentCount(contractPost.component6());TODO figure setting contract
+            post.setCommentCount( contractPost.component6().intValue());
             post.setBan(contractPost.component7());
 
 
