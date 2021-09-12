@@ -24,6 +24,8 @@ import com.dpearth.dvox.smartcontract.Post;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 //Todo: Go to comment view when post card is pressed
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>   {
@@ -65,7 +67,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>   
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Post post = posts.get(position);
-        holder.bind(post);
+        switch(holder.getItemViewType()){
+            case 0:
+                holder.bind(post);
+            case 1:
+                break;
+        }
+
     }
 
     @Override
@@ -95,6 +103,16 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>   
         private ImageView downvoteButton;
         private TextView upvotes;
         private TextView downvotes;
+
+        private Votes votes;
+
+        private Observer votesChanged = new Observer() {
+            @Override
+            public void update(Observable o, Object newValue) {
+                upvotes.setText(String.valueOf(votes.getUpvotes()));
+                downvotes.setText(String.valueOf(votes.getDownvotes()));
+            }
+        };
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -136,23 +154,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>   
                 }
             });
 
-            Votes votes = new Votes(3);
-            votes.getVotesFireStore(true);
-            upvotes.setText(String.valueOf(votes.getUpvotes()));
-
-//            upvoteButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//
-//                }
-//            });
-//
-//            downvoteButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//
-//                }
-//            });
 
             String uri = "drawable/" + stringToAvatar(post.getAuthor()).toLowerCase();
 
@@ -162,6 +163,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>   
             int imageResource = context.getResources().getIdentifier(uri, null, context.getPackageName());
 
             tvAvatar.setImageResource(imageResource);
+
+            votes = new Votes(post.getId());
+            votes.setVotes();
+            votes.addObserver(votesChanged);
         }
 
         public String stringToAvatar(String username){

@@ -6,106 +6,84 @@ import androidx.annotation.NonNull;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class Votes extends BaseObservable {
+import java.util.Observable;
 
-    private int upvotes;
-    private int downvotes;
+public class Votes extends Observable {
+
+    private String firebaseDocument = "0x47D3e11D792d7b4B808775629Fcd5A36CfAf00E6";
+
     private long postId;
 
-    private DocumentReference firesStore;
+    public int upvotes;
+    public int downvotes;
+    private String fieldUp;
+    private String fieldDown;
 
     public Votes(long postId) {
         this.postId = postId;
         this.upvotes = 0;
         this.downvotes = 0;
+        fieldUp = String.valueOf(postId) + "_upvote";
+        fieldDown = String.valueOf(postId) + "_downvote";
     }
 
-    @Bindable
     public int getUpvotes() {
         return upvotes;
     }
 
-    public void setUpvotes(int upvotes) {
-        this.upvotes = upvotes;
-    }
-
-    @Bindable
     public int getDownvotes() {
         return downvotes;
     }
 
-    public void setDownvotes(int downvotes) {
-        this.downvotes = downvotes;
-    }
+    public void setVotes() {
 
-    public long getPostId() {
-        return postId;
-    }
+        //Get the reference to the Firestore API document
+        DocumentReference Doc = FirebaseFirestore.getInstance().collection("Votes").document(firebaseDocument);
 
-    public void setPostId(long postId) {
-        this.postId = postId;
-    }
-
-    public String fieldString(boolean upvote) {
-        if (upvote) {
-            return getPostId() + "_upvote";
-        } else {
-            return getPostId() + "_downvote";
-        }
-    }
-
-    public void getVotesFireStore(boolean isUpvote) {
-
-        double[] numUpvotes = new double[1];
-        String fieldString = fieldString(isUpvote);
-
-        getFireStore().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        Doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            /**
+             * Executes when the document is received.
+             */
             @Override
-            public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()){
-                    numUpvotes[0] = documentSnapshot.getLong(fieldString);
-                    Log.d("..i..", "# of votes = " + numUpvotes[0]);
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
 
-                    if (isUpvote) {
-                        upvotes = (int) numUpvotes[0];
-                    } else {
-                        downvotes = (int) numUpvotes[0];
+                    //Getting results of the document
+                    DocumentSnapshot document = task.getResult();
+
+                    if (document.exists()) {
+                        // Retrieving specific APIs
+                        try {
+                            upvotes = document.getLong(fieldUp).intValue();
+                            Log.d("UpVotesGetter", String.valueOf(upvotes));
+                            setChanged();
+                            notifyObservers();
+
+                        } catch (Exception error) {
+                            Log.d("UpVotesGetter", error.getLocalizedMessage());
+                        }
+
+                        try {
+                            downvotes = document.getLong(fieldDown).intValue();
+                            Log.d("DownVotesGetter", String.valueOf(downvotes));
+                            setChanged();
+                            notifyObservers();
+
+                        } catch (Exception error) {
+                            Log.d("DownVotesGetter", error.getLocalizedMessage());
+                        }
+
                     }
                 }
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d("..i..", "");
-            }
         });
-
-//        if (isUpvote) {
-//            upvotes = (int) numUpvotes[0];
-//        } else {
-//            downvotes = (int) numUpvotes[0];
-//        }
-    }
-
-    private DocumentReference getFireStore() {
-        firesStore = FirebaseFirestore.getInstance().collection("Votes")
-                .document("0x47D3e11D792d7b4B808775629Fcd5A36CfAf00E6");
-
-        return firesStore;
-    }
-
-    @Override
-    public String toString() {
-        return "Votes{" +
-                "upvotes=" + upvotes +
-                ", downvotes=" + downvotes +
-                ", postId=" + postId +
-                '}';
     }
 }

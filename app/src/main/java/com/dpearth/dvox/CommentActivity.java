@@ -23,6 +23,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.dpearth.dvox.livedata.PostViewModel;
+import com.dpearth.dvox.livedata.Votes;
 import com.dpearth.dvox.models.recycleviews.CommentAdapter;
 import com.dpearth.dvox.models.recycleviews.PostAdapter;
 import com.dpearth.dvox.smartcontract.Comment;
@@ -35,6 +36,8 @@ import org.w3c.dom.Text;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 public class CommentActivity extends Activity {
 
@@ -77,6 +80,7 @@ public class CommentActivity extends Activity {
     private boolean refreshEnabled = false;
 
     private boolean thereIsShimmer = false;
+
     private boolean shimmerNeedstoBeDeleted = false;
 
     private SwipeRefreshLayout swipeRefreshLayoutComment;
@@ -84,6 +88,16 @@ public class CommentActivity extends Activity {
     private CommentAdapter adapter;
 
     private RecyclerView recyclerView;
+
+    private Votes votes;
+
+    private Observer votesChanged = new Observer() {
+        @Override
+        public void update(Observable o, Object newValue) {
+            postUpvotes.setText(String.valueOf(votes.getUpvotes()));
+            postDownvotes.setText(String.valueOf(votes.getDownvotes()));
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -114,6 +128,10 @@ public class CommentActivity extends Activity {
         backButton = findViewById(R.id.acBackButton);
 
         postButton = findViewById(R.id.acPostButton);
+
+        votes = new Votes(post.getId());
+        votes.setVotes();
+        votes.addObserver(votesChanged);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override

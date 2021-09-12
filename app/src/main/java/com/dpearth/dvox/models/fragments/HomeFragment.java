@@ -136,7 +136,6 @@ public class HomeFragment extends Fragment {
 
                 lastCompletelyVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
 
-                Log.d("DebuggerNumber", String.valueOf(realEndID));
                 try {
                     if (lastCompletelyVisibleItemPosition == realEndID - 1) {
                         Log.d("loading", "Loading more " + lastCompletelyVisibleItemPosition + " " + loadMore );
