@@ -112,6 +112,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void onChanged(List<Post> posts) {
                 if (posts.size() == 0) {
+                    setPostCount(0);
+                    lastPost = false;
                     addShimmer();
                     queryPosts(6, -1);
                 }
@@ -124,9 +126,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onRefresh() {
 
-                setPostCount(0);
                 postViewModel.deleteAllPosts();
-                lastPost = false;
                 swipeRefreshLayout.setRefreshing(false);
 
             }
