@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dpearth.dvox.CommentActivity;
 import com.dpearth.dvox.R;
 import com.dpearth.dvox.livedata.Votes;
+import com.dpearth.dvox.livedata.VotesDictionary;
 import com.dpearth.dvox.smartcontract.Post;
 
 import java.io.Serializable;
@@ -48,6 +49,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>   
             return 1;
         return 0;
     }
+    
 
     @NonNull
     @Override
@@ -92,6 +94,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>   
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
+        private int postId;
+        private int postVoted;
+
         private TextView tvTitle;
         private TextView tvAuthor;
         private TextView tvMessage;
@@ -105,12 +110,42 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>   
         private TextView downvotes;
 
         private Votes votes;
+        private boolean upVoted;
+        private boolean downVoted;
+
 
         private Observer votesChanged = new Observer() {
             @Override
             public void update(Observable o, Object newValue) {
                 upvotes.setText(String.valueOf(votes.getUpvotes()));
                 downvotes.setText(String.valueOf(votes.getDownvotes()));
+            }
+        };
+
+        private VotesDictionary votesDictionary;
+
+        private Observer votesDictionaryChanged = new Observer(){
+            @Override
+            public void update(Observable o, Object newValue){
+                if (votesDictionary.getVote(postId) == 1) {
+                    upVoted = true;
+                    upvoteButton.setEnabled(true);
+                    downvoteButton.setEnabled(false);
+                    upvoteButton.setImageResource(R.drawable.fi_rr_thumbs_up_filled);
+                }
+                else if (votesDictionary.getVote(postId) == -1) {
+                    downVoted = true;
+                    upvoteButton.setEnabled(false);
+                    downvoteButton.setEnabled(true);
+                    downvoteButton.setImageResource(R.drawable.fi_rr_thumbs_down_filled);
+                } else if (votesDictionary.getVote(postId) == 0){
+                    upvoteButton.setEnabled(true);
+                    downvoteButton.setEnabled(true);
+                    upvoteButton.setImageResource(R.drawable.fi_rr_thumbs_up);
+                    downvoteButton.setImageResource(R.drawable.fi_rr_thumbs_down);
+                    upVoted = false;
+                    downVoted = false;
+                }
             }
         };
 
@@ -131,6 +166,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>   
         }
 
         public void bind(Post post) {
+
+            postId = (int) post.getId();
+
             //Assign values to UI elements
             tvTitle.setText(post.getTitle());
             tvAuthor.setText(post.getAuthor());
@@ -167,6 +205,48 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>   
             votes = new Votes(post.getId());
             votes.setVotes();
             votes.addObserver(votesChanged);
+
+            votesDictionary = new VotesDictionary(context);
+            votesDictionary.addObserver(votesDictionaryChanged);
+
+            if (votesDictionary.getVote(postId) == 1) {
+                upVoted = true;
+                upvoteButton.setEnabled(true);
+                downvoteButton.setEnabled(false);
+                upvoteButton.setImageResource(R.drawable.fi_rr_thumbs_up_filled);
+            }
+            else if (votesDictionary.getVote(postId) == -1) {
+                downVoted = true;
+                upvoteButton.setEnabled(false);
+                downvoteButton.setEnabled(true);
+                downvoteButton.setImageResource(R.drawable.fi_rr_thumbs_down_filled);
+            }
+
+            upvoteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!upVoted) {
+                        votes.upVote(1);
+                        votesDictionary.addVote(postId, 1);
+                    } else{
+                        votes.upVote(-1);
+                        votesDictionary.addVote(postId, 0);
+                    }
+                }
+            });
+
+            downvoteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!downVoted) {
+                        votes.downVote(1);
+                        votesDictionary.addVote(postId, -1);
+                    } else{
+                        votes.downVote(-1);
+                        votesDictionary.addVote(postId, 0);
+                    }
+                }
+            });
         }
 
         public String stringToAvatar(String username){

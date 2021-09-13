@@ -12,6 +12,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Observable;
@@ -73,6 +74,74 @@ public class Votes extends Observable {
 
                         try {
                             downvotes = document.getLong(fieldDown).intValue();
+                            Log.d("DownVotesGetter", String.valueOf(downvotes));
+                            setChanged();
+                            notifyObservers();
+
+                        } catch (Exception error) {
+                            Log.d("DownVotesGetter", error.getLocalizedMessage());
+                        }
+
+                    }
+                }
+            }
+        });
+    }
+
+    public void upVote(long vote) {
+
+        //Get the reference to the Firestore API document
+        DocumentReference Doc = FirebaseFirestore.getInstance().collection("Votes").document(firebaseDocument);
+
+        Doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            /**
+             * Executes when the document is received.
+             */
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+
+                    //Getting results of the document
+                    DocumentSnapshot document = task.getResult();
+
+                    if (document.exists()) {
+                        try {
+                            Doc.update(fieldUp, FieldValue.increment(vote));
+                            upvotes = upvotes + (int) vote;
+                            Log.d("UpVotesGetter", String.valueOf(upvotes));
+                            setChanged();
+                            notifyObservers();
+
+                        } catch (Exception error) {
+                            Log.d("UpVotesGetter", error.getLocalizedMessage());
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    public void downVote(long vote) {
+
+        //Get the reference to the Firestore API document
+        DocumentReference Doc = FirebaseFirestore.getInstance().collection("Votes").document(firebaseDocument);
+
+        Doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            /**
+             * Executes when the document is received.
+             */
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+
+                    //Getting results of the document
+                    DocumentSnapshot document = task.getResult();
+
+                    if (document.exists()) {
+
+                        try {
+                            Doc.update(fieldDown, FieldValue.increment(vote));
+                            downvotes = downvotes + (int) vote;
                             Log.d("DownVotesGetter", String.valueOf(downvotes));
                             setChanged();
                             notifyObservers();

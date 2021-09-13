@@ -24,6 +24,7 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.dpearth.dvox.livedata.PostViewModel;
 import com.dpearth.dvox.livedata.Votes;
+import com.dpearth.dvox.livedata.VotesDictionary;
 import com.dpearth.dvox.models.recycleviews.CommentAdapter;
 import com.dpearth.dvox.models.recycleviews.PostAdapter;
 import com.dpearth.dvox.smartcontract.Comment;
@@ -90,6 +91,11 @@ public class CommentActivity extends Activity {
     private RecyclerView recyclerView;
 
     private Votes votes;
+    private int postId;
+    private boolean upVoted;
+    private boolean downVoted;
+    private ImageView upvoteButton;
+    private ImageView downvoteButton;
 
     private Observer votesChanged = new Observer() {
         @Override
@@ -98,6 +104,34 @@ public class CommentActivity extends Activity {
             postDownvotes.setText(String.valueOf(votes.getDownvotes()));
         }
     };
+
+    private VotesDictionary votesDictionary;
+
+    private Observer votesDictionaryChanged = new Observer(){
+        @Override
+        public void update(Observable o, Object newValue){
+            if (votesDictionary.getVote(postId) == 1) {
+                upVoted = true;
+                upvoteButton.setEnabled(true);
+                downvoteButton.setEnabled(false);
+                upvoteButton.setImageResource(R.drawable.fi_rr_thumbs_up_filled);
+            }
+            else if (votesDictionary.getVote(postId) == -1) {
+                downVoted = true;
+                upvoteButton.setEnabled(false);
+                downvoteButton.setEnabled(true);
+                downvoteButton.setImageResource(R.drawable.fi_rr_thumbs_down_filled);
+            } else if (votesDictionary.getVote(postId) == 0){
+                upvoteButton.setEnabled(true);
+                downvoteButton.setEnabled(true);
+                upvoteButton.setImageResource(R.drawable.fi_rr_thumbs_up);
+                downvoteButton.setImageResource(R.drawable.fi_rr_thumbs_down);
+                upVoted = false;
+                downVoted = false;
+            }
+        }
+    };
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -129,9 +163,56 @@ public class CommentActivity extends Activity {
 
         postButton = findViewById(R.id.acPostButton);
 
+        upvoteButton = findViewById(R.id.acUpvoteButton);
+        downvoteButton = findViewById(R.id.acDownvoteButton);
+
         votes = new Votes(post.getId());
         votes.setVotes();
         votes.addObserver(votesChanged);
+
+        postId = (int) post.getId();
+
+        votesDictionary = new VotesDictionary(getApplicationContext());
+        votesDictionary.addObserver(votesDictionaryChanged);
+
+        if (votesDictionary.getVote(postId) == 1) {
+            upVoted = true;
+            upvoteButton.setEnabled(true);
+            downvoteButton.setEnabled(false);
+            upvoteButton.setImageResource(R.drawable.fi_rr_thumbs_up_filled);
+        }
+        else if (votesDictionary.getVote(postId) == -1) {
+            downVoted = true;
+            upvoteButton.setEnabled(false);
+            downvoteButton.setEnabled(true);
+            downvoteButton.setImageResource(R.drawable.fi_rr_thumbs_down_filled);
+        }
+
+        upvoteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!upVoted) {
+                    votes.upVote(1);
+                    votesDictionary.addVote(postId, 1);
+                } else{
+                    votes.upVote(-1);
+                    votesDictionary.addVote(postId, 0);
+                }
+            }
+        });
+
+        downvoteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!downVoted) {
+                    votes.downVote(1);
+                    votesDictionary.addVote(postId, -1);
+                } else{
+                    votes.downVote(-1);
+                    votesDictionary.addVote(postId, 0);
+                }
+            }
+        });
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
