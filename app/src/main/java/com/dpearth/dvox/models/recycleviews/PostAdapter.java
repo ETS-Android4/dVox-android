@@ -3,9 +3,6 @@ package com.dpearth.dvox.models.recycleviews;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +46,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>   
             return 1;
         return 0;
     }
-    
+
+    public void updateVotesContainer(){
+
+    }
+
 
     @NonNull
     @Override
@@ -249,6 +250,22 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>   
             });
         }
 
+
+        public void updateVotesContainer(){
+            if (votesDictionary.getVote(postId) == 1) {
+                upVoted = true;
+                upvoteButton.setEnabled(true);
+                downvoteButton.setEnabled(false);
+                upvoteButton.setImageResource(R.drawable.fi_rr_thumbs_up_filled);
+            }
+            else if (votesDictionary.getVote(postId) == -1) {
+                downVoted = true;
+                upvoteButton.setEnabled(false);
+                downvoteButton.setEnabled(true);
+                downvoteButton.setImageResource(R.drawable.fi_rr_thumbs_down_filled);
+            }
+        }
+
         public String stringToAvatar(String username){
             String[] array = username.split("_");
 
@@ -260,6 +277,5 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>   
                 return "Hacker";
             }
         }
-
     }
 }

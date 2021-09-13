@@ -50,20 +50,18 @@ public class ComposeFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         super.onCreateView(inflater,container,savedInstanceState);
+
         usernameInstance = new Username(getActivity());
+
         usernameInstance.retrieveUsername(true);
 
         Avatar_string = "drawable/" + stringToAvatar(usernameInstance.getUsernameString()).toLowerCase();
 
-
         View rootView = inflater.inflate(R.layout.compose_fragment, container, false);
         return rootView;
-
-
     }
 
-
-        public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
             word_counter = getActivity().findViewById(R.id.word_counter);
             titleView = getActivity().findViewById(R.id.post_title);

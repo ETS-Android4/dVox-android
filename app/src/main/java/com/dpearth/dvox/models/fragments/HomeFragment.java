@@ -153,6 +153,13 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onResume() {
+        if (!thereIsShimmer) {
+            adapter.notifyItemRangeChanged(0, realEndID);
+        }
+        super.onResume();
+    }
 
     /**
      * Retrieves the certain number of last posts from the smart contract.
@@ -214,7 +221,6 @@ public class HomeFragment extends Fragment {
                         loadMore = true;
                     }
                 };
-
 
                 // ################# GET ALL POSTS #################//
 
