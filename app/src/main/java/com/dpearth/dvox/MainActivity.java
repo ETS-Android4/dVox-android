@@ -92,7 +92,11 @@ public class MainActivity extends AppCompatActivity {
                             if (currentFragment != "compose") {
                                 fragment = new ComposeFragment();
                                 //fragmentManager.beginTransaction().hide(activeFragment).show(composeFragment).commit();
+                                //if you added fragment via layout xml
+                                ComposeFragment fragmentC = (ComposeFragment) fragmentManager.findFragmentById(R.id.fl_wrapper);
+                                fragmentC.updateUsername();
                                 fragmentManager.beginTransaction().hide(activeFragment).show(composeFragment).commit();
+                                fragmentC.updateUsername();
                                 activeFragment = composeFragment;
                                 //fragmentManager.beginTransaction().add(R.id.fl_wrapper, activeFragment).commit();
                             }

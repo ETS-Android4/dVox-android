@@ -222,6 +222,14 @@ public class ComposeFragment extends Fragment {
         YoYo.with(Techniques.Shake).playOn(getActivity().findViewById(R.id.hashtag));
     }
 
+    public void updateUsername(){
+        usernameInstance = new Username(getActivity());
+        usernameInstance.retrieveUsername(false);
+        Avatar_string = "drawable/" + stringToAvatar(usernameInstance.getUsernameString()).toLowerCase();
+        int imageResource =getActivity().getResources().getIdentifier(Avatar_string, null, getActivity().getPackageName());
+        imageView2.setImageResource(imageResource);
+        authorView.setText(usernameInstance.getUsernameString());
+    }
 }
 
 
