@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.dpearth.dvox.LoginActivity;
 import com.dpearth.dvox.R;
 import com.dpearth.dvox.databinding.FragmentUserBinding;
+import com.dpearth.dvox.livedata.Statistics;
 import com.dpearth.dvox.livedata.User;
 import com.dpearth.dvox.username.Username;
 import com.muddzdev.styleabletoast.StyleableToast;
@@ -32,6 +33,10 @@ public class UserFragment extends Fragment {
     private Button saveButton;
     private Button cancelButton;
 
+    private TextView postCreated;
+    private TextView postUpvoted;
+    private TextView postDownvoted;
+    private TextView postComments;
 
     private TextView generatedNameTextView;
     public static final String USERNAME_PREFS = "usernamePrefs";
@@ -40,6 +45,8 @@ public class UserFragment extends Fragment {
     private FragmentUserBinding binding;
 
     private Username usernameInstance;
+
+    private Statistics statistics;
 
 
     @Override
@@ -66,10 +73,12 @@ public class UserFragment extends Fragment {
         generateButton = getActivity().findViewById(R.id.generate_button);
         saveButton = getActivity().findViewById(R.id.save_button);
         cancelButton = getActivity().findViewById(R.id.cancel_button);
-
         generatedNameTextView = getActivity().findViewById(R.id.profile_username);
 
-
+        postCreated = getActivity().findViewById(R.id.postsCreated);
+        postUpvoted = getActivity().findViewById(R.id.postsUpvoted);
+        postDownvoted = getActivity().findViewById(R.id.postsDownvoted);
+        postComments = getActivity().findViewById(R.id.commentsAdded);
 
         generateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,6 +125,8 @@ public class UserFragment extends Fragment {
 
         editor.apply();
 
+        resetStatistics();
+
         StyleableToast.makeText(getActivity(), "Profile saved!", Toast.LENGTH_SHORT, R.style.LoginToast).show();
     }
 
@@ -131,7 +142,6 @@ public class UserFragment extends Fragment {
         SharedPreferences.Editor editor = sharedPreferences.edit().putString(USERNAME_PREFS, username);
 
         editor.apply();
-
     }
 
     private void regenerateUsername() {
@@ -168,6 +178,23 @@ public class UserFragment extends Fragment {
             saveButton.setVisibility(View.GONE);
             cancelButton.setVisibility(View.GONE);
         }
+    }
+
+    public void resetStatistics(){
+        statistics = new Statistics();
+        statistics.resetStatistics();
+        postCreated.setText("Posts created: 0");
+        postUpvoted.setText("Posts upvoted: 0");
+        postDownvoted.setText("Posts downvoted: 0");
+        postComments.setText("Comments added: 0");
+    }
+
+    public void reloadStatistics(){
+        statistics = new Statistics();
+        postCreated.setText("Posts created: " + String.valueOf(statistics.getPostsCreated()));
+        postUpvoted.setText("Posts upvoted: " + String.valueOf(statistics.getUpVoted()));
+        postDownvoted.setText("Posts downvoted: " + String.valueOf(statistics.getDownVoted()));
+        postComments.setText("Comments added: " + String.valueOf(statistics.getCommentsAdded()));
     }
 
 }

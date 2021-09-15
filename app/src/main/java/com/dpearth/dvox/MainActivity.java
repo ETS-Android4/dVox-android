@@ -81,9 +81,9 @@ public class MainActivity extends AppCompatActivity {
         //Initialize paper
         Paper.init(getApplicationContext());
 
-        fragmentManager.beginTransaction().add(R.id.fl_wrapper, homeFragment).hide(homeFragment).commit();
-        fragmentManager.beginTransaction().add(R.id.fl_wrapper, userFragment).hide(userFragment).commit();
-        fragmentManager.beginTransaction().add(R.id.fl_wrapper, composeFragment).hide(composeFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.fl_wrapper, homeFragment, "home").hide(homeFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.fl_wrapper, userFragment, "user").hide(userFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.fl_wrapper, composeFragment, "compose").hide(composeFragment).commit();
 
         activeFragment = homeFragment;
 
@@ -111,6 +111,8 @@ public class MainActivity extends AppCompatActivity {
                             if (currentFragment != "user") {
                                 fragment = new UserFragment();
                                 //fragmentManager.beginTransaction().hide(activeFragment).show(userFragment).commit();
+                                UserFragment fragmentU = (UserFragment) fragmentManager.findFragmentByTag("user");
+                                fragmentU.reloadStatistics();
                                 fragmentManager.beginTransaction().hide(activeFragment).show(userFragment).commit();
                                 activeFragment = userFragment;
                                 //fragmentManager.beginTransaction().add(R.id.fl_wrapper, activeFragment).commit();

@@ -23,6 +23,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.dpearth.dvox.livedata.PostViewModel;
+import com.dpearth.dvox.livedata.Statistics;
 import com.dpearth.dvox.livedata.Votes;
 import com.dpearth.dvox.livedata.VotesDictionary;
 import com.dpearth.dvox.models.recycleviews.CommentAdapter;
@@ -449,7 +450,11 @@ public class CommentActivity extends Activity {
 
                 realEndID++;
 
+                Statistics statistics = new Statistics();
+                statistics.upCommentsAdded();
+
                 contract.createComment(author, message, id);
+
 
 
 

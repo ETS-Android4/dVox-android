@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dpearth.dvox.CommentActivity;
 import com.dpearth.dvox.R;
+import com.dpearth.dvox.livedata.Statistics;
 import com.dpearth.dvox.livedata.Votes;
 import com.dpearth.dvox.livedata.VotesDictionary;
 import com.dpearth.dvox.smartcontract.Post;
@@ -231,12 +232,17 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>   
                     if (!upVoted) {
                         votes.upVote(1);
                         votesDictionary.addVote(postId, 1);
+                        Statistics statistics = new Statistics();
+                        statistics.upUpVoted();
                     } else{
                         votes.upVote(-1);
                         votesDictionary.addVote(postId, 0);
+                        Statistics statistics = new Statistics();
+                        statistics.downUpVoted();
                     }
                 }
             });
+
 
             downvoteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -244,9 +250,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>   
                     if (!downVoted) {
                         votes.downVote(1);
                         votesDictionary.addVote(postId, -1);
+                        Statistics statistics = new Statistics();
+                        statistics.upDownVoted();
                     } else{
                         votes.downVote(-1);
                         votesDictionary.addVote(postId, 0);
+                        Statistics statistics = new Statistics();
+                        statistics.downDownVoted();
                     }
                 }
             });

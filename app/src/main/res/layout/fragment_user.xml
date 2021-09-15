@@ -115,7 +115,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/textView4"
+                    android:id="@+id/postsCreated"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10sdp"
@@ -130,7 +130,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
                 <TextView
-                    android:id="@+id/textView5"
+                    android:id="@+id/postsUpvoted"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10sdp"
@@ -142,10 +142,10 @@
                     android:textColor="@color/BlackColor"
                     android:textSize="@dimen/_11ssp"
                     app:layout_constraintStart_toEndOf="@+id/imageView5"
-                    app:layout_constraintTop_toBottomOf="@+id/textView4" />
+                    app:layout_constraintTop_toBottomOf="@+id/postsCreated" />
 
                 <TextView
-                    android:id="@+id/textView6"
+                    android:id="@+id/postsDownvoted"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10sdp"
@@ -157,11 +157,11 @@
                     android:textColor="@color/BlackColor"
                     android:textSize="@dimen/_11ssp"
                     app:layout_constraintStart_toEndOf="@+id/imageView4"
-                    app:layout_constraintTop_toBottomOf="@+id/textView5" />
+                    app:layout_constraintTop_toBottomOf="@+id/postsUpvoted" />
 
 
                 <TextView
-                    android:id="@+id/textView7"
+                    android:id="@+id/commentsAdded"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10sdp"
@@ -173,7 +173,7 @@
                     android:textColor="@color/BlackColor"
                     android:textSize="@dimen/_11ssp"
                     app:layout_constraintStart_toEndOf="@+id/imageView7"
-                    app:layout_constraintTop_toBottomOf="@+id/textView6" />
+                    app:layout_constraintTop_toBottomOf="@+id/postsDownvoted" />
 
 
                 <ImageView
@@ -181,9 +181,9 @@
                     android:layout_width="@dimen/_15sdp"
                     android:layout_height="@dimen/_15sdp"
                     android:layout_marginStart="@dimen/_20sdp"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView4"
+                    app:layout_constraintBottom_toBottomOf="@+id/postsCreated"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textView4"
+                    app:layout_constraintTop_toTopOf="@+id/postsCreated"
                     app:srcCompat="@drawable/fi_rr_add" />
 
                 <ImageView
@@ -191,9 +191,9 @@
                     android:layout_width="@dimen/_15sdp"
                     android:layout_height="@dimen/_15sdp"
                     android:layout_marginStart="@dimen/_20sdp"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView6"
+                    app:layout_constraintBottom_toBottomOf="@+id/postsDownvoted"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textView6"
+                    app:layout_constraintTop_toTopOf="@+id/postsDownvoted"
                     app:srcCompat="@drawable/fi_rr_thumbs_down" />
 
                 <ImageView
@@ -201,9 +201,9 @@
                     android:layout_width="@dimen/_15sdp"
                     android:layout_height="@dimen/_15sdp"
                     android:layout_marginStart="@dimen/_20sdp"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView5"
+                    app:layout_constraintBottom_toBottomOf="@+id/postsUpvoted"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textView5"
+                    app:layout_constraintTop_toTopOf="@+id/postsUpvoted"
                     app:srcCompat="@drawable/fi_rr_thumbs_up" />
 
                 <ImageView
@@ -211,9 +211,9 @@
                     android:layout_width="@dimen/_15sdp"
                     android:layout_height="@dimen/_15sdp"
                     android:layout_marginStart="@dimen/_20sdp"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView7"
+                    app:layout_constraintBottom_toBottomOf="@+id/commentsAdded"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textView7"
+                    app:layout_constraintTop_toTopOf="@+id/commentsAdded"
                     app:srcCompat="@drawable/fi_rr_comment" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

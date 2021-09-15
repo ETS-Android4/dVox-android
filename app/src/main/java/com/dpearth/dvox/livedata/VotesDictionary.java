@@ -28,7 +28,6 @@ public class VotesDictionary extends Observable {
 //            map = new HashMap<>();
 //            Paper.book().write("votesDictionary", map);
 //        }
-
 //        SharedPreferences pSharedPref = context.getSharedPreferences("VotesContainer", Context.MODE_PRIVATE);
 //        try {
 //            if (pSharedPref != null) {
@@ -60,7 +59,6 @@ public class VotesDictionary extends Observable {
 //                .remove("votesMap")
 //                .putString("votesMap", jsonString)
 //                .apply();
-
     }
 
     public int getVote(int postId){

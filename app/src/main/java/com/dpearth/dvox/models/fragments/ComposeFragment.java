@@ -29,6 +29,7 @@ import com.dpearth.dvox.R;
 import android.R.layout;
 import android.widget.Toast;
 
+import com.dpearth.dvox.livedata.Statistics;
 import com.dpearth.dvox.smartcontract.Post;
 import com.dpearth.dvox.smartcontract.SmartContract;
 import com.dpearth.dvox.username.Username;
@@ -187,6 +188,8 @@ public class ComposeFragment extends Fragment {
                             messageView.setText("");
                             hashtagView.setText("");
                             StyleableToast.makeText(getActivity(), "Your post is sent! It will appear in our decentralized storage soon.", Toast.LENGTH_LONG, R.style.LoginToast).show();
+                            Statistics statistics = new Statistics();
+                            statistics.upUpVoted();
                             create_button.setEnabled(true);
                             create_button.setTextColor(ContextCompat.getColor(getContext(), R.color.BlackColor));
                         }
