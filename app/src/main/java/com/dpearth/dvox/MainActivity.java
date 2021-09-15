@@ -28,6 +28,8 @@ import com.dpearth.dvox.smartcontract.SmartContract;
 import com.dpearth.dvox.username.Username;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import io.paperdb.Paper;
+
 public class MainActivity extends AppCompatActivity {
 
     private EditText postTitle, postTheme, postContent;
@@ -75,6 +77,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setTheme(R.style.LoginTheme_ProjectDIES);
         setContentView(R.layout.activity_main);
+
+        //Initialize paper
+        Paper.init(getApplicationContext());
 
         fragmentManager.beginTransaction().add(R.id.fl_wrapper, homeFragment).hide(homeFragment).commit();
         fragmentManager.beginTransaction().add(R.id.fl_wrapper, userFragment).hide(userFragment).commit();

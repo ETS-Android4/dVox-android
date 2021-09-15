@@ -215,11 +215,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>   
                 upvoteButton.setEnabled(true);
                 downvoteButton.setEnabled(false);
                 upvoteButton.setImageResource(R.drawable.fi_rr_thumbs_up_filled);
+                downvoteButton.setImageResource(R.drawable.fi_rr_thumbs_down);
             }
             else if (votesDictionary.getVote(postId) == -1) {
                 downVoted = true;
                 upvoteButton.setEnabled(false);
                 downvoteButton.setEnabled(true);
+                upvoteButton.setImageResource(R.drawable.fi_rr_thumbs_up);
                 downvoteButton.setImageResource(R.drawable.fi_rr_thumbs_down_filled);
             }
 

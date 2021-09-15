@@ -117,7 +117,6 @@ public class UserFragment extends Fragment {
         editor.apply();
 
         StyleableToast.makeText(getActivity(), "Profile saved!", Toast.LENGTH_SHORT, R.style.LoginToast).show();
-
     }
 
     private void abortRegeneration(){
