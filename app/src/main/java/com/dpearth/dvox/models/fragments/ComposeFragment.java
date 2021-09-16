@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.text.Editable;
+import android.text.Selection;
 import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -36,6 +37,8 @@ import com.dpearth.dvox.username.Username;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.muddzdev.styleabletoast.StyleableToast;
 
+import java.util.regex.Pattern;
+
 
 public class ComposeFragment extends Fragment {
 
@@ -51,13 +54,9 @@ public class ComposeFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         super.onCreateView(inflater,container,savedInstanceState);
-
         usernameInstance = new Username(getActivity());
-
         usernameInstance.retrieveUsername(true);
-
         Avatar_string = "drawable/" + stringToAvatar(usernameInstance.getUsernameString()).toLowerCase();
-
         View rootView = inflater.inflate(R.layout.compose_fragment, container, false);
         return rootView;
     }
@@ -111,20 +110,26 @@ public class ComposeFragment extends Fragment {
 
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
                 }
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-
                 }
+
 
                 @Override
-                public void afterTextChanged(Editable s) {
+                public void afterTextChanged(Editable text) {
+                    Selection.setSelection(hashtagView.getText(), hashtagView.getText().length());
 
+
+                    if(!text.toString().startsWith("#") && text.length() != 0){
+                        hashtagView.setText("#" + text);
+                        Selection.setSelection(hashtagView.getText(), hashtagView.getText().length());
+                    }
 
                 }
+
+
             });
 
             create_button.setOnClickListener(new View.OnClickListener() {
@@ -186,6 +191,7 @@ public class ComposeFragment extends Fragment {
                         public void run() {
                             titleView.setText("");
                             messageView.setText("");
+                            //todo: add hashtage logc here
                             hashtagView.setText("");
                             StyleableToast.makeText(getActivity(), "Your post is sent! It will appear in our decentralized storage soon.", Toast.LENGTH_LONG, R.style.LoginToast).show();
                             Statistics statistics = new Statistics();
