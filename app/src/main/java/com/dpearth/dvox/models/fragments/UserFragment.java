@@ -184,8 +184,6 @@ public class UserFragment extends Fragment {
         statistics = new Statistics();
         statistics.resetStatistics();
         postCreated.setText("Posts created: 0");
-        postUpvoted.setText("Posts upvoted: 0");
-        postDownvoted.setText("Posts downvoted: 0");
         postComments.setText("Comments added: 0");
     }
 

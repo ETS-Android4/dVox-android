@@ -114,7 +114,6 @@ public class HomeFragment extends Fragment {
             @Override
             public void onRefresh() {
                 if (refreshEnabled) {
-
                     int count = allPosts.size();
                     allPosts.clear();
                     postViewModel.deleteAllPosts();
@@ -123,6 +122,7 @@ public class HomeFragment extends Fragment {
                     lastPost = false;
                     addShimmer();
                     queryPosts(numberOfPostsToLoad, -1);
+                    adapter.notifyItemRangeChanged(0, realEndID);
                 }
                 swipeRefreshLayout.setRefreshing(false);
             }

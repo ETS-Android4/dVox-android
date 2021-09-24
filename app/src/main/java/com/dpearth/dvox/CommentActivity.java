@@ -52,6 +52,8 @@ public class CommentActivity extends Activity {
     private TextView postHashtag;
     private TextView postUpvotes;
     private TextView postDownvotes;
+    private TextView postComments;
+
     private ImageView postAvatar;
 
     private TextView newMessage;
@@ -156,6 +158,7 @@ public class CommentActivity extends Activity {
         postMessage = findViewById(R.id.acPostMessage);
         postHashtag = findViewById(R.id.acPostHashtag);
         postUpvotes = findViewById(R.id.acPostUpvotes);
+        postComments = findViewById(R.id.acPostComments);
         postDownvotes = findViewById(R.id.acPostDownvotes);
         postAvatar = findViewById(R.id.acPostAvatar);
         newMessage = findViewById(R.id.acNewCommentMessage);
@@ -166,6 +169,8 @@ public class CommentActivity extends Activity {
 
         upvoteButton = findViewById(R.id.acUpvoteButton);
         downvoteButton = findViewById(R.id.acDownvoteButton);
+
+        postComments.setText(String.valueOf(post.getCommentCount()));
 
         votes = new Votes(post.getId());
         votes.setVotes();
@@ -195,9 +200,13 @@ public class CommentActivity extends Activity {
                 if (!upVoted) {
                     votes.upVote(1);
                     votesDictionary.addVote(postId, 1);
+                    Statistics statistics = new Statistics();
+                    statistics.upUpVoted();
                 } else{
                     votes.upVote(-1);
                     votesDictionary.addVote(postId, 0);
+                    Statistics statistics = new Statistics();
+                    statistics.downUpVoted();
                 }
             }
         });
@@ -208,9 +217,13 @@ public class CommentActivity extends Activity {
                 if (!downVoted) {
                     votes.downVote(1);
                     votesDictionary.addVote(postId, -1);
+                    Statistics statistics = new Statistics();
+                    statistics.upDownVoted();
                 } else{
                     votes.downVote(-1);
                     votesDictionary.addVote(postId, 0);
+                    Statistics statistics = new Statistics();
+                    statistics.downDownVoted();
                 }
             }
         });

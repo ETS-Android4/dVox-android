@@ -18,6 +18,7 @@
 
 
             <androidx.recyclerview.widget.RecyclerView
+                android:overScrollMode="always"
                 android:id="@+id/liveDataRecycleView"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:layout_width="match_parent"

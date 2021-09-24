@@ -18,13 +18,9 @@ public class Statistics {
 
     public void resetStatistics(){
         postsCreated = 0;
-        upVoted = 0;
-        downVoted = 0;
         commentsAdded = 0;
 
         setPostsCreated(postsCreated);
-        setUpVoted(upVoted);
-        setDownVoted(downVoted);
         setCommentsAdded(commentsAdded);
     }
 
