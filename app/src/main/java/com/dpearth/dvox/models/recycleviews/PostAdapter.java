@@ -175,7 +175,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>   
             tvTitle.setText(post.getTitle());
             tvAuthor.setText(post.getAuthor());
             tvMessage.setText(post.getMessage());
-            tvHashtag.setText(post.getHashtag());
+            if (!post.isBan()) {
+                tvHashtag.setText(post.getHashtag());
+            } else {
+                tvHashtag.setText("BANNED");
+            }
             tvCommentNumber.setText(String.valueOf(post.getCommentCount()));
 
             commentButton.setOnClickListener(new View.OnClickListener() {

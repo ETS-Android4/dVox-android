@@ -15,25 +15,19 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.dpearth.dvox.livedata.PostViewModel;
 import com.dpearth.dvox.livedata.Statistics;
 import com.dpearth.dvox.livedata.Votes;
 import com.dpearth.dvox.livedata.VotesDictionary;
 import com.dpearth.dvox.models.recycleviews.CommentAdapter;
-import com.dpearth.dvox.models.recycleviews.PostAdapter;
 import com.dpearth.dvox.smartcontract.Comment;
 import com.dpearth.dvox.smartcontract.Post;
 import com.dpearth.dvox.smartcontract.SmartContract;
-import com.muddzdev.styleabletoast.StyleableToast;
-
-import org.w3c.dom.Text;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -197,34 +191,25 @@ public class CommentActivity extends Activity {
         upvoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!upVoted) {
-                    votes.upVote(1);
-                    votesDictionary.addVote(postId, 1);
-                    Statistics statistics = new Statistics();
-                    statistics.upUpVoted();
-                } else{
-                    votes.upVote(-1);
-                    votesDictionary.addVote(postId, 0);
-                    Statistics statistics = new Statistics();
-                    statistics.downUpVoted();
-                }
+
+                Toast.makeText(getApplicationContext(), "Cannot Like Post! You are Moderator", Toast.LENGTH_SHORT).show();
             }
         });
 
         downvoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Ban post
+                SmartContract contract = new SmartContract(preferences);
+
                 if (!downVoted) {
-                    votes.downVote(1);
                     votesDictionary.addVote(postId, -1);
-                    Statistics statistics = new Statistics();
-                    statistics.upDownVoted();
-                } else{
-                    votes.downVote(-1);
+                    banPost(postId);
+                } else {
                     votesDictionary.addVote(postId, 0);
-                    Statistics statistics = new Statistics();
-                    statistics.downDownVoted();
+                    banPost(postId);
                 }
+
             }
         });
 
@@ -236,7 +221,7 @@ public class CommentActivity extends Activity {
         });
 
 
-        //Assign their values
+                //Assign their values
         postTitle.setText(post.getTitle());
         postAuthor.setText(post.getAuthor());
         postMessage.setText(post.getMessage());
@@ -276,7 +261,7 @@ public class CommentActivity extends Activity {
         linearLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        adapter = new CommentAdapter(allComments);//getContext(), allPosts -> as pars
+        adapter = new CommentAdapter(allComments, getApplicationContext(), postId);//getContext(), allPosts -> as pars
 
         recyclerView.setAdapter(adapter);
 
@@ -471,6 +456,7 @@ public class CommentActivity extends Activity {
 
 
 
+
                 // ################# GET ALL POSTS #################//
 
 
@@ -500,6 +486,76 @@ public class CommentActivity extends Activity {
         } else{
             shakeMessage();
         }
+    }
+
+    private void banPost(int postId) {
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // ################# GET ALL POSTS #################//
+                SharedPreferences preferences = getSharedPreferences("pref", Context.MODE_PRIVATE);
+
+                while (preferences.getString("credentials", "error").equals("error") ||
+                        preferences.getString("contractAddress", "error").equals("error") ||
+                        preferences.getString("credentials", "error").equals("error")) {
+                    try {
+                        Thread.sleep(250);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                SmartContract contract = new SmartContract(preferences);
+
+                contract.banPost(postId);
+
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                    }
+//                });
+            }
+
+        });
+
+        thread.start();
+
+    }
+
+    //todo CHANGE!
+    private void banComment(int commentId){
+
+
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // ################# GET ALL POSTS #################//
+                        SharedPreferences preferences = getSharedPreferences("pref", Context.MODE_PRIVATE);
+
+                        while (preferences.getString("credentials", "error").equals("error") ||
+                                preferences.getString("contractAddress", "error").equals("error") ||
+                                preferences.getString("credentials", "error").equals("error")) {
+                            try {
+                                Thread.sleep(250);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        SmartContract contract = new SmartContract(preferences);
+
+                        contract.banComment(postId, commentId);
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                            }
+                        });
+                    }
+
+                });
+
+                thread.start();
+
     }
 
     private void shakeMessage(){

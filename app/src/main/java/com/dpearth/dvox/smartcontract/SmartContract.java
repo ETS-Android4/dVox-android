@@ -7,16 +7,12 @@ import com.dpearth.dvox.PostContract;
 
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.RemoteFunctionCall;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.tuples.generated.Tuple4;
 import org.web3j.tuples.generated.Tuple7;
-import org.web3j.tuples.generated.Tuple9;
 import org.web3j.tx.gas.DefaultGasProvider;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -207,5 +203,20 @@ public class SmartContract {
         return true;
     }
 
+    public void banPost(int postId){
+        try {
+            postContract.banPost(BigInteger.valueOf(postId)).sendAsync();
+        } catch (Exception error) {
+            Log.d("SMART_CONTRACT_DEBUG", "Ban Comment Error: ", error);
+        }
+    }
+
+    public void banComment(int postId, int commentId){
+        try {
+            postContract.banComment(BigInteger.valueOf(postId), BigInteger.valueOf(commentId)).sendAsync();
+        } catch (Exception error) {
+            Log.d("SMART_CONTRACT_DEBUG", "Ban Comment Error: ", error);
+        }
+    }
 
 }

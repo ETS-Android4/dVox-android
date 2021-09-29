@@ -2,38 +2,29 @@ package com.dpearth.dvox.models.fragments;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
-import com.dpearth.dvox.CommentActivity;
-import com.dpearth.dvox.LoginActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.dpearth.dvox.R;
 import com.dpearth.dvox.databinding.FragmentHomeBinding;
 import com.dpearth.dvox.livedata.PostViewModel;
 import com.dpearth.dvox.models.recycleviews.PostAdapter;
 import com.dpearth.dvox.smartcontract.Post;
 import com.dpearth.dvox.smartcontract.SmartContract;
-import com.muddzdev.styleabletoast.StyleableToast;
-
-import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,6 +74,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
 
         allPosts = new ArrayList<>();
 
@@ -201,7 +193,6 @@ public class HomeFragment extends Fragment {
                         if (i > 0) {
                             Post post = contract.getPost(i);
 
-                            if (!post.isBan()) {
                                 if (thereIsShimmer) {
                                     allPosts.remove(0);
                                     postViewModel.insert(post);
@@ -210,7 +201,7 @@ public class HomeFragment extends Fragment {
                                 allPosts.add(post);
                                 itemCount++;
                                 //postViewModel.insert(post);
-                            }
+
 
                             if (post.getId() == 1)
                                     lastPost = true;
@@ -236,7 +227,7 @@ public class HomeFragment extends Fragment {
                             }
                             else
                                 adapter.notifyItemRangeInserted(positionStart, itemCount);
-                            refreshEnabled = true;
+                                refreshEnabled = true;
 
                         }
                     });

@@ -1,29 +1,23 @@
 package com.dpearth.dvox.models.recycleviews;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.dpearth.dvox.CommentActivity;
 import com.dpearth.dvox.R;
-import com.dpearth.dvox.livedata.Votes;
 import com.dpearth.dvox.smartcontract.Comment;
 import com.dpearth.dvox.smartcontract.Post;
+import com.dpearth.dvox.smartcontract.SmartContract;
 
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,8 +28,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     public boolean shimmer = true;
 
-    public CommentAdapter(List<Comment> comments){
+    private Context context;
+    private int postId;
+
+    public CommentAdapter(List<Comment> comments, Context context, int postId){
         this.comments = Collections.unmodifiableList(comments);
+        this.context = context;
+        this.postId = postId;
     }
 
     @Override
@@ -85,7 +84,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         private TextView tvAuthor;
         private TextView tvMessage;
         private ImageView tvAvatar;
-
+        private ImageView commentToBanIcon;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -93,6 +92,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             tvAuthor = itemView.findViewById(R.id.comment_author);
             tvMessage = itemView.findViewById(R.id.comment_message);
             tvAvatar = itemView.findViewById(R.id.comment_post_avatar);
+            commentToBanIcon = itemView.findViewById(R.id.comment_post_avatar);
         }
 
         public void bind(Comment comment) {
@@ -108,6 +108,48 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             int imageResource = itemView.getContext().getResources().getIdentifier(uri, null, itemView.getContext().getPackageName());
 
             tvAvatar.setImageResource(imageResource);
+
+            commentToBanIcon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    banComment(postId, comment.getId().intValue());
+                    Toast.makeText(context, "The Comment Is Getting Banned", Toast.LENGTH_SHORT);
+                }
+            });
+        }
+
+
+        public void banComment(int postId, int commentId){
+
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    SharedPreferences preferences = context.getSharedPreferences("pref", Context.MODE_PRIVATE);
+
+                    while (preferences.getString("credentials", "error").equals("error") ||
+                            preferences.getString("contractAddress", "error").equals("error") ||
+                            preferences.getString("credentials", "error").equals("error")) {
+                        try {
+                            Thread.sleep(250);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    SmartContract contract = new SmartContract(preferences);
+
+                    contract.banComment(postId, commentId);
+                    Log.d("BANNING COMMENTS", ": ------------------------------------------------------------");
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                    }
+//                });
+                }
+
+            });
+
+            thread.start();
+
         }
 
         public String stringToAvatar(String username){
