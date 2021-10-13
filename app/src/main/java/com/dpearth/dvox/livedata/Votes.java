@@ -19,7 +19,7 @@ import java.util.Observable;
 
 public class Votes extends Observable {
 
-    private String firebaseDocument = "0x47D3e11D792d7b4B808775629Fcd5A36CfAf00E6";
+    private String firebaseDocument = "0xaa9e5bE920856826ABe102befEA9213eEe0a549B";
 
     private long postId;
 
