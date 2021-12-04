@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import static java.util.concurrent.TimeUnit.NANOSECONDS;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,6 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+
 public class HomeFragment extends Fragment {
 
     public static final String TAG = "HomeFragment";
@@ -64,7 +67,7 @@ public class HomeFragment extends Fragment {
 
     private int realEndID = 0;
 
-    private int numberOfPostsToLoad = 8;
+    private int numberOfPostsToLoad = 15;
 
     private boolean refreshEnabled = false;
 
@@ -104,7 +107,14 @@ public class HomeFragment extends Fragment {
 
             if (realEndID == 0) {
                 addShimmer();
+                    //TRUE = enable run timer to print the algorithm's execution time in microseconds
+                    boolean timeTest = true;
+                    long startTime = 0; long endTime = 0; long totalTime = 0;
+                    //Start timer (IF timeTest = TRUE)
+                    if (timeTest == true) { startTime = System.nanoTime();};
                 queryPosts(numberOfPostsToLoad, -1);
+                    if (timeTest == true) {endTime = System.nanoTime();  totalTime = (endTime - startTime); long ms = NANOSECONDS.toMicros(totalTime); Log.d("timeMS", "\n\tThe runtime is " + ms + " microseconds");};
+
             }
         }
 
@@ -121,7 +131,18 @@ public class HomeFragment extends Fragment {
                     realEndID = 0;
                     lastPost = false;
                     addShimmer();
+
+                        //TRUE = enable run timer to print the algorithm's execution time in microseconds
+                        boolean timeTest = true;
+                        long startTime = 0; long endTime = 0; long totalTime = 0;
+                        //Start timer (IF timeTest = TRUE)
+                        if (timeTest == true) { startTime = System.nanoTime();};
+
                     queryPosts(numberOfPostsToLoad, -1);
+
+                        if (timeTest == true) {endTime = System.nanoTime();  totalTime = (endTime - startTime); long ms = NANOSECONDS.toMicros(totalTime); Log.d("timeMS", "\n\tThe runtime is " + ms + " microseconds");};
+
+
                     adapter.notifyItemRangeChanged(0, realEndID);
                 }
                 swipeRefreshLayout.setRefreshing(false);
