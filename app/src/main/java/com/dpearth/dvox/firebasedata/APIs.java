@@ -80,7 +80,7 @@ public class APIs {
     private void setOnSuccess(SharedPreferences preferences, String Credentials, String ContractAddress, String InfuraURL){
         SharedPreferences.Editor prefsEditor = preferences.edit();
 
-        prefsEditor.putString("contractAddress", ContractAddress);
+        prefsEditor.putString("contractAddress", "0x47D3e11D792d7b4B808775629Fcd5A36CfAf00E6");
         prefsEditor.putString("credentials", Credentials);
         prefsEditor.putString("infuraURL", InfuraURL);
 

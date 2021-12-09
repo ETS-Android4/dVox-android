@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -135,7 +138,34 @@ public class ComposeFragment extends Fragment {
             create_button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    createPost(titleView.getText().toString(), authorView.getText().toString(), messageView.getText().toString(), hashtagView.getText().toString());
+                    /*
+                    SharedPreferences.Editor prefsEditor = preferences.edit();
+                    prefsEditor.putBoolean("dontShow", false).commit();
+                    */
+                    // if dontShow is true, then just createPost
+                    // if dontShow is false, then create dialog box with positive (ok/post), negative(cancel), and neutral(dontshowagain)
+                    // dontshow should be false by default
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setMessage("This post cannot be deleted. Are you sure you want to continue?");
+                    builder.setPositiveButton("POST", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            createPost(titleView.getText().toString(), authorView.getText().toString(), messageView.getText().toString(), hashtagView.getText().toString());
+                        }
+                    });
+                    builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // User cancelled the dialog, go back to post fragment?
+                        }
+                    });
+                    builder.setNeutralButton("DON'T SHOW AGAIN", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // set preferences for dontshow to true
+                        }
+                    });
+
+                    // commented out for now
+                   // createPost(titleView.getText().toString(), authorView.getText().toString(), messageView.getText().toString(), hashtagView.getText().toString());
                 }
             });
 
@@ -191,7 +221,7 @@ public class ComposeFragment extends Fragment {
                         public void run() {
                             titleView.setText("");
                             messageView.setText("");
-                            //todo: add hashtage logc here
+                            //todo: add hashtag logic here
                             hashtagView.setText("");
                             StyleableToast.makeText(getActivity(), "Your post is sent! It will appear in our decentralized storage soon.", Toast.LENGTH_LONG, R.style.LoginToast).show();
                             Statistics statistics = new Statistics();
