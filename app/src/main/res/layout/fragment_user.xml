@@ -256,7 +256,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <Button
-                        android:id="@+id/cancel_button"
+                        android:id="@+id/sendButton"
                         style="@style/Widget.AppCompat.Button.Borderless"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -268,7 +268,7 @@
                         android:textColor="@color/BlackColor"
                         android:visibility="gone"
                         app:elevation="0dp"
-                        app:layout_constraintEnd_toStartOf="@+id/save_button"
+                        app:layout_constraintEnd_toStartOf="@+id/cancelButton"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
                         tools:ignore="MissingConstraints" />
@@ -291,7 +291,7 @@
 
 
                     <Button
-                        android:id="@+id/save_button"
+                        android:id="@+id/cancelButton"
                         style="@style/Widget.AppCompat.Button.Borderless"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -304,7 +304,7 @@
                         app:elevation="0dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/cancel_button"
+                        app:layout_constraintStart_toEndOf="@+id/sendButton"
                         tools:ignore="MissingConstraints" />
 
                 </androidx.cardview.widget.CardView>

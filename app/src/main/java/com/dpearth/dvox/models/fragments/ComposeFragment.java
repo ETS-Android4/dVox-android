@@ -1,7 +1,9 @@
 package com.dpearth.dvox.models.fragments;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import android.app.AlertDialog;
@@ -22,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Scroller;
@@ -52,6 +55,11 @@ public class ComposeFragment extends Fragment {
      private Username usernameInstance;
      private String Avatar_string;
      private Button create_button;
+
+     private CheckBox alertCheckBox;
+     private Button alertSendButton;
+     private Button alertCancelButton;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -147,33 +155,51 @@ public class ComposeFragment extends Fragment {
                     // if dontShow is false, then create dialog box with positive (ok/post), negative(cancel), and neutral(dontshowagain)
                     // dontshow should be false by default
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setMessage("This post cannot be deleted. Are you sure you want to continue?");
-                    builder.setPositiveButton("POST", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            createPost(titleView.getText().toString(), authorView.getText().toString(), messageView.getText().toString(), hashtagView.getText().toString());
-                        }
-                    });
-                    builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.dismiss();
-                        }
-                    });
-                    builder.setNeutralButton("DON'T SHOW AGAIN", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            // set preferences for dontshow to true
-                        }
-                    });
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
+                    final Dialog alert = new Dialog((getActivity()));
+                    alert.setContentView(R.layout.activity_compose_alert);
+                    alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                    alertCancelButton = alert.findViewById(R.id.cancelButton);
+                    alertSendButton = alert.findViewById(R.id.sendButton);
+                    alertCheckBox = alert.findViewById(R.id.alertCheckbox);
 
-                    // Current fix for seeing buttons (set each one to be "blue" (which looks black))
-                    Button negColor = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-                    negColor.setBackgroundColor(Color.BLUE);
-                    Button neutColor = dialog.getButton(DialogInterface.BUTTON_NEUTRAL);
-                    neutColor.setBackgroundColor(Color.BLUE);
-                    Button posColor = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-                    posColor.setBackgroundColor(Color.BLUE);
+
+                    alertCancelButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alert.cancel();
+                        }
+                    });
+
+                    alert.show();
+
+
+
+//                    builder.setMessage("This post cannot be deleted. Are you sure you want to continue?");
+//                    builder.setPositiveButton("POST", new DialogInterface.OnClickListener() {
+//                        public void onClick(DialogInterface dialog, int id) {
+//                            createPost(titleView.getText().toString(), authorView.getText().toString(), messageView.getText().toString(), hashtagView.getText().toString());
+//                        }
+//                    });
+//                    builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+//                        public void onClick(DialogInterface dialog, int id) {
+//                            dialog.dismiss();
+//                        }
+//                    });
+//                    builder.setNeutralButton("DON'T SHOW AGAIN", new DialogInterface.OnClickListener() {
+//                        public void onClick(DialogInterface dialog, int id) {
+//                            // set preferences for dontshow to true
+//                        }
+//                    });
+//                    AlertDialog dialog = builder.create();
+//                    dialog.show();
+//
+//                    // Current fix for seeing buttons (set each one to be "blue" (which looks black))
+//                    Button negColor = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+//                    negColor.setBackgroundColor(Color.BLUE);
+//                    Button neutColor = dialog.getButton(DialogInterface.BUTTON_NEUTRAL);
+//                    neutColor.setBackgroundColor(Color.BLUE);
+//                    Button posColor = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+//                    posColor.setBackgroundColor(Color.BLUE);
 
                     // commented out for now
                    // createPost(titleView.getText().toString(), authorView.getText().toString(), messageView.getText().toString(), hashtagView.getText().toString());

@@ -1,7 +1,6 @@
 package com.dpearth.dvox.models.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -19,7 +18,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dpearth.dvox.LoginActivity;
 import com.dpearth.dvox.R;
 import com.dpearth.dvox.databinding.FragmentUserBinding;
 import com.dpearth.dvox.livedata.Statistics;
@@ -71,8 +69,8 @@ public class UserFragment extends Fragment {
 
         /*  Button for Regenerating a new name  */
         generateButton = getActivity().findViewById(R.id.generate_button);
-        saveButton = getActivity().findViewById(R.id.save_button);
-        cancelButton = getActivity().findViewById(R.id.cancel_button);
+        saveButton = getActivity().findViewById(R.id.cancelButton);
+        cancelButton = getActivity().findViewById(R.id.sendButton);
         generatedNameTextView = getActivity().findViewById(R.id.profile_username);
 
         postCreated = getActivity().findViewById(R.id.postsCreated);
