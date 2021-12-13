@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -155,7 +156,7 @@ public class ComposeFragment extends Fragment {
                     });
                     builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            // User cancelled the dialog, go back to post fragment?
+                            dialog.dismiss();
                         }
                     });
                     builder.setNeutralButton("DON'T SHOW AGAIN", new DialogInterface.OnClickListener() {
@@ -163,6 +164,16 @@ public class ComposeFragment extends Fragment {
                             // set preferences for dontshow to true
                         }
                     });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+
+                    // Current fix for seeing buttons (set each one to be "blue" (which looks black))
+                    Button negColor = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+                    negColor.setBackgroundColor(Color.BLUE);
+                    Button neutColor = dialog.getButton(DialogInterface.BUTTON_NEUTRAL);
+                    neutColor.setBackgroundColor(Color.BLUE);
+                    Button posColor = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                    posColor.setBackgroundColor(Color.BLUE);
 
                     // commented out for now
                    // createPost(titleView.getText().toString(), authorView.getText().toString(), messageView.getText().toString(), hashtagView.getText().toString());
