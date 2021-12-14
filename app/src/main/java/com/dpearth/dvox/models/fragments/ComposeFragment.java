@@ -60,6 +60,8 @@ public class ComposeFragment extends Fragment {
      private Button alertSendButton;
      private Button alertCancelButton;
 
+     private SharedPreferences checkboxPrefs;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,6 +71,7 @@ public class ComposeFragment extends Fragment {
         usernameInstance = new Username(getActivity());
         usernameInstance.retrieveUsername(true);
         Avatar_string = "drawable/" + stringToAvatar(usernameInstance.getUsernameString()).toLowerCase();
+        checkboxPrefs = getContext().getSharedPreferences("dontShow", Context.MODE_PRIVATE);
         View rootView = inflater.inflate(R.layout.compose_fragment, container, false);
         return rootView;
     }
@@ -147,62 +150,42 @@ public class ComposeFragment extends Fragment {
             create_button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    /*
-                    SharedPreferences.Editor prefsEditor = preferences.edit();
-                    prefsEditor.putBoolean("dontShow", false).commit();
-                    */
-                    // if dontShow is true, then just createPost
-                    // if dontShow is false, then create dialog box with positive (ok/post), negative(cancel), and neutral(dontshowagain)
-                    // dontshow should be false by default
 
-                    final Dialog alert = new Dialog((getActivity()));
-                    alert.setContentView(R.layout.activity_compose_alert);
-                    alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                    alertCancelButton = alert.findViewById(R.id.cancelButton);
-                    alertSendButton = alert.findViewById(R.id.sendButton);
-                    alertCheckBox = alert.findViewById(R.id.alertCheckbox);
+                    SharedPreferences.Editor prefsEditor = checkboxPrefs.edit();
 
-
-                    alertCancelButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            alert.cancel();
-                        }
-                    });
-
-                    alert.show();
+                    if(!(checkboxPrefs.getBoolean("dontShow", false))) {
+                        createPost(titleView.getText().toString(), authorView.getText().toString(), messageView.getText().toString(), hashtagView.getText().toString());
+                    }
+                    else {
+                        final Dialog alert = new Dialog((getActivity()));
+                        alert.setContentView(R.layout.activity_compose_alert);
+                        alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                        alertCancelButton = alert.findViewById(R.id.cancelButton);
+                        alertSendButton = alert.findViewById(R.id.sendButton);
+                        alertCheckBox = alert.findViewById(R.id.alertCheckbox);
 
 
+                        alertCancelButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                alert.cancel();
+                            }
+                        });
+                        alertSendButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                createPost(titleView.getText().toString(), authorView.getText().toString(), messageView.getText().toString(), hashtagView.getText().toString());
+                            }
+                        });
+                        alertCheckBox.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                prefsEditor.putBoolean("dontShow", true).commit();
+                            }
+                        });
 
-//                    builder.setMessage("This post cannot be deleted. Are you sure you want to continue?");
-//                    builder.setPositiveButton("POST", new DialogInterface.OnClickListener() {
-//                        public void onClick(DialogInterface dialog, int id) {
-//                            createPost(titleView.getText().toString(), authorView.getText().toString(), messageView.getText().toString(), hashtagView.getText().toString());
-//                        }
-//                    });
-//                    builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-//                        public void onClick(DialogInterface dialog, int id) {
-//                            dialog.dismiss();
-//                        }
-//                    });
-//                    builder.setNeutralButton("DON'T SHOW AGAIN", new DialogInterface.OnClickListener() {
-//                        public void onClick(DialogInterface dialog, int id) {
-//                            // set preferences for dontshow to true
-//                        }
-//                    });
-//                    AlertDialog dialog = builder.create();
-//                    dialog.show();
-//
-//                    // Current fix for seeing buttons (set each one to be "blue" (which looks black))
-//                    Button negColor = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-//                    negColor.setBackgroundColor(Color.BLUE);
-//                    Button neutColor = dialog.getButton(DialogInterface.BUTTON_NEUTRAL);
-//                    neutColor.setBackgroundColor(Color.BLUE);
-//                    Button posColor = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-//                    posColor.setBackgroundColor(Color.BLUE);
-
-                    // commented out for now
-                   // createPost(titleView.getText().toString(), authorView.getText().toString(), messageView.getText().toString(), hashtagView.getText().toString());
+                        alert.show();
+                    }
                 }
             });
 
