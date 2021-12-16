@@ -153,9 +153,8 @@ public class ComposeFragment extends Fragment {
 
                     SharedPreferences.Editor prefsEditor = checkboxPrefs.edit();
 
-                    if(!(checkboxPrefs.getBoolean("dontShow", false))) {
+                    if(checkboxPrefs.getBoolean("dontShow", false))
                         createPost(titleView.getText().toString(), authorView.getText().toString(), messageView.getText().toString(), hashtagView.getText().toString());
-                    }
                     else {
                         final Dialog alert = new Dialog((getActivity()));
                         alert.setContentView(R.layout.activity_compose_alert);
@@ -180,6 +179,9 @@ public class ComposeFragment extends Fragment {
                         alertCheckBox.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                if (checkboxPrefs.getBoolean("dontShow", false))
+                                    prefsEditor.putBoolean("dontShow", false).commit();
+                                else
                                 prefsEditor.putBoolean("dontShow", true).commit();
                             }
                         });
