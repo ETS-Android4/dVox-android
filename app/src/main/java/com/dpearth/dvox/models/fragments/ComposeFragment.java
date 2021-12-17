@@ -151,47 +151,52 @@ public class ComposeFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
 
-                    SharedPreferences.Editor prefsEditor = checkboxPrefs.edit();
-
-                    if(checkboxPrefs.getBoolean("dontShow", false))
-                        createPost(titleView.getText().toString(), authorView.getText().toString(), messageView.getText().toString(), hashtagView.getText().toString());
+                    if (titleView.getText().toString().equals("")  || hashtagView.getText().toString().equals("") || messageView.getText().toString().equals("")) {
+                        shakeTitle();
+                        shakeHashtag();
+                        shakeMessage();
+                    }
                     else {
-                        final Dialog alert = new Dialog((getActivity()));
-                        alert.setContentView(R.layout.activity_compose_alert);
-                        alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                        alertCancelButton = alert.findViewById(R.id.cancelButton);
-                        alertSendButton = alert.findViewById(R.id.sendButton);
-                        alertCheckBox = alert.findViewById(R.id.alertCheckbox);
+                        SharedPreferences.Editor prefsEditor = checkboxPrefs.edit();
+
+                        if(checkboxPrefs.getBoolean("dontShow", false))
+                            createPost(titleView.getText().toString(), authorView.getText().toString(), messageView.getText().toString(), hashtagView.getText().toString());
+                        else {
+                            final Dialog alert = new Dialog((getActivity()));
+                            alert.setContentView(R.layout.activity_compose_alert);
+                            alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                            alertCancelButton = alert.findViewById(R.id.cancelButton);
+                            alertSendButton = alert.findViewById(R.id.sendButton);
+                            alertCheckBox = alert.findViewById(R.id.alertCheckbox);
 
 
-                        alertCancelButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                alert.cancel();
-                            }
-                        });
-                        alertSendButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                createPost(titleView.getText().toString(), authorView.getText().toString(), messageView.getText().toString(), hashtagView.getText().toString());
-                            }
-                        });
-                        alertCheckBox.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if (checkboxPrefs.getBoolean("dontShow", false))
-                                    prefsEditor.putBoolean("dontShow", false).commit();
-                                else
-                                prefsEditor.putBoolean("dontShow", true).commit();
-                            }
-                        });
+                            alertCancelButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    alert.cancel();
+                                }
+                            });
+                            alertSendButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    createPost(titleView.getText().toString(), authorView.getText().toString(), messageView.getText().toString(), hashtagView.getText().toString());
+                                }
+                            });
+                            alertCheckBox.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if (checkboxPrefs.getBoolean("dontShow", false))
+                                        prefsEditor.putBoolean("dontShow", false).commit();
+                                    else
+                                        prefsEditor.putBoolean("dontShow", true).commit();
+                                }
+                            });
 
-                        alert.show();
+                            alert.show();
+                        }
                     }
                 }
             });
-
-
         }
 
         public String stringToAvatar(String username){
@@ -255,14 +260,6 @@ public class ComposeFragment extends Fragment {
                 }
             }
         });
-
-        if (title.equals(""))
-            shakeTitle();
-        if (hashtag.equals(""))
-            shakeHashtag();
-        if (message.equals("")){
-            shakeMessage();
-        }
 
         if (!title.equals("") && !hashtag.equals("") && !message.equals("")) {
             create_button.setEnabled(false);
