@@ -261,11 +261,9 @@ public class ComposeFragment extends Fragment {
             }
         });
 
-        if (!title.equals("") && !hashtag.equals("") && !message.equals("")) {
-            create_button.setEnabled(false);
-            create_button.setTextColor(ContextCompat.getColor(getContext(), R.color.TransparentWhiteColor));
-            thread.start();
-        }
+        create_button.setEnabled(false);
+        create_button.setTextColor(ContextCompat.getColor(getContext(), R.color.TransparentWhiteColor));
+        thread.start();
     }
 
     private void shakeMessage(){
