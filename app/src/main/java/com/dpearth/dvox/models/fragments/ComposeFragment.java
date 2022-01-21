@@ -179,6 +179,7 @@ public class ComposeFragment extends Fragment {
                             alertSendButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
+                                    alert.cancel();
                                     createPost(titleView.getText().toString(), authorView.getText().toString(), messageView.getText().toString(), hashtagView.getText().toString());
                                 }
                             });
